@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -39,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private GoogleSignInClient mGoogleSignInClient;
     private TextView mStatusTextView;
     private TextView mDetailTextView;
+
+    /* Test for Service toggle button */
+    private ToggleButton toggleButton = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +70,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
+
+        toggleButton = (ToggleButton) findViewById(R.id.controlServiceBtn);
+        toggleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (toggleButton.isChecked()) {
+                    startService(new Intent(getApplicationContext(), ShakeService.class));
+                } else {
+                    stopService(new Intent(getApplicationContext(), ShakeService.class));
+                }
+            }
+        });
     }
 
     // [START on_start_check_user]
