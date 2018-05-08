@@ -71,14 +71,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
 
-        toggleButton = (ToggleButton) findViewById(R.id.controlServiceBtn);
+        /* Check for usability of ShakeService */
+        toggleButton = findViewById(R.id.controlServiceBtn);
         toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent flag = new Intent(getApplicationContext(), ShakeService.class);
                 if (toggleButton.isChecked()) {
-                    startService(new Intent(getApplicationContext(), ShakeService.class));
+                    flag.putExtra("isChecked", true);
+                    startService(flag);
                 } else {
-                    stopService(new Intent(getApplicationContext(), ShakeService.class));
+                    flag.putExtra("isChecked", false);
+                    stopService(flag);
                 }
             }
         });
