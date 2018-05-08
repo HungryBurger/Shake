@@ -11,11 +11,11 @@
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="62dp"
-        android:layout_marginEnd="34dp"
-        android:text="Button" />
+        android:layout_below="@+id/imageView2"
+        android:layout_marginEnd="33dp"
+        android:layout_marginTop="41dp"
+        android:text="Menu" />
 
     <Button
         android:id="@+id/button2"
@@ -25,7 +25,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="34dp"
         android:layout_marginTop="54dp"
-        android:text="Button" />
+        android:text="Edit" />
 
     <Button
         android:id="@+id/button3"
@@ -34,7 +34,7 @@
         android:layout_alignBaseline="@+id/button2"
         android:layout_alignBottom="@+id/button2"
         android:layout_alignStart="@+id/button1"
-        android:text="Button" />
+        android:text="Setting" />
 
     <ImageView
         android:id="@+id/imageView2"
