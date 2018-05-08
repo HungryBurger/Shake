@@ -7,11 +7,6 @@
     android:orientation="vertical"
     android:weightSum="4">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Button" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -42,9 +37,8 @@
 
         <ImageButton
             android:id="@+id/imagebutton"
-            android:layout_width="232dp"
-            android:layout_height="235dp"
-            />
+            android:layout_width="222dp"
+            android:layout_height="226dp" />
     </LinearLayout>
 
 
