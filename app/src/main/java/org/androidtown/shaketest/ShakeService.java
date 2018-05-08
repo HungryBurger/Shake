@@ -74,6 +74,7 @@ public class ShakeService extends Service implements SensorEventListener {
             float gForce = (float) squaredD;
 
             if (gForce > SHAKE_THRESHOLD_GRAVITY) {
+                /* 흔들림이 감지 되는 부분 */
                 long currentTime = System.currentTimeMillis();
                 if (mShakeTime + SHAKE_SKIP_TIME > currentTime) {
                     return;

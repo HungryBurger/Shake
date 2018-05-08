@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="서비스 환경 설정">
+        <SwitchPreference android:title="흔들림 감지 서비스 사용"
+            android:key="shake_service_on"
+            android:defaultValue="false"
+            android:summaryOn="흔들림 감지 서비스를 항상 감지합니다."
+            android:summaryOff="흔들림 감지 서비스를 사용하지 않겠습니다."
+            android:switchTextOn="ON"
+            android:switchTextOff="OFF"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
