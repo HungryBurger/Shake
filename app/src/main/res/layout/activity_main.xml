@@ -39,6 +39,10 @@
             android:layout_height="wrap_content"
             android:text="Test Preference"/>
 
+        <ImageButton
+            android:id="@+id/imagebutton"
+            android:layout_width="222dp"
+            android:layout_height="226dp" />
     </LinearLayout>
 
 
