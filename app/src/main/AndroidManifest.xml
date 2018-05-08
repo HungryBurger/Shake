@@ -21,6 +21,8 @@
         </activity>
         <activity android:name=".MainActivity" />
 
+        <activity android:name=".SettingsActivity" />
+
         <service
             android:name=".ShakeService"
             android:enabled="true"

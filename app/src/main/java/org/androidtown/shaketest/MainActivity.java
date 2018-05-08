@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -44,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /* Test for Service toggle button */
     private ToggleButton toggleButton = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +94,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     flag.putExtra("isChecked", false);
                     stopService(flag);
                 }
+            }
+        });
+
+        button = findViewById(R.id.testForPreference);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(intent);
             }
         });
     }

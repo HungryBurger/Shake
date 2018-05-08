@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "562827163996-q5lhg7189c0rq216ic635httceauj0fu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.androidtown.shaketest",
+            "certificate_hash": "4007b660e314378721de9794ba4e24514aad8403"
+          }
+        },
+        {
+          "client_id": "562827163996-uo9vlgd1p8ccao3unqgg86rbrd4mpaif.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.androidtown.shaketest",
+            "certificate_hash": "102d3e655499643e792e67aa248712e921d02a52"
+          }
+        },
+        {
           "client_id": "562827163996-4llqekkflmrs4h9fia4u0ifa1m17qs48.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
