@@ -14,27 +14,27 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        Button button1 = (Button) findViewById(R.id.button1);
-        button1.setOnClickListener(new View.OnClickListener(){
+        Button button1 = findViewById(R.id.button1);
+        button1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                Intent intent = new Intent(getApplicationContext(),ItemListActivity.class);
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ItemListActivity.class);
                 startActivity(intent);
             }
         });
-        Button button2 = (Button) findViewById(R.id.button2);
-        button1.setOnClickListener(new View.OnClickListener(){
+        Button button2 = findViewById(R.id.button2);
+        button2.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                Intent intent = new Intent(getApplicationContext(),MainMenu.class);
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ItemListActivity.class);
                 startActivity(intent);
             }
         });
-        Button button3 = (Button) findViewById(R.id.button3);
-        button1.setOnClickListener(new View.OnClickListener(){
+        Button button3 = findViewById(R.id.button3);
+        button3.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                Intent intent = new Intent(getApplicationContext(),MainMenu.class);
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(intent);
             }
         });
