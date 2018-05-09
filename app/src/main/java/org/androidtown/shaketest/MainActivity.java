@@ -8,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /* Test for Service toggle button */
     private ToggleButton toggleButton = null;
+    private Button button = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,15 +60,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
         findViewById(R.id.disconnect_button).setOnClickListener(this);
-        ImageButton imageBtn = (ImageButton) findViewById(R.id.imagebutton);
-        imageBtn.setOnClickListener(new View.OnClickListener(){
+
+        ImageButton Btnimage = findViewById(R.id.imagebutton);
+        Btnimage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                Intent intent = new Intent(getApplicationContext(),MainMenu.class);
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainMenu.class);
                 startActivity(intent);
             }
         });
-
         // [START config_signin]
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
