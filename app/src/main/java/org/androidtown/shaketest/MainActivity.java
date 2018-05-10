@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -40,35 +39,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // [END declare_auth]
 
     private GoogleSignInClient mGoogleSignInClient;
-    private TextView mStatusTextView;
-    private TextView mDetailTextView;
+    //private TextView mStatusTextView;
+    //private TextView mDetailTextView;
 
-    /* Test for Service toggle button */
-    private ToggleButton toggleButton = null;
-    private Button button = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Views
-        mStatusTextView = findViewById(R.id.status);
-        mDetailTextView = findViewById(R.id.detail);
-
         // Button listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
         findViewById(R.id.disconnect_button).setOnClickListener(this);
 
-        ImageButton Btnimage = findViewById(R.id.imagebutton);
-        Btnimage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainMenu.class);
-                startActivity(intent);
-            }
-        });
         // [START config_signin]
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -83,30 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
 
-        /* Check for usability of ShakeService */
-        toggleButton = findViewById(R.id.controlServiceBtn);
-        toggleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent flag = new Intent(getApplicationContext(), ShakeService.class);
-                if (toggleButton.isChecked()) {
-                    flag.putExtra("isChecked", true);
-                    startService(flag);
-                } else {
-                    flag.putExtra("isChecked", false);
-                    stopService(flag);
-                }
-            }
-        });
 
-        button = findViewById(R.id.testForPreference);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     // [START on_start_check_user]
@@ -215,14 +176,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
         if (user != null) {
-            mStatusTextView.setText(user.getEmail());
-            mDetailTextView.setText(user.getUid());
+            //mStatusTextView.setText(user.getEmail());
+            //mDetailTextView.setText(user.getUid());
 
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
         } else {
-            mStatusTextView.setText("Signed Out");
-            mDetailTextView.setText(null);
+            //mStatusTextView.setText("Signed Out");
+            //mDetailTextView.setText(null);
 
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
