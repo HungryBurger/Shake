@@ -28,15 +28,22 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-
+        <!-- 기존 구글 코드
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:visibility="visible"
-            tools:visibility="gone" />
+            tools:visibility="gone" /> -->
 
+        <ImageButton android:id="@+id/sign_in_button"
+            android:layout_width="200dp"
+            android:layout_height="70dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/button_state"
+            android:scaleType="fitXY"
+            android:background="@color/basicColor"/>
 
         <LinearLayout
             android:id="@+id/sign_out_and_disconnect"
