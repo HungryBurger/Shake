@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Shake.iml" filepath="$PROJECT_DIR$/Shake.iml" />
-      <module fileurl="file://C:\Users\JHJ\AndroidStudioProjects\Shake\Shake.iml" filepath="C:\Users\JHJ\AndroidStudioProjects\Shake\Shake.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\JHJ\AndroidStudioProjects\Shake\app\app.iml" filepath="C:\Users\JHJ\AndroidStudioProjects\Shake\app\app.iml" />
     </modules>
   </component>
 </project>
