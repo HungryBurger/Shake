@@ -29,7 +29,10 @@
             android:enabled="true"
             android:exported="true"></service>
 
-        <activity android:name=".MainUIActivity"></activity>
+        <activity android:name=".MainUIActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>

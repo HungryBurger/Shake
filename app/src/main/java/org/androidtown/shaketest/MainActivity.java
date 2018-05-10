@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
+
+                startActivity(new Intent(getApplicationContext(), MainUIActivity.class));
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
