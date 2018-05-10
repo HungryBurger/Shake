@@ -5,5 +5,4 @@
         android:drawable="@drawable/log_in_pressed" />
 
     <item android:drawable="@drawable/log_in_origin"/>
-
 </selector>
