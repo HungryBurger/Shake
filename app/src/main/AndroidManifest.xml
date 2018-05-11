@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.androidtown.shaketest">
 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/shake_app"
@@ -31,8 +36,8 @@
 
         <activity android:name=".MainUIActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
-
         </activity>
+
     </application>
 
 </manifest>
