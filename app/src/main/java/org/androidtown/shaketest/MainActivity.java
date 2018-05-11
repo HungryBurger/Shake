@@ -191,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             displayUserEmail = user.getEmail();
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+            callDialog();
 
         } else {
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
@@ -212,10 +213,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        callDialog();
+    protected void onPause() {
+        super.onPause();
+
     }
+
     /*
     @VisibleForTesting
     public ProgressDialog mProgressDialog;
