@@ -6,7 +6,8 @@
     <FrameLayout
         android:id="@+id/realcontents"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:background="#ffffff">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,7 +23,7 @@
                 android:scaleType="fitCenter"
                 android:background="#ffffff"
                 android:src="@drawable/menu_button_1"/>
-            <ImageView
+            <ImageButton
                 android:id="@+id/bar_name"
                 android:layout_width="100dp"
                 android:layout_height="80dp"
