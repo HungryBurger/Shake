@@ -1,9 +1,11 @@
 package org.androidtown.shaketest;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int RC_SIGN_IN = 9001;
     // [START declare_auth]
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+    private FirebaseAuth.AuthStateListener mListener;
     // [END declare_auth]
     private GoogleSignInClient mGoogleSignInClient;
     private String displayUserName;
@@ -40,23 +44,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Button listeners
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
-        findViewById(R.id.sign_out_button).setOnClickListener(this);
-        findViewById(R.id.disconnect_button).setOnClickListener(this);
 
+        // [START initialize_auth]
+        mAuth = FirebaseAuth.getInstance();
+        // [END initialize_auth]
+        mListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                mUser = mAuth.getCurrentUser();
+
+                if(mUser != null) {
+                    startActivity(new Intent(getApplicationContext(), MainUIActivity.class));
+                    finish();
+                } else {
+                    init();
+                    updateUI(mUser);
+                }
+            }
+        };
+    }
+
+
+    private void init() {
         // [START config_signin]
         // Configure Google Sign In
+        // Button listeners
+        findViewById(R.id.sign_in_button).setOnClickListener(this);
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         // [END config_signin]
-
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        // [START initialize_auth]
-        mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
+
+
+
         myContact();
     }
 
@@ -65,10 +88,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        mAuth.addAuthStateListener(mListener);
     }
     // [END on_start_check_user]
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if(mListener != null) {
+            mAuth.removeAuthStateListener(mListener);
+        }
+    }
 
     // [START onactivityresult]
     @Override
@@ -98,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
-       // showProgressDialog();
+
         // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -120,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
 
                         // [START_EXCLUDE]
-                     //   hideProgressDialog();
+
                         // [END_EXCLUDE]
                     }
                 });
@@ -134,32 +166,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     // [END signin]
 
-    private void signOut() {
-        // Firebase sign out
-        mAuth.signOut();
+    private void myContact() {
+        TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 
-        // Google sign out
-        mGoogleSignInClient.signOut().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        updateUI(null);
-                    }
-                });
+        try {
+            String phoneNum = telephonyManager.getLine1Number();
+            if (phoneNum.startsWith("+82")) {
+                phoneNum = phoneNum.replace("+82", "0");
+            }
+            displayUserPhoneNumber = PhoneNumberUtils.formatNumber(phoneNum);
+
+        } catch (SecurityException e) {
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
-    private void revokeAccess() {
-        // Firebase sign out
-        mAuth.signOut();
-
-        // Google revoke access
-        mGoogleSignInClient.revokeAccess().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        updateUI(null);
-                    }
-                });
+    private void callDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        MyAlertDialogFragment newDialogFragment = MyAlertDialogFragment.newInstance(displayUserName, displayUserPhoneNumber, displayUserEmail);
+        newDialogFragment.show(fm, "dialog");
     }
 
     private void myContact() {
@@ -184,17 +210,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void updateUI(FirebaseUser user) {
-       // hideProgressDialog();
 
         if (user != null) {
-            displayUserName = user.getDisplayName();
-            displayUserEmail = user.getEmail();
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+            //callDialog();
 
         } else {
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
 
         }
     }
@@ -204,17 +226,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int i = v.getId();
         if (i == R.id.sign_in_button) {
             signIn();
-        } else if (i == R.id.sign_out_button) {
-            signOut();
-        } else if (i == R.id.disconnect_button) {
-            revokeAccess();
+
         }
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        callDialog();
     }
-
 }
