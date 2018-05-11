@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
     }
 
+
     private void init() {
         // [START config_signin]
         // Configure Google Sign In
@@ -76,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build();
         // [END config_signin]
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+
 
         myContact();
     }
@@ -111,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
+                startActivity(new Intent(getApplicationContext(), MainMenu.class));
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
@@ -126,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
+
         // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -147,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
 
                         // [START_EXCLUDE]
+
                         // [END_EXCLUDE]
                     }
                 });
@@ -182,13 +188,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         newDialogFragment.show(fm, "dialog");
     }
 
+    private void myContact() {
+        TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+
+        try {
+            String phoneNum = telephonyManager.getLine1Number();
+            if (phoneNum.startsWith("+82")) {
+                phoneNum = phoneNum.replace("+82", "0");
+            }
+            displayUserPhoneNumber = PhoneNumberUtils.formatNumber(phoneNum);
+
+        } catch (SecurityException e) {
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    private void callDialog(){
+        FragmentManager fm = getSupportFragmentManager();
+        MyAlertDialogFragment newDialogFragment = MyAlertDialogFragment.newInstance(displayUserName, displayUserPhoneNumber, displayUserEmail);
+        newDialogFragment.show(fm,"dialog");
+    }
+
     private void updateUI(FirebaseUser user) {
+
         if (user != null) {
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             //callDialog();
 
         } else {
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
+
         }
     }
 
@@ -197,6 +226,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int i = v.getId();
         if (i == R.id.sign_in_button) {
             signIn();
+
         }
+
     }
 }
