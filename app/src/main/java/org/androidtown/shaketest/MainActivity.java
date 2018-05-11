@@ -1,18 +1,22 @@
 package org.androidtown.shaketest;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -38,13 +42,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String displayUserName;
     private String displayUserEmail;
     private String displayUserPhoneNumber;
-
-
+    FragmentManager fm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         // Button listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
@@ -59,10 +61,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // [END config_signin]
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
+
     }
 
     // [START on_start_check_user]
@@ -103,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
-        showProgressDialog();
+       // showProgressDialog();
         // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -125,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
 
                         // [START_EXCLUDE]
-                        hideProgressDialog();
+                     //   hideProgressDialog();
                         // [END_EXCLUDE]
                     }
                 });
@@ -169,29 +171,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void myContact() {
 
-        TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().
-                getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 
         try {
+            fm = getSupportFragmentManager();
             String phoneNum = telephonyManager.getLine1Number();
-            if(phoneNum.startsWith("+82")) {
+            if (phoneNum.startsWith("+82")) {
                 phoneNum = phoneNum.replace("+82", "0");
             }
             displayUserPhoneNumber = PhoneNumberUtils.formatNumber(phoneNum);
-            Toast.makeText(getApplicationContext(),
-                    displayUserName + " " + displayUserPhoneNumber + " " + displayUserEmail,
-                    Toast.LENGTH_SHORT).show();
-            Log.e(TAG, "myContact: num");
+            Toast.makeText(getApplicationContext(), displayUserName + " " + displayUserPhoneNumber + " " + displayUserEmail, Toast.LENGTH_SHORT).show();
+
+            MyAlertDialogFragment newDialogFragment = MyAlertDialogFragment.newInstance(displayUserName, displayUserPhoneNumber, displayUserEmail);
+            newDialogFragment.show(fm,TAG);
         } catch (SecurityException e) {
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void updateUI(FirebaseUser user) {
-        hideProgressDialog();
-        displayUserName = user.getDisplayName();
-        displayUserEmail = user.getEmail();
+       // hideProgressDialog();
+
         if (user != null) {
+            displayUserName = user.getDisplayName();
+            displayUserEmail = user.getEmail();
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
             findViewById(R.id.readContact).setVisibility(View.VISIBLE);
@@ -215,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             myContact();
         }
     }
-
+/*
     @VisibleForTesting
     public ProgressDialog mProgressDialog;
 
@@ -234,5 +237,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mProgressDialog.dismiss();
         }
     }
-
+    */
 }
