@@ -89,7 +89,7 @@ public class ShakeService extends Service implements SensorEventListener {
     public void onDestroy() {
         super.onDestroy();
 
-        stopSelf();
+        mSensorManager.unregisterListener(this, mAccelermeter);
         Toast.makeText(getApplicationContext(), "서비스 종료", Toast.LENGTH_SHORT).show();
     }
 }
