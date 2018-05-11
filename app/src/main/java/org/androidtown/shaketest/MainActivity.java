@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
         findViewById(R.id.disconnect_button).setOnClickListener(this);
-        findViewById(R.id.readContact).setOnClickListener(this);
+
         // [START config_signin]
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
-
+        myContact();
     }
 
     // [START on_start_check_user]
@@ -176,6 +176,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
         }
 
+    }
+    private void callDialog(){
         FragmentManager fm = getSupportFragmentManager();
         MyAlertDialogFragment newDialogFragment = MyAlertDialogFragment.newInstance(displayUserName, displayUserPhoneNumber, displayUserEmail);
         newDialogFragment.show(fm,"dialog");
@@ -189,11 +191,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             displayUserEmail = user.getEmail();
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
-            findViewById(R.id.readContact).setVisibility(View.VISIBLE);
+
         } else {
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
-            findViewById(R.id.readContact).setVisibility(View.GONE);
+
         }
     }
 
@@ -206,11 +208,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             signOut();
         } else if (i == R.id.disconnect_button) {
             revokeAccess();
-        } else if (i == R.id.readContact) {
-            myContact();
         }
     }
-/*
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        callDialog();
+    }
+    /*
     @VisibleForTesting
     public ProgressDialog mProgressDialog;
 
