@@ -1,22 +1,15 @@
 package org.androidtown.shaketest;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -42,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String displayUserName;
     private String displayUserEmail;
     private String displayUserPhoneNumber;
-    FragmentManager fm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,23 +163,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void myContact() {
-
         TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 
         try {
-            fm = getSupportFragmentManager();
             String phoneNum = telephonyManager.getLine1Number();
             if (phoneNum.startsWith("+82")) {
                 phoneNum = phoneNum.replace("+82", "0");
             }
             displayUserPhoneNumber = PhoneNumberUtils.formatNumber(phoneNum);
-            Toast.makeText(getApplicationContext(), displayUserName + " " + displayUserPhoneNumber + " " + displayUserEmail, Toast.LENGTH_SHORT).show();
 
-            MyAlertDialogFragment newDialogFragment = MyAlertDialogFragment.newInstance(displayUserName, displayUserPhoneNumber, displayUserEmail);
-            newDialogFragment.show(fm,TAG);
         } catch (SecurityException e) {
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
         }
+
+        FragmentManager fm = getSupportFragmentManager();
+        MyAlertDialogFragment newDialogFragment = MyAlertDialogFragment.newInstance(displayUserName, displayUserPhoneNumber, displayUserEmail);
+        newDialogFragment.show(fm,"dialog");
     }
 
     private void updateUI(FirebaseUser user) {

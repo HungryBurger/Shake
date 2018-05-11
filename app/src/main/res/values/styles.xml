@@ -14,7 +14,7 @@
         </item>
     </style>
     
-    <style name="Theme.AppCompat.NoActionBar">
+    <style name="Theme.AppCompat.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@color/basicColor</item>
