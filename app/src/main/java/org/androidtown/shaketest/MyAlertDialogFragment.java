@@ -51,8 +51,6 @@ public class MyAlertDialogFragment extends DialogFragment {
         Log.d("fuck2",nameTv.getText()+ " " + numTv.getText()+ " " + emailTv.getText());
         builder.setView(mView).setNegativeButton("닫기",null);
 
-        //dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-
         return builder.create();
     }
 }
