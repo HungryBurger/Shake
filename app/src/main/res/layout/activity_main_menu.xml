@@ -1,74 +1,37 @@
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/dl_main_drawer"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
-        android:id="@+id/realcontents"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="#ffffff">
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/dl_main_drawer_root"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:fitsSystemWindows="true"
+        tools:openDrawer="start"
+        >
 
-        <RelativeLayout
+        <!-- main content -->
+        <include
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            layout="@layout/activity_main_content" />
 
-            <ImageButton
-                android:id="@+id/button1"
-                android:layout_alignParentLeft="true"
-                android:padding="20dp"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:scaleType="fitCenter"
-                android:background="#ffffff"
-                android:src="@drawable/menu_button_1"/>
-            <ImageButton
-                android:id="@+id/bar_name"
-                android:layout_width="100dp"
-                android:layout_height="80dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginEnd="123dp"
-                android:scaleType="fitXY"
-                android:background="#ffffff"
-
-                android:src="@drawable/shake_logo4" />
-            <ImageButton
-                android:id="@+id/button2"
-                android:padding="20dp"
-                android:layout_alignParentRight="true"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:scaleType="fitCenter"
-                android:background="#ffffff"
-                android:src="@drawable/setting_button"/>
-
-        </RelativeLayout>
-    </FrameLayout>
-
-    <ListView
-        android:id="@+id/lv_activity_main_nav_list"
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="#ffffff"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp" />
-    <LinearLayout
-        android:id="@+id/sign_out_and_disconnect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
-
-        <Button
-            android:id="@+id/sign_out_button"
+        <!-- navigation drawer-->
+        <android.support.design.widget.NavigationView
+            android:id="@+id/nv_main_navigation_root"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="Sign Out" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/nav_header_main"
+            app:menu="@menu/drawer" />
 
-</android.support.v4.widget.DrawerLayout>
+    </android.support.v4.widget.DrawerLayout>
+
+</android.support.constraint.ConstraintLayout>
