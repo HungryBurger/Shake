@@ -184,9 +184,14 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         switch (item.getItemId()) {
             case R.id.item1:
                 Toast.makeText(this, "item1 clicked..", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainMenu.this,ContactList_main.class);
+                startActivity(intent);
                 break;
             case R.id.item2:
                 Toast.makeText(this, "item2 clicked..", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.item3:
+                Toast.makeText(this, "item3 clicked..", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.log_out:
                 click_log_out();
