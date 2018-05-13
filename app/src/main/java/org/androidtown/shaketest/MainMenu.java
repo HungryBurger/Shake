@@ -54,13 +54,13 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 
-public class MainMenu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainMenu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle drawerToggle;
     Toolbar toolbar;
     View nav_header_view;
-    TextView mName, mPhoneNum,mEmail;
+    TextView mName, mPhoneNum, mEmail;
     ImageButton mPicture;
     private static int GET_PICTURE_URI = 9999;
     NfcAdapter nfcAdapter;
@@ -103,18 +103,29 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             }
         });
         onNFC();
+        findViewById(R.id.nfc).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent(MainMenu.this, NFCActivity.class);
+                    startActivity(intent);
+                }catch (Exception e){}
+            }
+        });
     }
-    private void onNFC(){
+
+    private void onNFC() {
         nfcAdapter = NfcAdapter.getDefaultAdapter(MainMenu.this);
-        if(nfcAdapter.isEnabled()){}
-        else{
-            AlertDialog.Builder alertBox= new AlertDialog.Builder(MainMenu.this);
+
+        if (nfcAdapter.isEnabled()) {
+        } else {
+            AlertDialog.Builder alertBox = new AlertDialog.Builder(MainMenu.this);
             alertBox.setTitle("NFC Connection ERROR....");
             alertBox.setMessage("NFC를 켜주세요.");
             alertBox.setPositiveButton("Turn on", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
                         startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
                     else
                         startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
@@ -129,29 +140,30 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             alertBox.show();
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == GET_PICTURE_URI){
-            if(resultCode == Activity.RESULT_OK){
-                try{
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),data.getData());
+        if (requestCode == GET_PICTURE_URI) {
+            if (resultCode == Activity.RESULT_OK) {
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
                     mPicture.setImageBitmap(bitmap);
                     Glide.with(MainMenu.this).load(data.getData()).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(mPicture);
-                }catch (IOException e){
-                    Log.e("TAG",e.getMessage());
+                } catch (IOException e) {
+                    Log.e("TAG", e.getMessage());
                 }
             }
         }
     }
 
-    private void setProfile(){
+    private void setProfile() {
         navigationView.setNavigationItemSelectedListener(MainMenu.this);
         nav_header_view = navigationView.getHeaderView(0);
 
-        mEmail = (TextView)nav_header_view.findViewById(R.id.profile_E_mail);
+        mEmail = (TextView) nav_header_view.findViewById(R.id.profile_E_mail);
         mEmail.setSelected(true);
-        mName = (TextView)nav_header_view.findViewById(R.id.profile_name);
-        mPhoneNum = (TextView)nav_header_view.findViewById(R.id.profile_phone_number);
+        mName = (TextView) nav_header_view.findViewById(R.id.profile_name);
+        mPhoneNum = (TextView) nav_header_view.findViewById(R.id.profile_phone_number);
         mPicture = (ImageButton) nav_header_view.findViewById(R.id.profile_picture);
         mPicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,16 +171,17 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
                 intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent,GET_PICTURE_URI);
+                startActivityForResult(intent, GET_PICTURE_URI);
             }
         });
         mEmail.setText(displayUserEmail);
         mName.setText(displayUserName);
         mPhoneNum.setText(displayUserPhoneNumber);
     }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.item1:
                 Toast.makeText(this, "item1 clicked..", Toast.LENGTH_SHORT).show();
                 break;
@@ -198,12 +211,13 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(drawerToggle.onOptionsItemSelected(item)){
+        if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-    private void initLayout(){
+
+    private void initLayout() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
@@ -222,7 +236,8 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         drawerLayout.addDrawerListener(drawerToggle);
         navigationView.setNavigationItemSelectedListener(this);
     }
-    public void click_log_out(){
+
+    public void click_log_out() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
         builder.setMessage("로그아웃 하시겠습니까?")
                 .setCancelable(false)
@@ -235,9 +250,10 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
     @Override
     public void onBackPressed() {
-        if(drawerLayout.isDrawerOpen(GravityCompat.START))
+        if (drawerLayout.isDrawerOpen(GravityCompat.START))
             drawerLayout.closeDrawer(GravityCompat.START);
         else
             super.onBackPressed();
@@ -248,14 +264,16 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         super.onStart();
         mAuth.addAuthStateListener(mListener);
     }
+
     @Override
     protected void onStop() {
         super.onStop();
 
-        if(mListener != null) {
+        if (mListener != null) {
             mAuth.removeAuthStateListener(mListener);
         }
     }
+
     private void getPhonenum() {
         TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 

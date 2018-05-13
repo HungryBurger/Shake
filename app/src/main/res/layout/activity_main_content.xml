@@ -17,5 +17,14 @@
         app:layout_constraintRight_toRightOf="parent"
         android:id="@+id/popup"
         android:text="Pop up"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/popup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/nfc"
+        android:text="nfc"/>
 
 </android.support.constraint.ConstraintLayout>
