@@ -54,6 +54,8 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainMenu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -61,7 +63,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     Toolbar toolbar;
     View nav_header_view;
     TextView mName, mPhoneNum, mEmail;
-    ImageButton mPicture;
+    CircleImageView mPicture;
     private static int GET_PICTURE_URI = 9999;
     NfcAdapter nfcAdapter;
     private FirebaseAuth mAuth;
@@ -164,7 +166,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         mEmail.setSelected(true);
         mName = (TextView) nav_header_view.findViewById(R.id.profile_name);
         mPhoneNum = (TextView) nav_header_view.findViewById(R.id.profile_phone_number);
-        mPicture = (ImageButton) nav_header_view.findViewById(R.id.profile_picture);
+        mPicture = (CircleImageView) nav_header_view.findViewById(R.id.profile_picture);
         mPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
