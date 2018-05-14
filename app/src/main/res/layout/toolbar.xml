@@ -8,11 +8,4 @@
     android:minHeight="?attr/actionBarSize"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     android:background="?attr/colorPrimary">
-    <ImageButton
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:scaleType="fitCenter"
-        android:src ="@drawable/menu_button_1"
-        app:menu="@menu/drawer"
-        />
 </android.support.v7.widget.Toolbar>
