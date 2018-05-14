@@ -55,6 +55,8 @@ import org.w3c.dom.Text;
 import java.io.IOException;
 
 public class MainMenu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    ToggleButton servcie_check;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle drawerToggle;
@@ -70,6 +72,8 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     private String displayUserName, displayUserEmail, displayUserPhoneNumber;
     // [END declare_auth]
     private GoogleSignInClient mGoogleSignInClient;
+
+    private ToggleButton service_check;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,31 +116,48 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 }catch (Exception e){}
             }
         });
+
+        servcie_check = findViewById(R.id.service_check);
+        servcie_check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ShakeService.class);
+
+                intent.putExtra("userName", displayUserName);
+                intent.putExtra("userEmail", displayUserEmail);
+                intent.putExtra("userPhoneNum", displayUserPhoneNumber);
+                if (servcie_check.isChecked()) {
+                    startService(intent);
+                } else {
+                    stopService(intent);
+                }
+            }
+        });
     }
 
     private void onNFC() {
         nfcAdapter = NfcAdapter.getDefaultAdapter(MainMenu.this);
 
-        if (nfcAdapter.isEnabled()) {
-        } else {
-            AlertDialog.Builder alertBox = new AlertDialog.Builder(MainMenu.this);
-            alertBox.setTitle("NFC Connection ERROR....");
-            alertBox.setMessage("NFC를 켜주세요.");
-            alertBox.setPositiveButton("Turn on", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
-                        startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
-                    else
-                        startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
-                }
-            });
-            alertBox.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+            if (nfcAdapter.isEnabled()) {
+            } else {
+                AlertDialog.Builder alertBox = new AlertDialog.Builder(MainMenu.this);
+                alertBox.setTitle("NFC Connection ERROR....");
+                alertBox.setMessage("NFC를 켜주세요.");
+                alertBox.setPositiveButton("Turn on", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
+                            startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
+                        else
+                            startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+                    }
+                });
+                alertBox.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                }
-            });
+                    }
+                });
             alertBox.show();
         }
     }
@@ -312,7 +333,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 });
     }
 
-    private void callDialog() {
+    public void callDialog() {
         FragmentManager fm = getSupportFragmentManager();
         MyAlertDialogFragment newDialogFragment = MyAlertDialogFragment.newInstance(displayUserName, displayUserPhoneNumber, displayUserEmail);
         newDialogFragment.show(fm, "dialog");
