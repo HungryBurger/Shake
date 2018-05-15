@@ -139,7 +139,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ShakeService.class);
-
                 intent.putExtra("userName", displayUserName);
                 intent.putExtra("userEmail", displayUserEmail);
                 intent.putExtra("userPhoneNum", displayUserPhoneNumber);
