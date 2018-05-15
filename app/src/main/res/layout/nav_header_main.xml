@@ -4,22 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:background="@android:color/holo_green_dark"
-    android:gravity="bottom"
+    android:background="@color/basicColor"
+    android:gravity="center"
     android:orientation="horizontal"
     android:paddingBottom="8dp"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
     android:paddingTop="8dp"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    >
 
-    <ImageButton
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_picture"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:scaleType="centerCrop"
-        android:background="@color/basicColor"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:background="@mipmap/ic_launcher_round"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#FF000000"/>
 
     <LinearLayout
         android:orientation="vertical"
@@ -34,10 +35,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="   이름   : " />
 
             <TextView
                 android:id="@+id/profile_name"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
@@ -51,10 +54,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="전화번호 : " />
 
             <TextView
                 android:id="@+id/profile_phone_number"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -66,10 +71,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="  E-mail  :" />
 
             <TextView
                 android:id="@+id/profile_E_mail"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"

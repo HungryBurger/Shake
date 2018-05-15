@@ -7,5 +7,14 @@
     android:id="@+id/toolbar"
     android:minHeight="?attr/actionBarSize"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    android:background="?attr/colorPrimary">
+    android:background="@color/ourConcept">
+
+    <ImageButton
+        android:id="@+id/setting_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="fitXY"
+        android:background="@color/ourConcept"
+        android:layout_gravity = "right"
+        android:src="@drawable/setting_button"/>
 </android.support.v7.widget.Toolbar>

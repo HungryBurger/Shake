@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.Image;
+import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -57,6 +58,8 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainMenu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     ToggleButton servcie_check;
@@ -66,8 +69,15 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     Toolbar toolbar;
     View nav_header_view;
     TextView mName, mPhoneNum, mEmail;
-    ImageButton mPicture;
+    CircleImageView mPicture;
+    ImageButton settingButton;
+
     private static int GET_PICTURE_URI = 9999;
+    private static int GET_PHOTO = 9998;
+    private static int GET_CROP = 9997;
+    String mCurrentPhotoPath;
+    Uri photoURI, albumURI;
+    boolean isAlbum = false;
     NfcAdapter nfcAdapter;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
@@ -78,14 +88,13 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     private RelativeLayout frameList1;
 
     private RelativeLayout frameList2;
-    private ToggleButton service_check;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
         initLayout();
+
         frameList1=(RelativeLayout) findViewById(R.id.frame1);
         frameList2=(RelativeLayout) findViewById(R.id.frame2);
 
@@ -187,14 +196,11 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     private void setProfile() {
-        navigationView.setNavigationItemSelectedListener(MainMenu.this);
-        nav_header_view = navigationView.getHeaderView(0);
-
         mEmail = (TextView) nav_header_view.findViewById(R.id.profile_E_mail);
         mEmail.setSelected(true);
         mName = (TextView) nav_header_view.findViewById(R.id.profile_name);
         mPhoneNum = (TextView) nav_header_view.findViewById(R.id.profile_phone_number);
-        mPicture = (ImageButton) nav_header_view.findViewById(R.id.profile_picture);
+        mPicture = (CircleImageView) nav_header_view.findViewById(R.id.profile_picture);
         mPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -252,11 +258,9 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     private void initLayout() {
+        settingButton = findViewById(R.id.setting_button);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_launcher_round);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer_root);
         navigationView = (NavigationView) findViewById(R.id.nv_main_navigation_root);
@@ -266,9 +270,23 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 toolbar,
                 R.string.open_drawer,
                 R.string.close_drawer
-        );
+        ){
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+        };
         drawerLayout.addDrawerListener(drawerToggle);
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(MainMenu.this);
+        nav_header_view = navigationView.getHeaderView(0);
+        toolbar.setTitle("Shake");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     public void click_log_out() {

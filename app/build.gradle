@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "org.androidtown.shaketest"
         minSdkVersion 23
@@ -34,6 +34,7 @@ dependencies {
     // QR scanner
     implementation 'com.journeyapps:zxing-android-embedded:3.4.0'
     implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
