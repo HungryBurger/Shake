@@ -44,11 +44,9 @@ public class MyAlertDialogFragment extends DialogFragment {
         String displayName = data.getString("name");
         String phoneNum = data.getString("pNum");
         String eMail = data.getString("eMail");
-        Log.d("fuck",displayName+ " " + phoneNum+ " " + eMail);
         nameTv.setText(displayName);
         numTv.setText(phoneNum);
         emailTv.setText(eMail);
-        Log.d("fuck2",nameTv.getText()+ " " + numTv.getText()+ " " + emailTv.getText());
         builder.setView(mView).setNegativeButton("닫기",null);
 
         return builder.create();

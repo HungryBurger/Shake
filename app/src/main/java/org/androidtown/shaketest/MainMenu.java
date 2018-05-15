@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.Image;
+import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -23,6 +24,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.MenuAdapter;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
@@ -33,6 +35,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -64,7 +67,13 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     View nav_header_view;
     TextView mName, mPhoneNum, mEmail;
     CircleImageView mPicture;
+    ImageButton settingButton;
     private static int GET_PICTURE_URI = 9999;
+    private static int GET_PHOTO = 9998;
+    private static int GET_CROP = 9997;
+    String mCurrentPhotoPath;
+    Uri photoURI, albumURI;
+    boolean isAlbum = false;
     NfcAdapter nfcAdapter;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
@@ -77,9 +86,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
         initLayout();
-
         mAuth = FirebaseAuth.getInstance();
         mListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -92,12 +99,21 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                     getPhonenum();
                     //callDialog();
                     setProfile();
+                    settingButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(MainMenu.this, SettingsActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+
                 } else {
                     startActivity(new Intent(MainMenu.this, MainActivity.class));
                     finish();
                 }
             }
         };
+
         findViewById(R.id.popup).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,7 +127,8 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 try {
                     Intent intent = new Intent(MainMenu.this, NFCActivity.class);
                     startActivity(intent);
-                }catch (Exception e){}
+                } catch (Exception e) {
+                }
             }
         });
     }
@@ -156,12 +173,10 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 }
             }
         }
+
     }
 
     private void setProfile() {
-        navigationView.setNavigationItemSelectedListener(MainMenu.this);
-        nav_header_view = navigationView.getHeaderView(0);
-
         mEmail = (TextView) nav_header_view.findViewById(R.id.profile_E_mail);
         mEmail.setSelected(true);
         mName = (TextView) nav_header_view.findViewById(R.id.profile_name);
@@ -186,7 +201,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         switch (item.getItemId()) {
             case R.id.item1:
                 Toast.makeText(this, "item1 clicked..", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainMenu.this,ContactList_main.class);
+                Intent intent = new Intent(MainMenu.this, ContactList_main.class);
                 startActivity(intent);
                 break;
             case R.id.item2:
@@ -225,11 +240,9 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     private void initLayout() {
+        settingButton = findViewById(R.id.setting_button);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_launcher_round);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer_root);
         navigationView = (NavigationView) findViewById(R.id.nv_main_navigation_root);
@@ -239,9 +252,23 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 toolbar,
                 R.string.open_drawer,
                 R.string.close_drawer
-        );
-        drawerLayout.addDrawerListener(drawerToggle);
-        navigationView.setNavigationItemSelectedListener(this);
+        ){
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+        };
+        drawerLayout.setDrawerListener(drawerToggle);
+        navigationView.setNavigationItemSelectedListener(MainMenu.this);
+        nav_header_view = navigationView.getHeaderView(0);
+        toolbar.setTitle("Shake");
+        toolbar.setNavigationIcon(R.drawable.menu_button_1);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     public void click_log_out() {
