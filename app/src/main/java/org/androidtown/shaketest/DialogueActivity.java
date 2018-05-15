@@ -24,7 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DialogueActivity extends Activity {
     TextView get_name, get_pNum, get_email;
-    CircleImageView mPicture;
+    CircleImageView mPicture,convertQRButton;
     private String userName, userPhoneNum, userEmail;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
@@ -35,7 +35,7 @@ public class DialogueActivity extends Activity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_dialogue);
-
+        convertQRButton = findViewById(R.id.convertQR);
         mPicture = findViewById(R.id.dialogue_activity_picture);
         get_name = findViewById(R.id.dialogue_activity_name);
         get_pNum = findViewById(R.id.dialogue_activity_pNum);
@@ -47,6 +47,13 @@ public class DialogueActivity extends Activity {
         get_pNum.setText(userPhoneNum);
         get_email.setText(userEmail);
         Log.d("AtDialogueActivity", userName + " " + userEmail + " " + userPhoneNum);
+
+        convertQRButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(DialogueActivity.this, "QR is Clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
