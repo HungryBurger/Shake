@@ -36,7 +36,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center|left"
                 android:padding="10dp" />
-
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
