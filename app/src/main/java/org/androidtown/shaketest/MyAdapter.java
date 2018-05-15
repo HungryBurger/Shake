@@ -27,7 +27,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public MyAdapter(ArrayList<MyData> myDataset) {
         mDataset = myDataset;
     }
-
+    @Override
     public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_contact_list_main_fragment, parent, false);
         ViewHolder vh = new ViewHolder(v);
@@ -39,7 +39,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.mTextView.setText(mDataset.get(position).text);
         holder.mImageView.setImageResource(mDataset.get(position).img);
     }
-
+    @Override
     public int getItemCount() {
         return mDataset.size();
     }
@@ -47,7 +47,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     static class MyData {
         public String text;
         public int img;
-
         public MyData(String text, int img) {
             this.text = text;
             this.img = img;

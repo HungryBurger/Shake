@@ -18,6 +18,7 @@ public class ContactListMain_fragment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list_main_fragment);
 
+
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -26,7 +27,12 @@ public class ContactListMain_fragment extends AppCompatActivity {
         mAdapter = new MyAdapter(myDataset);
         mRecyclerView.setAdapter(mAdapter);
 
-        myDataset.add(new MyAdapter.MyData("#InsideOut", R.mipmap.insideout));
-        myDataset.add(new MyAdapter.MyData("#Mini", R.mipmap.minions));
+        myDataset.add(new MyAdapter.MyData("insideOut", R.mipmap.insideout));
+        myDataset.add(new MyAdapter.MyData("minions", R.mipmap.minions));
+
+
+    }
+    private void dataset(){
+
     }
 }
