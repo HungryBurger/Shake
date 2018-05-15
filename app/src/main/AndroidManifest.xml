@@ -70,6 +70,7 @@
                 android:resource="@xml/tech_list" />
         </activity>
         <activity android:name=".ContactList_main"></activity>
+
     </application>
 
 </manifest>

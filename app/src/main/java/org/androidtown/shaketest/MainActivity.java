@@ -176,12 +176,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void callDialog() {
-        FragmentManager fm = getSupportFragmentManager();
-        MyAlertDialogFragment newDialogFragment = MyAlertDialogFragment.newInstance(displayUserName, displayUserPhoneNumber, displayUserEmail);
-        newDialogFragment.show(fm, "dialog");
-    }
-
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);

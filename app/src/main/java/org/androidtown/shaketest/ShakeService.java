@@ -7,6 +7,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -36,14 +37,13 @@ public class ShakeService extends Service implements SensorEventListener {
 
         mSensorManager.registerListener(this, mAccelermeter, SensorManager.SENSOR_DELAY_NORMAL);
 
-        //return super.onStartCommand(intent, flags, startId);
         /* 서비스가 강제종료 되었을 경우 재시작한다.(디폴트값) */
         return START_STICKY;
 
-        /* 강제종료 되어도 재시작하지 않는다. */
+        // 강제종료 되어도 재시작하지 않는다.
         //return START_NOT_STICKY;
 
-        /* 서비스가 강제 종료 되었을 경우 재시작하며, 서비스를 시작할때 받았던 intent를 다시 받으며 시작한다. */
+        // 서비스가 강제 종료 되었을 경우 재시작하며, 서비스를 시작할때 받았던 intent를 다시 받으며 시작한다.
         //return START_REDELIVER_INTENT
     }
 
@@ -80,8 +80,10 @@ public class ShakeService extends Service implements SensorEventListener {
                     return;
                 }
                 mShakeTime = currentTime;
-                Toast.makeText(getApplicationContext(), "Shake 감지", Toast.LENGTH_SHORT).show();
-            }
+                Intent intent = new Intent(ShakeService.this, DialogueActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                }
         }
     }
 
@@ -89,7 +91,7 @@ public class ShakeService extends Service implements SensorEventListener {
     public void onDestroy() {
         super.onDestroy();
 
+        Log.d("TAG","Kill Service");
         mSensorManager.unregisterListener(this, mAccelermeter);
-        Toast.makeText(getApplicationContext(), "서비스 종료", Toast.LENGTH_SHORT).show();
     }
 }
