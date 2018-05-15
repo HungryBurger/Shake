@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -35,7 +36,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -72,7 +75,9 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     private String displayUserName, displayUserEmail, displayUserPhoneNumber;
     // [END declare_auth]
     private GoogleSignInClient mGoogleSignInClient;
+    private RelativeLayout frameList1;
 
+    private RelativeLayout frameList2;
     private ToggleButton service_check;
 
     @Override
@@ -81,7 +86,10 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         setContentView(R.layout.activity_main_menu);
 
         initLayout();
+        frameList1=(RelativeLayout) findViewById(R.id.frame1);
+        frameList2=(RelativeLayout) findViewById(R.id.frame2);
 
+        frameList1.setVisibility(View.VISIBLE);
         mAuth = FirebaseAuth.getInstance();
         mListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -134,6 +142,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             }
         });
     }
+
 
     private void onNFC() {
         nfcAdapter = NfcAdapter.getDefaultAdapter(MainMenu.this);
@@ -205,11 +214,10 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         switch (item.getItemId()) {
             case R.id.item1:
                 Toast.makeText(this, "item1 clicked..", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainMenu.this,ContactList_main.class);
-                startActivity(intent);
+                frameList1.setVisibility(RelativeLayout.INVISIBLE);
+                frameList2.setVisibility(RelativeLayout.VISIBLE);
                 break;
             case R.id.item2:
-                Toast.makeText(this, "item2 clicked..", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.item3:
                 Toast.makeText(this, "item3 clicked..", Toast.LENGTH_SHORT).show();
