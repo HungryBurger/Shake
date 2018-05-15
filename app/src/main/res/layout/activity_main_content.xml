@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -7,7 +8,6 @@
     <!--Custom Toolbar-->
     <include layout="@layout/toolbar"
         />
-
 
     <Button
         android:layout_width="wrap_content"
@@ -27,5 +27,12 @@
         app:layout_constraintRight_toRightOf="parent"
         android:id="@+id/nfc"
         android:text="nfc"/>
+
+    <ToggleButton
+        android:id="@+id/service_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints" />
 
 </android.support.constraint.ConstraintLayout>
