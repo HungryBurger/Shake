@@ -77,7 +77,8 @@
             android:name=".DialogueActivity"
             android:theme="@android:style/Theme.DeviceDefault.Dialog" />
         <activity android:name=".ContactListMain_fragment" />
-        <activity android:name=".MainMenu_mainpage"></activity>
+        <activity android:name=".MainMenu_mainpage" />
+        <activity android:name=".Customized_main"></activity>
     </application>
 
 </manifest>

@@ -219,6 +219,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 break;
             case R.id.item2:
                 Toast.makeText(this, "Customized clicked..", Toast.LENGTH_SHORT).show();
+                fragmentManager.beginTransaction().replace(R.id.frameLayout, Customized_main.newInstance()).commit();
                 break;
             case R.id.item3:
                 Toast.makeText(this, "Main page clicked..", Toast.LENGTH_SHORT).show();
