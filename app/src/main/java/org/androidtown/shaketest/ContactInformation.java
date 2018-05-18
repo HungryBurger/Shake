@@ -1,5 +1,4 @@
 package org.androidtown.shaketest;
-
 public class ContactInformation {
     String text1, text2;
     int image;

@@ -23,8 +23,6 @@ public class ContactListMain_fragment extends Fragment {
 
         return fragment;
     }
-
-    //This section shows the fragment.
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
