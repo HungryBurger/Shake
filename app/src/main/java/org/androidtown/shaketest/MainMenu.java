@@ -214,17 +214,21 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item1:
-                Toast.makeText(this, "item1 clicked..", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Contact List clicked..", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, ContactListMain_fragment.newInstance()).commit();
                 break;
             case R.id.item2:
+                Toast.makeText(this, "Customized clicked..", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.item3:
-                Toast.makeText(this, "item3 clicked..", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Main page clicked..", Toast.LENGTH_SHORT).show();
+                fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
                 break;
             case R.id.log_out:
                 click_log_out();
                 break;
+
+
         }
         drawerLayout.closeDrawer(GravityCompat.START);
 

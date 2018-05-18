@@ -21,12 +21,6 @@
             android:layout_width="match_parent"
             />
 
-        <include
-            android:id="@+id/frame2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            layout="@layout/activity_contact_list_main_fragment" />
-
     </FrameLayout>
 
     <Button

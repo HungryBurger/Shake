@@ -13,7 +13,7 @@
     <item
         android:id="@+id/item3"
         android:icon="@mipmap/ic_launcher_round"
-        android:title="Load"
+        android:title="MainPage"
         />
     <item
         android:id="@+id/log_out"
