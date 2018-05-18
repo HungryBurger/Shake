@@ -85,9 +85,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     private String displayUserName, displayUserEmail, displayUserPhoneNumber;
     // [END declare_auth]
     private GoogleSignInClient mGoogleSignInClient;
-    private RelativeLayout frameList1;
-
-    private RelativeLayout frameList2;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,10 +93,8 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         setContentView(R.layout.activity_main_menu);
         initLayout();
 
-        frameList1=(RelativeLayout) findViewById(R.id.frame1);
-        frameList2=(RelativeLayout) findViewById(R.id.frame2);
-
-        frameList1.setVisibility(View.VISIBLE);
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
         mAuth = FirebaseAuth.getInstance();
         mListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -219,8 +215,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         switch (item.getItemId()) {
             case R.id.item1:
                 Toast.makeText(this, "item1 clicked..", Toast.LENGTH_SHORT).show();
-                frameList1.setVisibility(RelativeLayout.INVISIBLE);
-                frameList2.setVisibility(RelativeLayout.VISIBLE);
+                fragmentManager.beginTransaction().replace(R.id.frameLayout, ContactListMain_fragment.newInstance()).commit();
                 break;
             case R.id.item2:
                 break;
