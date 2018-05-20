@@ -2,9 +2,11 @@ package org.androidtown.shaketest;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +24,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DialogueActivity extends Activity {
@@ -31,6 +35,10 @@ public class DialogueActivity extends Activity {
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private Activity activity;
+
+    private ArrayList<ContentProviderOperation> ops;
+    private String DisplayName;
+    private String MobileNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +87,13 @@ public class DialogueActivity extends Activity {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
                 finish();
             } else {
-
                 Toast.makeText(getApplicationContext(), result.getContents(), Toast.LENGTH_SHORT).show();
-
+                if (result.getContents().startsWith("shake")) {
+                    String[] arr = result.getContents().split("#");
+                    saveContacts(arr[1], arr[2]);
+                } else {
+                    /* Wrong Value */
+                }
             }
         } else {
             // This is important, otherwise the result will not be passed to the fragment
@@ -114,5 +126,47 @@ public class DialogueActivity extends Activity {
         } catch (SecurityException e) {
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
         } return null;
+    }
+
+    public void saveContacts(String name, String num) {
+
+        DisplayName = name;
+        MobileNumber = num;
+
+        ops = new ArrayList<>();
+        ops.add(ContentProviderOperation.newInsert(
+                ContactsContract.RawContacts.CONTENT_URI)
+                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
+                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
+                .build());
+
+        if (DisplayName != null) {
+            ops.add(ContentProviderOperation.newInsert(
+                    ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                    .withValue(ContactsContract.Data.MIMETYPE,
+                            ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                    .withValue(
+                            ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
+                            DisplayName).build());
+        }
+        if (MobileNumber != null) {
+            ops.add(ContentProviderOperation.
+                    newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                    .withValue(ContactsContract.Data.MIMETYPE,
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, MobileNumber)
+                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
+                            ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                    .build());
+        }
+        try {
+            getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            finish();
+        }
     }
 }

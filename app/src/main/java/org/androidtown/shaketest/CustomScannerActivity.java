@@ -26,6 +26,7 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
     private String userName, userPhoneNum, userEmail;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
+    private final String  HEADER = "shake#";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,8 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
 
         MultiFormatWriter gen = new MultiFormatWriter();
 
-        String data = userName + "\n" + userPhoneNum + "\n" + userEmail;
+        String data = construct_data();
+        
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.screenBrightness = 1;
         getWindow().setAttributes(params);
@@ -77,6 +79,10 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
         userName = mUser.getDisplayName();
         userEmail = mUser.getEmail();
         userPhoneNum = getPhoneNum();
+    }
+
+    private String construct_data () {
+        return (HEADER + userName + "#" + userPhoneNum + "#" +userEmail);
     }
 
     private String getPhoneNum() {

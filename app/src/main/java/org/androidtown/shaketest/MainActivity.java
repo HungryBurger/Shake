@@ -1,5 +1,6 @@
 package org.androidtown.shaketest;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +27,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "GoogleActivity";
@@ -51,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                
                 mUser = mAuth.getCurrentUser();
-
                 if(mUser != null) {
                     startActivity(new Intent(getApplicationContext(), MainMenu.class));
                     finish();
