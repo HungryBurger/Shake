@@ -15,7 +15,10 @@
             android:layout_height="292dp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="5dp"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:scrollbars="horizontal"
+            android:dividerHeight="8dp"
+            >
 
         </android.support.v7.widget.RecyclerView>
 

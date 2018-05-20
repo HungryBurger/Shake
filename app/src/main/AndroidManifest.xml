@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.androidtown.shaketest">
 
-    <uses-sdk android:minSdkVersion="16" />
+    <uses-sdk android:minSdkVersion="27" />
 
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -76,9 +76,6 @@
         <activity
             android:name=".DialogueActivity"
             android:theme="@android:style/Theme.DeviceDefault.Dialog" />
-        <activity android:name=".ContactListMain_fragment" />
-        <activity android:name=".MainMenu_mainpage" />
-        <activity android:name=".Customized_main"></activity>
     </application>
 
 </manifest>
