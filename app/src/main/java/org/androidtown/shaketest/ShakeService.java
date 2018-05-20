@@ -1,8 +1,6 @@
 package org.androidtown.shaketest;
 
-import android.app.AlarmManager;
-import android.app.FragmentManager;
-import android.app.PendingIntent;
+
 import android.app.Service;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -10,9 +8,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * Created by Hee-Su, Lee
@@ -22,8 +18,8 @@ public class ShakeService extends Service implements SensorEventListener {
     private Sensor mAccelermeter = null;
     private long mShakeTime;
     private String TAG = "At Service Class";
-    private static final int SHAKE_SKIP_TIME = 500; // 스킵 시간
-    private static final float SHAKE_THRESHOLD_GRAVITY = 2.7F;
+    private static final int SHAKE_SKIP_TIME = 5000; // 스킵 시간
+    private static final float SHAKE_THRESHOLD_GRAVITY = 3.0F;
 
     public ShakeService() {
 
@@ -79,14 +75,13 @@ public class ShakeService extends Service implements SensorEventListener {
             double squaredD = Math.sqrt(f.doubleValue());
             float gForce = (float) squaredD;
 
-            if (gForce > SHAKE_THRESHOLD_GRAVITY) {
+            if (gForce > SHAKE_THRESHOLD_GRAVITY && ServiceApplication.service_flag) {
                 /* 흔들림이 감지 되는 부분 */
                 long currentTime = System.currentTimeMillis();
 
                 if (mShakeTime + SHAKE_SKIP_TIME > currentTime) {
                     return;
-                }
-                mShakeTime = currentTime;
+                } mShakeTime = currentTime;
 
                 Intent intent = new Intent(ShakeService.this, DialogueActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);

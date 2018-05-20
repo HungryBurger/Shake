@@ -77,7 +77,16 @@
         <activity
             android:name=".DialogueActivity"
             android:theme="@android:style/Theme.DeviceDefault.Dialog" />
-        <activity android:name=".CustomScannerActivity"></activity>
+        <activity android:name=".CustomScannerActivity" />
+
+        <receiver
+            android:name=".ScreenOnOffBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

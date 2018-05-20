@@ -1,6 +1,9 @@
 package org.androidtown.shaketest;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -13,9 +16,6 @@ import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 public class SettingsActivity extends PreferenceActivity {
-
-    private PreferenceScreen screen;
-    private SwitchPreference service_check;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,4 +55,7 @@ public class SettingsActivity extends PreferenceActivity {
             stopService(intent);
         }
     }
+
+
+
 }
