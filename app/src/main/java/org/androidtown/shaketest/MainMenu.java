@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -13,6 +14,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -176,6 +178,21 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        Intent intent = new Intent(getApplicationContext(), ShakeService.class);
+        SharedPreferences setRefer = PreferenceManager
+                .getDefaultSharedPreferences(this);
+
+        if (setRefer.getBoolean("shake_service_on", false)) {
+            startService(intent);
+        } else {
+            stopService(intent);
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GET_PICTURE_URI) {
             if (resultCode == Activity.RESULT_OK) {
@@ -260,6 +277,16 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         settingButton = findViewById(R.id.setting_button);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        /**
+         * 환경설정 액티비티로 넘어가기
+         */
+        settingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+            }
+        });
 
         drawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer_root);
         navigationView = (NavigationView) findViewById(R.id.nv_main_navigation_root);
