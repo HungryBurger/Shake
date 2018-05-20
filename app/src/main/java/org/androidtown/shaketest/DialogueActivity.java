@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -28,10 +29,13 @@ public class DialogueActivity extends Activity {
     private String userName, userPhoneNum, userEmail;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
+    private Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        activity = this;
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_dialogue);
@@ -51,6 +55,9 @@ public class DialogueActivity extends Activity {
         convertQRButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                IntentIntegrator integrator = new IntentIntegrator(activity);
+                integrator.setCaptureActivity(CustomScannerActivity.class);
+                integrator.initiateScan();
                 Toast.makeText(DialogueActivity.this, "QR is Clicked", Toast.LENGTH_SHORT).show();
             }
         });

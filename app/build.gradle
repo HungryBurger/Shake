@@ -1,7 +1,12 @@
 apply plugin: 'com.android.application'
 
+repositories {
+    jcenter()
+}
+
 android {
     compileSdkVersion 27
+    buildToolsVersion '27.0.3' //zxing
     defaultConfig {
         applicationId "org.androidtown.shaketest"
         minSdkVersion 23
