@@ -1,15 +1,11 @@
 package org.androidtown.shaketest;
 
-
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.media.Image;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Build;
@@ -27,25 +23,14 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
-import android.text.Layout;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -53,11 +38,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import org.w3c.dom.Text;
-
-import java.io.IOException;
-
+import java.io.File;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainMenu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -71,13 +52,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     TextView mName, mPhoneNum, mEmail;
     CircleImageView mPicture;
     ImageButton settingButton;
-
-    private static int GET_PICTURE_URI = 9999;
-    private static int GET_PHOTO = 9998;
-    private static int GET_CROP = 9997;
-    String mCurrentPhotoPath;
-    Uri photoURI, albumURI;
-    boolean isAlbum = false;
+    CircleImageView bPicture;
     NfcAdapter nfcAdapter;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
@@ -86,6 +61,12 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     // [END declare_auth]
     private GoogleSignInClient mGoogleSignInClient;
     private FragmentManager fragmentManager;
+
+    private Uri photoURI;
+    private String mCurrentPhotoPath;
+    private static final int FROM_CAMERA = 0;
+    private static final int FROM_ALBUM = 1;
+    private static final int REQUEST_IMAGE_CROP = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +107,8 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 try {
                     Intent intent = new Intent(MainMenu.this, NFCActivity.class);
                     startActivity(intent);
-                }catch (Exception e){}
+                } catch (Exception e) {
+                }
             }
         });
 
@@ -147,46 +129,107 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         });
     }
 
+    private void initLayout() {
+        settingButton = findViewById(R.id.setting_button);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer_root);
+        navigationView = (NavigationView) findViewById(R.id.nv_main_navigation_root);
+        drawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                toolbar,
+                R.string.open_drawer,
+                R.string.close_drawer
+        ) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+        };
+        drawerLayout.addDrawerListener(drawerToggle);
+        navigationView.setNavigationItemSelectedListener(MainMenu.this);
+        nav_header_view = navigationView.getHeaderView(0);
+        toolbar.setTitle("Shake");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+    }
+
 
     private void onNFC() {
         nfcAdapter = NfcAdapter.getDefaultAdapter(MainMenu.this);
 
-            if (nfcAdapter.isEnabled()) {
-            } else {
-                AlertDialog.Builder alertBox = new AlertDialog.Builder(MainMenu.this);
-                alertBox.setTitle("NFC Connection ERROR....");
-                alertBox.setMessage("NFC를 켜주세요.");
-                alertBox.setPositiveButton("Turn on", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
-                            startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
-                        else
-                            startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
-                    }
-                });
-                alertBox.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+        if (nfcAdapter.isEnabled()) {
+        } else {
+            AlertDialog.Builder alertBox = new AlertDialog.Builder(MainMenu.this);
+            alertBox.setTitle("NFC Connection ERROR....");
+            alertBox.setMessage("NFC를 켜주세요.");
+            alertBox.setPositiveButton("Turn on", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
+                        startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
+                    else
+                        startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+                }
+            });
+            alertBox.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-                    }
-                });
+                }
+            });
             alertBox.show();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == GET_PICTURE_URI) {
-            if (resultCode == Activity.RESULT_OK) {
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                    mPicture.setImageBitmap(bitmap);
-                    Glide.with(MainMenu.this).load(data.getData()).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(mPicture);
-                } catch (IOException e) {
-                    Log.e("TAG", e.getMessage());
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        switch (requestCode) {
+            case FROM_ALBUM: {
+                //앨범에서 가져오기
+                if (data.getData() != null) {
+                    galleryAddPic();
+                    //이미지뷰에 이미지 셋팅
+                    CropPicture(data.getData());
+                    break;
                 }
             }
+            case FROM_CAMERA: {
+                //촬영
+                try {
+                    Log.v("알림", "FROM_CAMERA 처리");
+                    galleryAddPic();
+                    CropPicture(photoURI);
+                    //이미지뷰에 이미지셋팅
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+            case REQUEST_IMAGE_CROP:
+                Bundle extras = data.getExtras();
+
+                // String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/shake/" + System.currentTimeMillis() + ".jpg";
+
+                if (extras != null) {
+                    Log.d("ekit", "ekit");
+                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+                    mPicture.setImageBitmap(imageBitmap);
+                    bPicture.setImageBitmap(imageBitmap);
+                    break;
+                }
+                File f = new File(photoURI.getPath());
+                if (f.exists()) f.delete();
         }
     }
 
@@ -196,18 +239,31 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         mName = (TextView) nav_header_view.findViewById(R.id.profile_name);
         mPhoneNum = (TextView) nav_header_view.findViewById(R.id.profile_phone_number);
         mPicture = (CircleImageView) nav_header_view.findViewById(R.id.profile_picture);
+        bPicture = (CircleImageView) findViewById(R.id.profile_image);
         mPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, GET_PICTURE_URI);
+                imageDialog();
             }
         });
         mEmail.setText(displayUserEmail);
         mName.setText(displayUserName);
         mPhoneNum.setText(displayUserPhoneNumber);
+    }
+
+    private void getPhonenum() {
+        TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+
+        try {
+            String phoneNum = telephonyManager.getLine1Number();
+            if (phoneNum.startsWith("+82")) {
+                phoneNum = phoneNum.replace("+82", "0");
+            }
+            displayUserPhoneNumber = PhoneNumberUtils.formatNumber(phoneNum);
+        } catch (SecurityException e) {
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
@@ -228,8 +284,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             case R.id.log_out:
                 click_log_out();
                 break;
-
-
         }
         drawerLayout.closeDrawer(GravityCompat.START);
 
@@ -256,52 +310,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         return super.onOptionsItemSelected(item);
     }
 
-    private void initLayout() {
-        settingButton = findViewById(R.id.setting_button);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        drawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer_root);
-        navigationView = (NavigationView) findViewById(R.id.nv_main_navigation_root);
-        drawerToggle = new ActionBarDrawerToggle(
-                this,
-                drawerLayout,
-                toolbar,
-                R.string.open_drawer,
-                R.string.close_drawer
-        ){
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-            }
-        };
-        drawerLayout.addDrawerListener(drawerToggle);
-        navigationView.setNavigationItemSelectedListener(MainMenu.this);
-        nav_header_view = navigationView.getHeaderView(0);
-        toolbar.setTitle("Shake");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-    }
-
-    public void click_log_out() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
-        builder.setMessage("로그아웃 하시겠습니까?")
-                .setCancelable(false)
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        signOut();
-                    }
-                }).setNegativeButton("취소", null);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START))
@@ -325,19 +333,18 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         }
     }
 
-    private void getPhonenum() {
-        TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-
-        try {
-            String phoneNum = telephonyManager.getLine1Number();
-            if (phoneNum.startsWith("+82")) {
-                phoneNum = phoneNum.replace("+82", "0");
-            }
-            displayUserPhoneNumber = PhoneNumberUtils.formatNumber(phoneNum);
-        } catch (SecurityException e) {
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-        }
-
+    public void click_log_out() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
+        builder.setMessage("로그아웃 하시겠습니까?")
+                .setCancelable(false)
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        signOut();
+                    }
+                }).setNegativeButton("취소", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void signOut() {
@@ -362,5 +369,48 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         FragmentManager fm = getSupportFragmentManager();
         MyAlertDialogFragment newDialogFragment = MyAlertDialogFragment.newInstance(displayUserName, displayUserPhoneNumber, displayUserEmail);
         newDialogFragment.show(fm, "dialog");
+    }
+
+    public void imageDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
+        builder.setTitle("사진 선택");
+        builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.setNegativeButton("앨범 찾기", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                galleryAddPic();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+    public void galleryAddPic() {
+        Intent pickPic = new Intent(Intent.ACTION_PICK);
+        pickPic.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickPic.setType("image/*");
+        if (pickPic.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(pickPic, FROM_ALBUM);
+        }
+    }
+
+    public void CropPicture(Uri uri) {
+        //this.grantUriPermission("com.android.camera",photoURI, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Intent cropPic = new Intent("com.android.camera.action.CROP");
+        cropPic.setDataAndType(uri, "image/*");
+        cropPic.putExtra("outputX", 200); // crop한 이미지의 x축 크기 (integer)
+        cropPic.putExtra("outputY", 200); // crop한 이미지의 y축 크기 (integer)
+        cropPic.putExtra("aspectX", 1); // crop 박스의 x축 비율 (integer)
+        cropPic.putExtra("aspectY", 1); // crop 박스의 y축 비율 (integer)
+        cropPic.putExtra("scale", true);
+        cropPic.putExtra("return-data", true);
+        if (cropPic.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(cropPic, REQUEST_IMAGE_CROP);
+        }
+
     }
 }

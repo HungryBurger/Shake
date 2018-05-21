@@ -51,12 +51,19 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="application/org.androidtown.shaketest" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="org.androidtown.shaketest.fileprovider"
+            android:name="android.support.v4.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:resource="@xml/file_paths"
+                android:name="android.support.FILE_PROVIDER_PATHS" />
+        </provider>
         <activity android:name=".NFCActivity">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
@@ -76,6 +83,6 @@
         <activity
             android:name=".DialogueActivity"
             android:theme="@android:style/Theme.DeviceDefault.Dialog" />
-    </application>
 
+    </application>
 </manifest>
