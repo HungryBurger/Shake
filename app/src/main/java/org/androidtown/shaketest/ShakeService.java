@@ -2,7 +2,9 @@ package org.androidtown.shaketest;
 
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,6 +23,8 @@ public class ShakeService extends Service implements SensorEventListener {
     private static final int SHAKE_SKIP_TIME = 5000; // 스킵 시간
     private static final float SHAKE_THRESHOLD_GRAVITY = 3.0F;
 
+    private BroadcastReceiver mReceiver = null;
+
     public ShakeService() {
 
     }
@@ -35,6 +39,9 @@ public class ShakeService extends Service implements SensorEventListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        if (mReceiver == null)
+            registerScreenOffAction();
 
         Log.d(TAG, "Start Service");
         mSensorManager.registerListener(this, mAccelermeter, SensorManager.SENSOR_DELAY_NORMAL);
@@ -90,12 +97,21 @@ public class ShakeService extends Service implements SensorEventListener {
         }
     }
 
+    private void registerScreenOffAction () {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        mReceiver = new ScreenOnOffBroadcastReceiver();
+        registerReceiver(mReceiver, intentFilter);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
 
         Log.d(TAG, "Kill Service");
         mSensorManager.unregisterListener(this, mAccelermeter);
+        unregisterReceiver(mReceiver);
+        mReceiver = null;
     }
 
 }

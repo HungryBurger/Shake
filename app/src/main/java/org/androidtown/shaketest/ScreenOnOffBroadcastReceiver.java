@@ -3,9 +3,7 @@ package org.androidtown.shaketest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.util.Log;
-import android.widget.Toast;
 
 public class ScreenOnOffBroadcastReceiver extends BroadcastReceiver {
 
@@ -23,9 +21,4 @@ public class ScreenOnOffBroadcastReceiver extends BroadcastReceiver {
         }
     }
 
-    public IntentFilter getFilter () {
-        final IntentFilter filter = new IntentFilter();
-        filter.addAction(SCREEN_OFF);
-        return filter;
-    }
 }
