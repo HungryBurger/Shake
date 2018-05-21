@@ -204,6 +204,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                     break;
                 }
             }
+
             case FROM_CAMERA: {
                 //촬영
                 try {
