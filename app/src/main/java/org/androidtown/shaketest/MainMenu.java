@@ -2,7 +2,6 @@ package org.androidtown.shaketest;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,8 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.media.Image;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Build;
@@ -30,25 +27,13 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
-import android.text.Layout;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
+import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -76,7 +61,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     TextView mName, mPhoneNum, mEmail;
     CircleImageView mPicture;
     ImageButton settingButton;
-
+    Button read,write;
     private static final int FROM_ALBUM = 1;
     private static final int REQUEST_IMAGE_CROP = 2;
 
@@ -95,7 +80,8 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
+        read = findViewById(R.id.read);
+        write = findViewById(R.id.write);
         /**
          * 자동 권한 요청하기
          */
@@ -116,7 +102,10 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                         android.Manifest.permission.CAMERA,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         android.Manifest.permission.READ_PHONE_STATE,
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.NFC,
+                        Manifest.permission.BIND_NFC_SERVICE
+                        )
                 .check();
 
         initLayout();
@@ -141,23 +130,25 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 }
             }
         };
-        findViewById(R.id.popup).setOnClickListener(new View.OnClickListener() {
+        read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callDialog();
+                Intent intent = new Intent(MainMenu.this,ReadNFC.class);
+                startActivity(intent);
             }
         });
-        onNFC();
-        findViewById(R.id.nfc).setOnClickListener(new View.OnClickListener() {
+        write.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    Intent intent = new Intent(MainMenu.this, NFCActivity.class);
-                    startActivity(intent);
-                }catch (Exception e){}
+                Intent intent = new Intent(MainMenu.this, WriteNFC.class);
+                Bundle myBundle = new Bundle();
+                myBundle.putString("name",mName.getText().toString());
+                myBundle.putString("phoneNum",mPhoneNum.getText().toString());
+                myBundle.putString("E-mail",mEmail.getText().toString());
+                intent.putExtras(myBundle);
+                startActivity(intent);
             }
         });
-
     }
 
     private void onNFC() {
@@ -445,6 +436,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         if (cropPic.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(cropPic, REQUEST_IMAGE_CROP);
         }
+
     }
     public void callDialog() {
         FragmentManager fm = getSupportFragmentManager();

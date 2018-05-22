@@ -88,6 +88,9 @@
                 <action android:name="android.intent.action.SCREEN_OFF"/>
             </intent-filter>
         </receiver>
+        <activity android:name=".ReadNFC"/>
+        <activity android:name=".WriteNFC"/>
+        <activity android:name=".second"/>
     </application>
 
 </manifest>
