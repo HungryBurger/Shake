@@ -22,6 +22,7 @@ public class ShakeService extends Service implements SensorEventListener {
     private String TAG = "AtServiceClass";
     private static final int SHAKE_SKIP_TIME = 5000; // 스킵 시간
     private static final float SHAKE_THRESHOLD_GRAVITY = 3.0F;
+
     private BroadcastReceiver mReceiver = null;
 
     public ShakeService() {

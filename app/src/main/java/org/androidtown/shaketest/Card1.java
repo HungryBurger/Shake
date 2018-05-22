@@ -1,6 +1,5 @@
 package org.androidtown.shaketest;
 
-import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -9,13 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MainMenu_mainpage extends Fragment {
-    private int chk;
+public class Card1 extends Fragment {
     FragmentManager fragmentManager;
-    public static MainMenu_mainpage newInstance() {
+    public static Card1 newInstance() {
         Bundle args = new Bundle();
-        MainMenu_mainpage fragment = new MainMenu_mainpage();
-
+        Card1 fragment = new Card1();
         fragment.setArguments(args);
         return fragment;
     }
@@ -23,7 +20,7 @@ public class MainMenu_mainpage extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.activity_main_menu_mainpage, container, false);
+        ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.card1, container, false);
         return mView;
     }
 }
