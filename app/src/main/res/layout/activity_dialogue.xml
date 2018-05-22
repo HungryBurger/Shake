@@ -70,9 +70,9 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/convertQR"
-        android:src="@drawable/qr_code"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_margin="10dp"
-        android:layout_gravity="right|bottom" />
+        android:layout_gravity="right|bottom"
+        android:layout_margin="20dp"
+        android:src="@drawable/qr_code" />
 </LinearLayout>

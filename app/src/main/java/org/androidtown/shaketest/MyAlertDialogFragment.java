@@ -17,10 +17,13 @@ public class MyAlertDialogFragment extends DialogFragment {
     TextView numTv;
 
     public static MyAlertDialogFragment newInstance(String name, String pNum, String email) {
+        Customized_main fragment = new Customized_main();
         Bundle bundle = new Bundle();
+        fragment.setArguments(bundle);
         bundle.putString("name", name);
         bundle.putString("pNum", pNum);
         bundle.putString("eMail", email);
+        fragment.setArguments(bundle);
 
         MyAlertDialogFragment frag = new MyAlertDialogFragment();
         frag.setArguments(bundle);
@@ -48,6 +51,7 @@ public class MyAlertDialogFragment extends DialogFragment {
         nameTv.setText(displayName);
         numTv.setText(phoneNum);
         emailTv.setText(eMail);
+
         Log.d("fuck2",nameTv.getText()+ " " + numTv.getText()+ " " + emailTv.getText());
         builder.setView(mView).setNegativeButton("닫기",null);
 

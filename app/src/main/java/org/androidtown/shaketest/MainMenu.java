@@ -81,6 +81,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     private static int GET_PICTURE_URI = 9999;
     private static int GET_PHOTO = 9998;
     private static int GET_CROP = 9997;
+    private int chklist=1;
     String mCurrentPhotoPath;
     Uri photoURI, albumURI;
     boolean isAlbum = false;
@@ -261,6 +262,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             case R.id.item1:
                 Toast.makeText(this, "Contact List clicked..", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, ContactListMain_fragment.newInstance()).commit();
+
                 break;
             case R.id.item2:
                 Toast.makeText(this, "Customized clicked..", Toast.LENGTH_SHORT).show();

@@ -61,6 +61,7 @@ public class DialogueActivity extends Activity {
         get_email.setText(userEmail);
         Log.d("AtDialogueActivity", userName + " " + userEmail + " " + userPhoneNum);
 
+
         convertQRButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,6 +128,7 @@ public class DialogueActivity extends Activity {
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
         } return null;
     }
+
 
     public void saveContacts(String name, String num) {
 
