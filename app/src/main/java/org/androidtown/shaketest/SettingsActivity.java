@@ -1,6 +1,9 @@
 package org.androidtown.shaketest;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -14,9 +17,6 @@ import android.widget.Toast;
 
 public class SettingsActivity extends PreferenceActivity {
 
-    private PreferenceScreen screen;
-    private SwitchPreference service_check;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,13 +29,33 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragment {
+        private SharedPreferences.OnSharedPreferenceChangeListener prefListener;
+        private Context context;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
             addPreferencesFromResource(R.xml.preference);
 
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            context = getActivity();
+
+            prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+                @Override
+                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+                    Intent intent = new Intent(context, ShakeService.class);
+                    SharedPreferences setRefer = PreferenceManager
+                            .getDefaultSharedPreferences(context);
+                    if (setRefer.getBoolean("shake_service_on", false)) {
+                        ServiceApplication.service_flag = true;
+                        context.startService(intent);
+                    } else {
+                        ServiceApplication.service_flag = false;
+                        context.stopService(intent);
+                    }
+                }
+            }; prefs.registerOnSharedPreferenceChangeListener(prefListener);
         }
     }
 
@@ -43,16 +63,5 @@ public class SettingsActivity extends PreferenceActivity {
     protected void onStop() {
         super.onStop();
 
-        Intent intent = new Intent(getApplicationContext(), ShakeService.class);
-        SharedPreferences setRefer = PreferenceManager
-                .getDefaultSharedPreferences(this);
-
-        if (setRefer.getBoolean("shake_service_on", false)) {
-            Toast.makeText(getApplicationContext(), "서비스 실행", Toast.LENGTH_SHORT).show();
-            startService(intent);
-        } else {
-            Toast.makeText(getApplicationContext(), "서비스 취소", Toast.LENGTH_SHORT).show();
-            stopService(intent);
-        }
     }
 }

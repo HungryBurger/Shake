@@ -1,18 +1,16 @@
 package org.androidtown.shaketest;
 
-import android.app.AlarmManager;
-import android.app.FragmentManager;
-import android.app.PendingIntent;
+
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * Created by Hee-Su, Lee
@@ -21,9 +19,11 @@ public class ShakeService extends Service implements SensorEventListener {
     private SensorManager mSensorManager = null;
     private Sensor mAccelermeter = null;
     private long mShakeTime;
-    private String TAG = "At Service Class";
-    private static final int SHAKE_SKIP_TIME = 500; // 스킵 시간
-    private static final float SHAKE_THRESHOLD_GRAVITY = 2.7F;
+    private String TAG = "AtServiceClass";
+    private static final int SHAKE_SKIP_TIME = 5000; // 스킵 시간
+    private static final float SHAKE_THRESHOLD_GRAVITY = 3.0F;
+
+    private BroadcastReceiver mReceiver = null;
 
     public ShakeService() {
 
@@ -33,12 +33,16 @@ public class ShakeService extends Service implements SensorEventListener {
     public void onCreate() {
         super.onCreate();
 
+        Log.d(TAG, "Service onCreate");
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAccelermeter = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        if (mReceiver == null)
+            registerScreenOffAction();
 
         Log.d(TAG, "Start Service");
         mSensorManager.registerListener(this, mAccelermeter, SensorManager.SENSOR_DELAY_NORMAL);
@@ -79,14 +83,13 @@ public class ShakeService extends Service implements SensorEventListener {
             double squaredD = Math.sqrt(f.doubleValue());
             float gForce = (float) squaredD;
 
-            if (gForce > SHAKE_THRESHOLD_GRAVITY) {
+            if (gForce > SHAKE_THRESHOLD_GRAVITY && ServiceApplication.service_flag) {
                 /* 흔들림이 감지 되는 부분 */
                 long currentTime = System.currentTimeMillis();
 
                 if (mShakeTime + SHAKE_SKIP_TIME > currentTime) {
                     return;
-                }
-                mShakeTime = currentTime;
+                } mShakeTime = currentTime;
 
                 Intent intent = new Intent(ShakeService.this, DialogueActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -95,12 +98,21 @@ public class ShakeService extends Service implements SensorEventListener {
         }
     }
 
+    private void registerScreenOffAction () {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        mReceiver = new ScreenOnOffBroadcastReceiver();
+        registerReceiver(mReceiver, intentFilter);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
 
         Log.d(TAG, "Kill Service");
         mSensorManager.unregisterListener(this, mAccelermeter);
+        unregisterReceiver(mReceiver);
+        mReceiver = null;
     }
 
 }

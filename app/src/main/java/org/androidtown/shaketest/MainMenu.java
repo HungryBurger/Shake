@@ -68,7 +68,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainMenu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    ToggleButton servcie_check;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle drawerToggle;
@@ -161,23 +160,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             }
         });
 
-        servcie_check = findViewById(R.id.service_check);
-        servcie_check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ShakeService.class);
-                intent.putExtra("userName", displayUserName);
-                intent.putExtra("userEmail", displayUserEmail);
-                intent.putExtra("userPhoneNum", displayUserPhoneNumber);
-                if (servcie_check.isChecked()) {
-                    startService(intent);
-                } else {
-                    stopService(intent);
-                }
-            }
-        });
     }
-
 
     private void onNFC() {
         nfcAdapter = NfcAdapter.getDefaultAdapter(MainMenu.this);
