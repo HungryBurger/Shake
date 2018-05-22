@@ -27,14 +27,7 @@ public class MainMenu_mainpage extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.activity_main_menu_mainpage, container, false);
-        CircleImageView imgBtn = mView.findViewById(R.id.profile_image);
-        imgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activity = (MainMenu)getActivity();
-                activity.imageDialog();
-            }
-        });
+
         return mView;
     }
 }
