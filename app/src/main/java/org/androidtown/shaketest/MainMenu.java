@@ -2,7 +2,6 @@ package org.androidtown.shaketest;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,8 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.media.Image;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Build;
@@ -30,25 +27,13 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
-import android.text.Layout;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
+import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -76,14 +61,12 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     TextView mName, mPhoneNum, mEmail;
     CircleImageView mPicture;
     ImageButton settingButton;
+    Button read,write;
+    private static final int FROM_ALBUM = 1;
+    private static final int REQUEST_IMAGE_CROP = 2;
 
-    private static int GET_PICTURE_URI = 9999;
-    private static int GET_PHOTO = 9998;
-    private static int GET_CROP = 9997;
     private int chklist=1;
-    String mCurrentPhotoPath;
-    Uri photoURI, albumURI;
-    boolean isAlbum = false;
+    Uri photoURI;
     NfcAdapter nfcAdapter;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
@@ -97,7 +80,8 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
+        read = findViewById(R.id.read);
+        write = findViewById(R.id.write);
         /**
          * 자동 권한 요청하기
          */
@@ -118,7 +102,10 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                         android.Manifest.permission.CAMERA,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         android.Manifest.permission.READ_PHONE_STATE,
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.NFC,
+                        Manifest.permission.BIND_NFC_SERVICE
+                )
                 .check();
 
         initLayout();
@@ -143,48 +130,50 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 }
             }
         };
-        findViewById(R.id.popup).setOnClickListener(new View.OnClickListener() {
+        read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callDialog();
+                Intent intent = new Intent(MainMenu.this,ReadNFC.class);
+                startActivity(intent);
             }
         });
-        onNFC();
-        findViewById(R.id.nfc).setOnClickListener(new View.OnClickListener() {
+        write.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    Intent intent = new Intent(MainMenu.this, NFCActivity.class);
-                    startActivity(intent);
-                }catch (Exception e){}
+                Intent intent = new Intent(MainMenu.this, WriteNFC.class);
+                Bundle myBundle = new Bundle();
+                myBundle.putString("name",mName.getText().toString());
+                myBundle.putString("phoneNum",mPhoneNum.getText().toString());
+                myBundle.putString("E-mail",mEmail.getText().toString());
+                intent.putExtras(myBundle);
+                startActivity(intent);
             }
         });
-
     }
 
     private void onNFC() {
         nfcAdapter = NfcAdapter.getDefaultAdapter(MainMenu.this);
 
-            if (nfcAdapter.isEnabled()) {
-            } else {
-                AlertDialog.Builder alertBox = new AlertDialog.Builder(MainMenu.this);
-                alertBox.setTitle("NFC Connection ERROR....");
-                alertBox.setMessage("NFC를 켜주세요.");
-                alertBox.setPositiveButton("Turn on", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
-                            startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
-                        else
-                            startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
-                    }
-                });
-                alertBox.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+        if (nfcAdapter.isEnabled()) {
+        } else {
+            AlertDialog.Builder alertBox = new AlertDialog.Builder(MainMenu.this);
+            alertBox.setTitle("NFC Connection ERROR....");
+            alertBox.setMessage("NFC를 켜주세요.");
+            alertBox.setPositiveButton("Turn on", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
+                        startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
+                    else
+                        startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+                }
+            });
+            alertBox.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-                    }
-                });
+                }
+            });
             alertBox.show();
         }
     }
@@ -206,16 +195,30 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == GET_PICTURE_URI) {
-            if (resultCode == Activity.RESULT_OK) {
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                    mPicture.setImageBitmap(bitmap);
-                    Glide.with(MainMenu.this).load(data.getData()).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(mPicture);
-                } catch (IOException e) {
-                    Log.e("TAG", e.getMessage());
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        switch (requestCode) {
+            case FROM_ALBUM: {
+                //앨범에서 가져오기
+                if (data.getData() != null) {
+                    galleryAddPic();
+                    //이미지뷰에 이미지 셋팅
+                    CropPicture(data.getData());
+                    break;
                 }
             }
+            case REQUEST_IMAGE_CROP:
+                Bundle extras = data.getExtras();
+
+                // String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/shake/" + System.currentTimeMillis() + ".jpg";
+
+                if (extras != null) {
+                    Log.d("ekit", "ekit");
+                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+                    mPicture.setImageBitmap(imageBitmap);
+                    break;
+                }
         }
     }
 
@@ -225,13 +228,11 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         mName = (TextView) nav_header_view.findViewById(R.id.profile_name);
         mPhoneNum = (TextView) nav_header_view.findViewById(R.id.profile_phone_number);
         mPicture = (CircleImageView) nav_header_view.findViewById(R.id.profile_picture);
+
         mPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, GET_PICTURE_URI);
+                imageDialog();
             }
         });
         mEmail.setText(displayUserEmail);
@@ -397,7 +398,46 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                     }
                 });
     }
+    public void imageDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
+        builder.setTitle("사진 선택");
+        builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.setNegativeButton("앨범 찾기", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                galleryAddPic();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+    public void galleryAddPic() {
+        Intent pickPic = new Intent(Intent.ACTION_PICK);
+        pickPic.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickPic.setType("image/*");
+        if (pickPic.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(pickPic, FROM_ALBUM);
+        }
+    }
+    public void CropPicture(Uri uri) {
+        Intent cropPic = new Intent("com.android.camera.action.CROP");
+        cropPic.setDataAndType(uri, "image/*");
+        cropPic.putExtra("outputX", 200); // crop한 이미지의 x축 크기 (integer)
+        cropPic.putExtra("outputY", 200); // crop한 이미지의 y축 크기 (integer)
+        cropPic.putExtra("aspectX", 1); // crop 박스의 x축 비율 (integer)
+        cropPic.putExtra("aspectY", 1); // crop 박스의 y축 비율 (integer)
+        cropPic.putExtra("scale", true);
+        cropPic.putExtra("return-data", true);
+        if (cropPic.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(cropPic, REQUEST_IMAGE_CROP);
+        }
 
+    }
     public void callDialog() {
         FragmentManager fm = getSupportFragmentManager();
         MyAlertDialogFragment newDialogFragment = MyAlertDialogFragment.newInstance(displayUserName, displayUserPhoneNumber, displayUserEmail);
