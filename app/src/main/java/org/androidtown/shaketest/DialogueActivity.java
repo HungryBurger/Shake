@@ -185,7 +185,7 @@ public class DialogueActivity extends Activity {
                     .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                     .withValue(ContactsContract.Data.MIMETYPE,
                             ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                    .withValue(ContactsContract.CommonDataKinds.Email.ADDRESS, MobileNumber)
+                    .withValue(ContactsContract.CommonDataKinds.Email.ADDRESS, emailAddress)
                     .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
                             ContactsContract.CommonDataKinds.Phone.TYPE_WORK)
                     .build());
