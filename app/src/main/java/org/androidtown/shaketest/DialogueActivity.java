@@ -57,6 +57,7 @@ public class DialogueActivity extends Activity {
          */
         init();
 
+
         convertQRButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,6 +139,7 @@ public class DialogueActivity extends Activity {
         } return null;
     }
 
+
     /**
      * Receive the data from NFC or QR code
      * and then Insert received data into the phone's contact DB
@@ -146,7 +148,6 @@ public class DialogueActivity extends Activity {
      * @param email
      */
     public void saveContacts(String name, String num, String email) {
-
         DisplayName = name;
         MobileNumber = num;
         emailAddress = email;

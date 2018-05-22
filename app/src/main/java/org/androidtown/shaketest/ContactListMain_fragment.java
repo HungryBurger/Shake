@@ -1,7 +1,10 @@
 package org.androidtown.shaketest;
 
 
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +26,7 @@ public class ContactListMain_fragment extends Fragment {
 
         return fragment;
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -31,7 +35,6 @@ public class ContactListMain_fragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) mView.findViewById(R.id.list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
-
         MyAdapter myAdapter = new MyAdapter(getActivity(),productList);
         recyclerView.setAdapter(myAdapter);
         return mView;
