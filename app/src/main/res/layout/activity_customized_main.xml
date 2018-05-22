@@ -1,46 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:stretchColumns="2"
-    tools:context=".Customized_main">
+    android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/container_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <TableRow>
+    </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/imageButton1"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:background="#FFFFFF"
-            android:scaleType="fitCenter"
-            android:src="@drawable/card1_list" />
-
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/card2_list"
-            android:background="#FFFFFF"/>
-
-    </TableRow>
-    <TableRow>
-        <ImageButton
-            android:id="@+id/imageButton3"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/card3_list"
-            android:background="#FFFFFF"
-            />
-
-        <ImageButton
-            android:id="@+id/imageButton4"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/card4_list"
-            android:background="#FFFFFF"/>
-    </TableRow>
-</TableLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:dividerHeight="8dp"
+        android:scrollbars="horizontal">
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>
