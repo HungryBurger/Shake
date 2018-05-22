@@ -74,7 +74,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     Toolbar toolbar;
     View nav_header_view;
     TextView mName, mPhoneNum, mEmail;
-    CircleImageView mPicture,bPicture;
+    CircleImageView mPicture;
     ImageButton settingButton;
 
     private static final int FROM_ALBUM = 1;
@@ -226,7 +226,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                     Log.d("ekit", "ekit");
                     Bitmap imageBitmap = (Bitmap) extras.get("data");
                     mPicture.setImageBitmap(imageBitmap);
-                    bPicture.setImageBitmap(imageBitmap);
                     break;
                 }
         }
@@ -238,7 +237,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         mName = (TextView) nav_header_view.findViewById(R.id.profile_name);
         mPhoneNum = (TextView) nav_header_view.findViewById(R.id.profile_phone_number);
         mPicture = (CircleImageView) nav_header_view.findViewById(R.id.profile_picture);
-        bPicture = (CircleImageView) findViewById(R.id.profile_image);
+
         mPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
