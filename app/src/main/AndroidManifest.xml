@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.androidtown.shaketest">
 
-    <uses-sdk android:minSdkVersion="27" />
+
+    <uses-sdk android:minSdkVersion="16" />
 
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -20,6 +21,7 @@
     <uses-feature android:name="android.hardware.nfc" />
 
     <application
+        android:largeHeap="true"
         android:allowBackup="true"
         android:icon="@drawable/shake_app"
         android:label="@string/app_name"
