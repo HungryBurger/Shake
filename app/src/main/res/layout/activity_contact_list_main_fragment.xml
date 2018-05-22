@@ -33,14 +33,15 @@
             android:scaleType="fitXY"
             app:srcCompat="@drawable/card1" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/cardlist_name"
             android:layout_marginStart="63dp"
-            app:srcCompat="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher_round"
+            />
 
         <TextView
             android:id="@+id/cardlist_name"

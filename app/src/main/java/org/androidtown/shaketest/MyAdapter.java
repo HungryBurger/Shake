@@ -10,6 +10,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     Context context;
     List<ContactInformation>productList = new ArrayList<>();
@@ -40,12 +42,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView mImageView;
+        CircleImageView mImageView;
         TextView mTextView;
         TextView mTextView2;
         public ViewHolder(View itemView) {
             super(itemView);
-            this.mImageView = (ImageView) itemView.findViewById(R.id.imageView);
+            this.mImageView = (CircleImageView) itemView.findViewById(R.id.imageView);
             this.mTextView = (TextView) itemView.findViewById(R.id.textView);
             this.mTextView2 = (TextView) itemView.findViewById(R.id.textView2);
         }

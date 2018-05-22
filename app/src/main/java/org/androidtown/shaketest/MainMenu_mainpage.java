@@ -9,9 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainMenu_mainpage extends Fragment {
     private int chk;
     FragmentManager fragmentManager;
+    MainMenu activity;
     public static MainMenu_mainpage newInstance() {
         Bundle args = new Bundle();
         MainMenu_mainpage fragment = new MainMenu_mainpage();
@@ -24,6 +27,14 @@ public class MainMenu_mainpage extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.activity_main_menu_mainpage, container, false);
+        CircleImageView imgBtn = mView.findViewById(R.id.profile_image);
+        imgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity = (MainMenu)getActivity();
+                activity.imageDialog();
+            }
+        });
         return mView;
     }
 }

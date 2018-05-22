@@ -12,12 +12,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContactListMain_fragment extends Fragment {
     List<ContactInformation> productList = new ArrayList<>();
+    MainMenu activity;
+    ImageView image;
     public static ContactListMain_fragment newInstance() {
         Bundle args = new Bundle();
 
@@ -35,6 +38,8 @@ public class ContactListMain_fragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) mView.findViewById(R.id.list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
+        activity = (MainMenu)getActivity();
+        image = mView.findViewById(R.id.imageView2);
         MyAdapter myAdapter = new MyAdapter(getActivity(),productList);
         recyclerView.setAdapter(myAdapter);
         return mView;
