@@ -76,7 +76,8 @@
         </activity>
         <activity
             android:name=".DialogueActivity"
-            android:theme="@android:style/Theme.DeviceDefault.Dialog" />
+            android:theme="@android:style/Theme.DeviceDefault.Dialog"
+            />
         <activity android:name=".CustomScannerActivity" />
 
         <receiver
