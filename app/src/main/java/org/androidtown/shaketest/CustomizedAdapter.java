@@ -48,7 +48,10 @@ public class CustomizedAdapter extends RecyclerView.Adapter<CustomizedAdapter.Vi
         viewHolder.itemView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Toast.makeText(mContext,myItem.getName(),Toast.LENGTH_SHORT).show();
+
+                SharedPrefManager mSharedPrefs = SharedPrefManager.getInstance(mContext);
+                mSharedPrefs.setUI_ItemNo(i + 1);
+                Log.d("SharedPref", String.valueOf(mSharedPrefs.getUI_ItemNo()));
             }
         });
     }

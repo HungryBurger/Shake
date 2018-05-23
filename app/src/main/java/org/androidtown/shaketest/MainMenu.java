@@ -112,6 +112,12 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
+
+        //초기 값 설정 카드 넘버 저장
+        SharedPrefManager mSharedPrefs = SharedPrefManager.getInstance(this);
+        mSharedPrefs.setUI_ItemNo(1);
+        Log.d("SharedPref", String.valueOf(mSharedPrefs.getUI_ItemNo()));
+
         mAuth = FirebaseAuth.getInstance();
         mListener = new FirebaseAuth.AuthStateListener() {
             @Override
