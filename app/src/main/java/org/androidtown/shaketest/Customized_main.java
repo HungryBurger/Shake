@@ -34,7 +34,9 @@ import java.util.ArrayList;
 public class Customized_main extends Fragment {
     RecyclerView mRecyclerView;
     CustomizedAdapter mAdapter;
-    ArrayList<Item> list;
+    ArrayList<CustomizedAdapter.Item> list;
+    String displayUserPhoneNumber;
+
 
     public static Customized_main newInstance() {
         Bundle args = new Bundle();
@@ -49,7 +51,10 @@ public class Customized_main extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.activity_customized_main, container, false);
-        list = new ArrayList<Item>();
+        getPhonenum();
+        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        final DatabaseReference mRef = FirebaseDatabase.getInstance().getReference().child("USER").child(mUser.getUid()).child(displayUserPhoneNumber).child("customized_num/value");
+        list = new ArrayList<CustomizedAdapter.Item>();
         setInitialData();
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -58,60 +63,27 @@ public class Customized_main extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         return mView;
     }
+
     private void setInitialData() {
-        list.add(new Item("Manish Rajput", "manish@gmail.com", R.drawable.card1));
-        list.add(new Item("Vinit yadav", "vinit@gmail.com", R.drawable.card2));
-        list.add(new Item("Anoop", "anoop@gmail.com", R.drawable.card3));
-        list.add(new Item("Dheeraj", "Dheeraj@gmail.com", R.drawable.card4));
+        list.add(new CustomizedAdapter.Item("Style1", "hjjooace@naver.com", R.drawable.card1));
+
+        list.add(new CustomizedAdapter.Item("Style2", "hjjooace@naver.com", R.drawable.card2));
+        list.add(new CustomizedAdapter.Item("Style3", "hjjooace@gmail.com", R.drawable.card3));
+        list.add(new CustomizedAdapter.Item("Style4", "hjjooace@gmail.com", R.drawable.card4));
     }
 
-    /**  getPhonenum();
-     Toast.makeText(getActivity(), displayUserPhoneNumber, Toast.LENGTH_SHORT).show();
-     FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-     final DatabaseReference mRef = FirebaseDatabase.getInstance().getReference().child("USER").child(mUser.getUid()).child(displayUserPhoneNumber).child("customized_num/value");
 
-     ImageButton btn1 = (ImageButton) mView.findViewById(R.id.imageButton1);
-     btn1.setOnClickListener(new View.OnClickListener() {
-    @Override public void onClick(View v) {
-    Toast.makeText(getActivity(), "Set Style1", Toast.LENGTH_SHORT).show();
-    mRef.push().setValue("1");
-    }
-    });
-     ImageButton btn2 = (ImageButton) mView.findViewById(R.id.imageButton2);
-     btn2.setOnClickListener(new View.OnClickListener() {
-    @Override public void onClick(View v) {
-    Toast.makeText(getActivity(), "Set Style2", Toast.LENGTH_SHORT).show();
-    mRef.push().setValue("2");
-    }
-    });
+    private void getPhonenum() {
+        TelephonyManager telephonyManager = (TelephonyManager) getActivity().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 
-     ImageButton btn3 = (ImageButton) mView.findViewById(R.id.imageButton3);
-     btn3.setOnClickListener(new View.OnClickListener() {
-    @Override public void onClick(View v) {
-    Toast.makeText(getActivity(), "Set Style3", Toast.LENGTH_SHORT).show();
-    mRef.push().setValue("3");
+        try {
+            String phoneNum = telephonyManager.getLine1Number();
+            if (phoneNum.startsWith("+82")) {
+                phoneNum = phoneNum.replace("+82", "0");
+            }
+            displayUserPhoneNumber = PhoneNumberUtils.formatNumber(phoneNum);
+        } catch (SecurityException e) {
+            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+        }
     }
-    });
-     ImageButton btn4 = (ImageButton) mView.findViewById(R.id.imageButton4);
-     btn4.setOnClickListener(new View.OnClickListener() {
-    @Override public void onClick(View v) {
-    Toast.makeText(getActivity(), "Set Style4", Toast.LENGTH_SHORT).show();
-    mRef.push().setValue("4");
-    }
-    });
-     return mView;
-     }
-     private void getPhonenum() {
-     TelephonyManager telephonyManager = (TelephonyManager) getActivity().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-
-     try {
-     String phoneNum = telephonyManager.getLine1Number();
-     if (phoneNum.startsWith("+82")) {
-     phoneNum = phoneNum.replace("+82", "0");
-     }
-     displayUserPhoneNumber = PhoneNumberUtils.formatNumber(phoneNum);
-     } catch (SecurityException e) {
-     Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
-     }
-     */
 }

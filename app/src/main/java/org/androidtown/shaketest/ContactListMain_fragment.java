@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContactListMain_fragment extends Fragment {
-    List<ContactInformation> productList = new ArrayList<>();
+    List<MyAdapter.ContactInformation> productList = new ArrayList<>();
     public static ContactListMain_fragment newInstance() {
         Bundle args = new Bundle();
 
@@ -40,15 +40,15 @@ public class ContactListMain_fragment extends Fragment {
         return mView;
     }
     private void setInitialData(){
-        productList.add(new ContactInformation("text1","text1",R.mipmap.ic_launcher));
-        productList.add(new ContactInformation("text2","text2",R.mipmap.ic_launcher));
-        productList.add(new ContactInformation("text3","text3",R.mipmap.ic_launcher));
-        productList.add(new ContactInformation("text3","text3",R.mipmap.ic_launcher));
-        productList.add(new ContactInformation("text3","text3",R.mipmap.ic_launcher));
-        productList.add(new ContactInformation("text3","text3",R.mipmap.ic_launcher));
-        productList.add(new ContactInformation("text3","text3",R.mipmap.ic_launcher));
-        productList.add(new ContactInformation("text3","text3",R.mipmap.ic_launcher));
-        productList.add(new ContactInformation("text3","text3",R.mipmap.ic_launcher));
-        productList.add(new ContactInformation("text3","text3",R.mipmap.ic_launcher));
+        productList.add(new MyAdapter.ContactInformation("text1","text1",R.mipmap.ic_launcher));
+        productList.add(new MyAdapter.ContactInformation("text2","text2",R.mipmap.ic_launcher));
+        productList.add(new MyAdapter.ContactInformation("text3","text3",R.mipmap.ic_launcher));
+        productList.add(new MyAdapter.ContactInformation("text3","text3",R.mipmap.ic_launcher));
+        productList.add(new MyAdapter.ContactInformation("text3","text3",R.mipmap.ic_launcher));
+        productList.add(new MyAdapter.ContactInformation("text3","text3",R.mipmap.ic_launcher));
+        productList.add(new MyAdapter.ContactInformation("text3","text3",R.mipmap.ic_launcher));
+        productList.add(new MyAdapter.ContactInformation("text3","text3",R.mipmap.ic_launcher));
+        productList.add(new MyAdapter.ContactInformation("text3","text3",R.mipmap.ic_launcher));
+        productList.add(new MyAdapter.ContactInformation("text3","text3",R.mipmap.ic_launcher));
     }
 }
