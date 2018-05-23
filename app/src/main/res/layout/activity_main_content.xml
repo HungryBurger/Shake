@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,13 +8,17 @@
     <include layout="@layout/toolbar" />
 
     <FrameLayout
-        android:id="@+id/main_frame"
-        android:layout_width="346dp"
-        android:layout_height="260dp"
-        android:layout_marginBottom="168dp"
-        android:layout_marginStart="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="505dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <RelativeLayout
+            android:id="@+id/frame1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </FrameLayout>
 
     <Button

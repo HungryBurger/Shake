@@ -111,10 +111,10 @@ public class DialogueActivity extends Activity {
         userPhoneNum = getPhoneNum();
 
         convertQRButton = findViewById(R.id.convertQR);
-        mPicture = findViewById(R.id.dialogue_activity_picture);
-        get_name = findViewById(R.id.dialogue_activity_name);
-        get_pNum = findViewById(R.id.dialogue_activity_pNum);
-        get_email = findViewById(R.id.dialogue_activity_email);
+        mPicture = findViewById(R.id.user_picture);
+        get_name = findViewById(R.id.user_name);
+        get_pNum = findViewById(R.id.user_phone_num);
+        get_email = findViewById(R.id.user_email);
 
         get_name.setText(userName);
         get_pNum.setText(userPhoneNum);

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.androidtown.shaketest">
 
-    <uses-sdk android:minSdkVersion="27" />
+    <uses-sdk android:minSdkVersion="16" />
 
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />

@@ -246,19 +246,25 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             case R.id.item1:
                 Toast.makeText(this, "Contact List clicked..", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, ContactListMain_fragment.newInstance()).commit();
-
+                read.setVisibility(View.GONE);
+                write.setVisibility(View.GONE);
                 break;
             case R.id.item2:
                 Toast.makeText(this, "Customized clicked..", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, Customized_main.newInstance()).commit();
+                read.setVisibility(View.GONE);
+                write.setVisibility(View.GONE);
                 break;
             case R.id.item3:
                 Toast.makeText(this, "Main page clicked..", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
+                read.setVisibility(View.GONE);
+                write.setVisibility(View.GONE);
                 break;
             case R.id.log_out:
                 click_log_out();
                 break;
+
 
 
         }
@@ -436,12 +442,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         if (cropPic.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(cropPic, REQUEST_IMAGE_CROP);
         }
-
-    }
-    public void callDialog() {
-        FragmentManager fm = getSupportFragmentManager();
-        MyAlertDialogFragment newDialogFragment = MyAlertDialogFragment.newInstance(displayUserName, displayUserPhoneNumber, displayUserEmail);
-        newDialogFragment.show(fm, "dialog");
     }
 
 }
