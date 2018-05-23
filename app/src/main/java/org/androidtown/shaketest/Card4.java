@@ -23,7 +23,7 @@ public class Card4 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.card1, container, false);
+        ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.card4, container, false);
         return mView;
     }
 }

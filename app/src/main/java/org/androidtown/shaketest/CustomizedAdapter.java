@@ -1,6 +1,8 @@
 package org.androidtown.shaketest;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +18,8 @@ import java.util.List;
 public class CustomizedAdapter extends RecyclerView.Adapter<CustomizedAdapter.ViewHolder> {
     List<Item> countries=new ArrayList<>();
     Context mContext;
-
+    SharedPreferences sh_Pref;
+    SharedPreferences.Editor toEdit;
 
 
     public CustomizedAdapter(List<Item> countries, Context context) {
@@ -36,8 +39,9 @@ public class CustomizedAdapter extends RecyclerView.Adapter<CustomizedAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(ViewHolder viewHolder, final int i) {
         final Item myItem = countries.get(i);
+        final Integer a = i;
         viewHolder.Name.setText(myItem.getName());
         viewHolder.Image.setImageDrawable(mContext.getDrawable(myItem.getOmg()));
         viewHolder.email.setText(myItem.getEmail());
@@ -61,6 +65,8 @@ public class CustomizedAdapter extends RecyclerView.Adapter<CustomizedAdapter.Vi
             this.email = (TextView) itemView.findViewById(R.id.text_email);
         }
     }
+
+
     public static class Item {
         public String name, email;
         public int omg;
