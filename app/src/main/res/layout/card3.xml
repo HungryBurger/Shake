@@ -1,54 +1,89 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:padding="16dp">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="300dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-    <!-- A CardView that contains a TextView -->
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
-        android:layout_gravity="center"
-        android:layout_width="fill_parent"
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="243dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/card3" />
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/dialogue_activity_picture"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        card_view:cardCornerRadius="10dp"
-        >
-        <LinearLayout
-            android:padding="5dp"
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-            <TextView
-                android:padding="5dp"
-                android:textStyle="bold|italic"
-                android:textColor="@android:color/holo_blue_dark"
-                android:textSize="20dp"
-                android:text="@string/app_name"
-                android:id="@+id/text_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="left"
+        android:background="@mipmap/ic_launcher_round"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp" />
 
-            <ImageView
-                android:id="@+id/Image"
-                android:layout_width="match_parent"
-                android:layout_height="169dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/card3" />
-            <TextView
-                android:padding="5dp"
-                android:textColor="@android:color/black"
-                android:textSize="15dp"
-                android:layout_gravity="right"
-                android:gravity="right"
-                android:text="Email"
-                android:id="@+id/text_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_below="@+id/textView"/>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+    <LinearLayout
+        android:layout_width="243dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialogue_activity_picture"
+        android:layout_centerHorizontal="true">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:padding="8dp"
+            android:text="Name : " />
+
+        <TextView
+            android:id="@+id/dialogue_activity_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Text" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="249dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:padding="8dp"
+            android:text="Phone Number : " />
+
+        <TextView
+            android:id="@+id/dialogue_activity_pNum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Text" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="205dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="78dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:padding="8dp"
+            android:text="E-Mail : " />
+
+        <TextView
+            android:id="@+id/dialogue_activity_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Text" />
+    </LinearLayout>
 </RelativeLayout>
