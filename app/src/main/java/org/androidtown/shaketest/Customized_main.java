@@ -66,7 +66,6 @@ public class Customized_main extends Fragment {
 
     private void setInitialData() {
         list.add(new CustomizedAdapter.Item("Style1", "hjjooace@naver.com", R.drawable.card1));
-
         list.add(new CustomizedAdapter.Item("Style2", "hjjooace@naver.com", R.drawable.card2));
         list.add(new CustomizedAdapter.Item("Style3", "hjjooace@gmail.com", R.drawable.card3));
         list.add(new CustomizedAdapter.Item("Style4", "hjjooace@gmail.com", R.drawable.card4));

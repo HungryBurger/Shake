@@ -51,7 +51,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainMenu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainMenu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -443,4 +443,5 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         MyAlertDialogFragment newDialogFragment = MyAlertDialogFragment.newInstance(displayUserName, displayUserPhoneNumber, displayUserEmail);
         newDialogFragment.show(fm, "dialog");
     }
+
 }
