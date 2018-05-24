@@ -41,6 +41,7 @@ public class WriteNFC extends AppCompatActivity {
                 createNewTextRecord("E-mail : " + mMail, Locale.ENGLISH, true),
         });
     }
+
     public static NdefRecord createNewTextRecord(String text, Locale locale, boolean encodelnUtf8){
         byte[] langBytes = locale.getLanguage().getBytes(Charset.forName("US-ASCII"));
         Charset utfEncoding = encodelnUtf8 ? Charset.forName("UTF-8"):Charset.forName("UTF-16");

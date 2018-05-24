@@ -1,23 +1,20 @@
 package org.androidtown.shaketest;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ContentProviderOperation;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v4.app.FragmentManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,10 +34,11 @@ public class DialogueActivity extends Activity {
     private Activity activity;
 
     /* Instance Variable for SaveContact method */
-    private ArrayList<ContentProviderOperation> ops;
+    private ArrayList<ContentProviderOperation> operationLists;
     private String DisplayName;
     private String MobileNumber;
     private String emailAddress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,17 +55,50 @@ public class DialogueActivity extends Activity {
          */
         init();
 
-
         convertQRButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentIntegrator integrator = new IntentIntegrator(activity);
-                integrator.setCaptureActivity(CustomScannerActivity.class);
-                integrator.initiateScan();
+                startScanning();
                 Toast.makeText(DialogueActivity.this, "QR is Clicked", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+    /*public void setContentCard (int id) {
+                    switch (id) {
+                        case 1: {
+                            getSupportFragmentManager().
+                                    beginTransaction().
+                                    replace(R.id.fragment_dialogue, Card1.newInstance()).
+                                    commit();
+                            break;
+                        }
+                        case 2: {
+                            getSupportFragmentManager().
+                                    beginTransaction().
+                                    replace(R.id.fragment_dialogue, Card2.newInstance()).
+                                    commit();
+                            break;
+                        }
+                        case 3: {
+                            getSupportFragmentManager().
+                                    beginTransaction().
+                                    replace(R.id.fragment_dialogue, Card3.newInstance()).
+                                    commit();
+                break;
+            }
+            case 4: {
+                getSupportFragmentManager().
+                        beginTransaction().
+                        replace(R.id.fragment_dialogue, Card4.newInstance()).
+                        commit();
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    }*/
 
     /**
      * Interpreting data from QR code
@@ -110,6 +141,9 @@ public class DialogueActivity extends Activity {
         userEmail = mUser.getEmail();
         userPhoneNum = getPhoneNum();
 
+        SharedPrefManager mSharedPrefs = SharedPrefManager.getInstance(this);
+        //setContentCard(mSharedPrefs.getUI_ItemNo());
+
         convertQRButton = findViewById(R.id.convertQR);
         mPicture = findViewById(R.id.user_picture);
         get_name = findViewById(R.id.user_name);
@@ -139,6 +173,17 @@ public class DialogueActivity extends Activity {
         } return null;
     }
 
+    /**
+     * Start Scanning
+     */
+    private void startScanning () {
+
+        new IntentIntegrator(activity).
+                setBeepEnabled(false).
+                setOrientationLocked(false).
+                setCaptureActivity(CustomScannerActivity.class).
+                initiateScan();
+    }
 
     /**
      * Receive the data from NFC or QR code
@@ -152,25 +197,26 @@ public class DialogueActivity extends Activity {
         MobileNumber = num;
         emailAddress = email;
 
-        ops = new ArrayList<>();
-        ops.add(ContentProviderOperation.newInsert(
+        operationLists = new ArrayList<>();
+        operationLists.add(ContentProviderOperation.newInsert(
                 ContactsContract.RawContacts.CONTENT_URI)
                 .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
                 .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
                 .build());
 
         if (DisplayName != null) {
-            ops.add(ContentProviderOperation.newInsert(
+            operationLists.add(ContentProviderOperation.newInsert(
                     ContactsContract.Data.CONTENT_URI)
                     .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                     .withValue(ContactsContract.Data.MIMETYPE,
                             ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
                     .withValue(
                             ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
-                            DisplayName).build());
+                            DisplayName
+                    ).build());
         }
         if (MobileNumber != null) {
-            ops.add(ContentProviderOperation.
+            operationLists.add(ContentProviderOperation.
                     newInsert(ContactsContract.Data.CONTENT_URI)
                     .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                     .withValue(ContactsContract.Data.MIMETYPE,
@@ -181,7 +227,7 @@ public class DialogueActivity extends Activity {
                     .build());
         }
         if (emailAddress != null) {
-            ops.add(ContentProviderOperation.
+            operationLists.add(ContentProviderOperation.
                     newInsert(ContactsContract.Data.CONTENT_URI)
                     .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                     .withValue(ContactsContract.Data.MIMETYPE,
@@ -192,7 +238,7 @@ public class DialogueActivity extends Activity {
                     .build());
         }
         try {
-            getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+            getContentResolver().applyBatch(ContactsContract.AUTHORITY, operationLists);
         } catch (Exception e) {
             e.printStackTrace();
         }finally {

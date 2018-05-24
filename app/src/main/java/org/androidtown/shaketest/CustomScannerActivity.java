@@ -15,7 +15,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
@@ -38,33 +40,12 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
 
         init();
 
-        MultiFormatWriter gen = new MultiFormatWriter();
-
-        String data = construct_data();
-        
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.screenBrightness = 1;
         getWindow().setAttributes(params);
 
-        try {
-            final int WIDTH = 400;
-            final int HEIGHT = 400;
-
-            data = new String(data.getBytes("UTF-8"), "ISO-8859-1");
-            BitMatrix byteMap = gen.encode(data, BarcodeFormat.QR_CODE, WIDTH, HEIGHT);
-            Bitmap bitmap = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888);
-
-            for (int i = 0; i < WIDTH; ++i)
-                for (int j = 0; j < HEIGHT; ++j)
-                    bitmap.setPixel(i, j, byteMap.get(i, j) ? Color.BLACK : Color.WHITE);
-
-            ImageView viw = findViewById(R.id.qrView);
-            viw.setImageBitmap(bitmap);
-            viw.invalidate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        /* Create QR code and Connect it with ImageView */
+        generateQRCode(makeContents());
 
         capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
@@ -81,8 +62,50 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
         userPhoneNum = getPhoneNum();
     }
 
-    private String construct_data () {
+    /**
+     * Make Content to be used for QR
+     * by Our Format
+     * @return
+     */
+    private String makeContents () {
         return (HEADER + userName + "#" + userPhoneNum + "#" +userEmail);
+    }
+
+    /**
+     * Create QR code and Connect it with ImageView
+     * @param content
+     */
+    public void generateQRCode (String content) {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        try {
+            Bitmap bitmap = toBitmap(
+                    qrCodeWriter.encode(
+                            content,
+                            BarcodeFormat.QR_CODE,
+                            400, 400)
+            );
+            ((ImageView)findViewById(R.id.qrView)).setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Convert Content to Bitmap
+     * then, Return it
+     * @param matrix
+     * @return
+     */
+    public Bitmap toBitmap (BitMatrix matrix) {
+        int height = matrix.getHeight();
+        int width = matrix.getWidth();
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        for (int x = 0; x < width; ++ x) {
+            for (int y = 0; y < height; ++ y) {
+                bitmap.setPixel(x, y, matrix.get(x, y) ? Color.BLACK : Color.WHITE);
+            }
+        } return bitmap;
     }
 
     private String getPhoneNum() {
