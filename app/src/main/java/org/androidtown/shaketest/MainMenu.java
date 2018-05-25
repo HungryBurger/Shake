@@ -111,8 +111,9 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         initLayout();
 
         fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
 
+        fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
+        fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card1.newInstance()).commit();
         //초기 값 설정 카드 넘버 저장
         SharedPrefManager mSharedPrefs = SharedPrefManager.getInstance(this);
         mSharedPrefs.setUI_ItemNo(1);
@@ -264,15 +265,13 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             case R.id.item3:
                 Toast.makeText(this, "Main page clicked..", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
+                fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card1.newInstance()).commit();
                 read.setVisibility(View.GONE);
                 write.setVisibility(View.GONE);
                 break;
             case R.id.log_out:
                 click_log_out();
                 break;
-
-
-
         }
         drawerLayout.closeDrawer(GravityCompat.START);
 
