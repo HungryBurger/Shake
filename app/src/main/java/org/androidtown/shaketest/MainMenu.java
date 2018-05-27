@@ -31,6 +31,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -257,8 +258,8 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 write.setVisibility(View.GONE);
                 break;
             case R.id.item2:
-                Toast.makeText(this, "Customized clicked..", Toast.LENGTH_SHORT).show();
-                fragmentManager.beginTransaction().replace(R.id.frameLayout, Customized_main.newInstance()).commit();
+                Toast.makeText(this, "Editprofile clicked..", Toast.LENGTH_SHORT).show();
+                fragmentManager.beginTransaction().replace(R.id.frameLayout, Editprofile.newInstance()).commit();
                 read.setVisibility(View.GONE);
                 write.setVisibility(View.GONE);
                 break;

@@ -33,7 +33,7 @@
                 android:id="@+id/Image"
                 android:layout_width="match_parent"
                 android:layout_height="169dp"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 android:src="@drawable/card1" />
             <TextView
                 android:padding="5dp"
