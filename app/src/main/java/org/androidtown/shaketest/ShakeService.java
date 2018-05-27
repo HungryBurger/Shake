@@ -5,11 +5,13 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -47,14 +49,7 @@ public class ShakeService extends Service implements SensorEventListener {
         Log.d(TAG, "Start Service");
         mSensorManager.registerListener(this, mAccelermeter, SensorManager.SENSOR_DELAY_NORMAL);
 
-        //서비스가 강제종료 되었을 경우 재시작한다.(디폴트값)
         return START_STICKY;
-
-        //강제종료 되어도 재시작하지 않는다.
-        //return START_NOT_STICKY;
-
-        //서비스가 강제 종료 되었을 경우 재시작하며, 서비스를 시작할때 받았던 intent를 다시 받으며 시작한다.
-        //return START_REDELIVER_INTENT;
     }
 
     @Override
@@ -70,6 +65,7 @@ public class ShakeService extends Service implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             float axisX = event.values[0];
             float axisY = event.values[1];
@@ -82,6 +78,8 @@ public class ShakeService extends Service implements SensorEventListener {
             Float f = gravityX * gravityX + gravityY * gravityY + gravityZ * gravityZ;
             double squaredD = Math.sqrt(f.doubleValue());
             float gForce = (float) squaredD;
+
+            Log.d(TAG, "onSensorChanged " + ServiceApplication.service_flag + "");
 
             if (gForce > SHAKE_THRESHOLD_GRAVITY && ServiceApplication.service_flag) {
                 /* 흔들림이 감지 되는 부분 */

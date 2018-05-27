@@ -449,4 +449,11 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             startActivityForResult(cropPic, REQUEST_IMAGE_CROP);
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Log.d("AppLifeCycle", "MainMenu");
+    }
 }

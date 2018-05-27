@@ -178,9 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (SecurityException e) {
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
         }
-
     }
-
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
@@ -198,5 +196,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (i == R.id.sign_in_button) {
             signIn();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Log.d("AppLifeCycle", "MainActivity");
     }
 }

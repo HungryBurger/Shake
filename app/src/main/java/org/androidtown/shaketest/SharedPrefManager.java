@@ -32,4 +32,5 @@ public class SharedPrefManager {
     public int getUI_ItemNo () {
         return mSharedPrefs.getInt(UI_ITEM_NO, 1);
     }
+
 }

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -14,7 +15,6 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
@@ -28,6 +28,7 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
     private String userName, userPhoneNum, userEmail;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
+    private SharedPrefManager mSharedPrefs;
     private final String  HEADER = "shake#";
 
     @Override
@@ -44,6 +45,7 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
         params.screenBrightness = 1;
         getWindow().setAttributes(params);
 
+        Log.d("QRCODE", makeContents());
         /* Create QR code and Connect it with ImageView */
         generateQRCode(makeContents());
 
@@ -60,6 +62,8 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
         userName = mUser.getDisplayName();
         userEmail = mUser.getEmail();
         userPhoneNum = getPhoneNum();
+
+        mSharedPrefs = SharedPrefManager.getInstance(this);
     }
 
     /**
@@ -68,7 +72,7 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
      * @return
      */
     private String makeContents () {
-        return (HEADER + userName + "#" + userPhoneNum + "#" +userEmail);
+        return (HEADER + userName + "#" + userPhoneNum + "#" +userEmail + "#" + mSharedPrefs.getUI_ItemNo() + "#" + mUser.getUid());
     }
 
     /**
@@ -78,14 +82,18 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
     public void generateQRCode (String content) {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         try {
+            // 한글 지원
+            String data = new String (content.getBytes("UTF-8"), "ISO-8859-1");
             Bitmap bitmap = toBitmap(
                     qrCodeWriter.encode(
-                            content,
+                            data,
                             BarcodeFormat.QR_CODE,
                             400, 400)
             );
             ((ImageView)findViewById(R.id.qrView)).setImageBitmap(bitmap);
         } catch (WriterException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -100,7 +108,7 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
         int height = matrix.getHeight();
         int width = matrix.getWidth();
 
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         for (int x = 0; x < width; ++ x) {
             for (int y = 0; y < height; ++ y) {
                 bitmap.setPixel(x, y, matrix.get(x, y) ? Color.BLACK : Color.WHITE);

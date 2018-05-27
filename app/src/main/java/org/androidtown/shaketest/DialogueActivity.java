@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.provider.ContactsContract;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -14,14 +13,19 @@ import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v4.app.FragmentManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -39,6 +43,7 @@ public class DialogueActivity extends Activity {
     private String MobileNumber;
     private String emailAddress;
 
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +113,10 @@ public class DialogueActivity extends Activity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().
+                child("users").child(mUser.getUid()).child("contact_list");
+
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
@@ -117,8 +126,18 @@ public class DialogueActivity extends Activity {
             } else {
                 Toast.makeText(getApplicationContext(), result.getContents(), Toast.LENGTH_SHORT).show();
                 if (result.getContents().startsWith("shake")) {
-                    String[] arr = result.getContents().split("#");
+                    Log.d("RESULTRESULT", result.getContents());
+                    final String[] arr = result.getContents().split("#");
                     saveContacts(arr[1], arr[2], arr[3]);
+
+                    final ContactData current_data =  new ContactData(
+                            arr[1],
+                            arr[2],
+                            arr[3],
+                            Integer.parseInt(arr[4])
+                    );
+                    mDatabase.child(arr[5]).setValue(current_data);
+
                 } else {
                     /* Wrong Value */
                 }
@@ -244,5 +263,12 @@ public class DialogueActivity extends Activity {
         }finally {
             finish();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Log.d("AppLifeCycle", "DialogueActivity");
     }
 }

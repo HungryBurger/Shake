@@ -6,14 +6,28 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ContactListMain_fragment extends Fragment {
+
+    private MyAdapter myAdapter;
+
     List<MyAdapter.ContactInformation> productList = new ArrayList<>();
     public static ContactListMain_fragment newInstance() {
         Bundle args = new Bundle();
@@ -32,15 +46,43 @@ public class ContactListMain_fragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) mView.findViewById(R.id.list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
-        MyAdapter myAdapter = new MyAdapter(getActivity(),productList);
+        myAdapter = new MyAdapter(getActivity(),productList);
         recyclerView.setAdapter(myAdapter);
         return mView;
     }
     private void setInitialData(){
-        productList.add(new MyAdapter.ContactInformation("text1","text1",R.mipmap.ic_launcher));
-        productList.add(new MyAdapter.ContactInformation("text2","text2",R.mipmap.ic_launcher));
-        productList.add(new MyAdapter.ContactInformation("text3","text3",R.mipmap.ic_launcher));
-        productList.add(new MyAdapter.ContactInformation("text3","text3",R.mipmap.ic_launcher));
-        productList.add(new MyAdapter.ContactInformation("text3","text3",R.mipmap.ic_launcher));
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference contactListRef = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("contact_list");
+
+
+        contactListRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                ContactData contactData = dataSnapshot.getValue(ContactData.class);
+                productList.add(new MyAdapter.ContactInformation(contactData.getName(),contactData.getPhoneNum(),R.mipmap.ic_launcher));
+                myAdapter.notifyDataSetChanged();
+                Log.d("FireDB", "Value " + contactData.getName());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
