@@ -6,4 +6,15 @@
     <string name="open_drawer">Open drawer</string>
     <string name="close_drawer">Close drawer</string>
 
+
+    <string name="action_sort">Sort</string>
+    <string name="action_search">Search</string>
+    <string name="action_home">Home</string>
+    <string name="action_profile">Profile</string>
+    <string name="action_inbox">Inbox</string>
+    <string name="action_logout">Logout</string>
+
+    <string name="lbl_close">Close</string>
+    <string name="lbl_open">Open</string>
+
 </resources>

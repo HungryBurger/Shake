@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/item3"
+        android:icon="@mipmap/ic_launcher_round"
+        android:title="Home"/>
+    <item
         android:id="@+id/item1"
         android:icon="@mipmap/ic_launcher_round"
         android:title="Contatct List"
@@ -8,17 +12,11 @@
     <item
         android:id="@+id/item2"
         android:icon="@mipmap/ic_launcher_round"
-        android:title="Edit profile"
-        />
-    <item
-        android:id="@+id/item3"
-        android:icon="@mipmap/ic_launcher_round"
-        android:title="MainPage"
+        android:title="Profile"
         />
     <item
         android:id="@+id/log_out"
         android:icon="@mipmap/ic_launcher_round"
         android:title="Log out"
         />
-
 </menu>
