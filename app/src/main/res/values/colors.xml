@@ -10,4 +10,16 @@
     <color name="ourConcept3">#0000FF</color>
     <color name="ourConcept4">#00BFFF</color>
 
+
+    <color name="colorPrimary1">#4ec07e</color>
+    <color name="colorPrimaryDark1">#3b925f</color>
+    <color name="colorAccent1">#4a90e2</color>
+
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+
+    <color name="white">#ffffff</color>
+    <color name="light_grey">#e1e1e1</color>
+
 </resources>

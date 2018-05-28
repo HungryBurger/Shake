@@ -4,71 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="388dp"
-        android:layout_height="566dp">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="292dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:scrollbars="horizontal"
-            android:dividerHeight="8dp"
-            android:onClick="OnItemClick"
-            >
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="8dp"
+        android:dividerHeight="8dp"
+        android:scrollbars="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        </android.support.v7.widget.RecyclerView>
-
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="302dp"
-            android:layout_height="190dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="31dp"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/card1" />
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/cardlist_name"
-            android:layout_marginStart="63dp"
-            app:srcCompat="@mipmap/ic_launcher" />
-
-        <TextView
-            android:id="@+id/cardlist_name"
-            android:layout_width="181dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="58dp"
-            android:layout_marginTop="65dp"
-            android:text="Name : " />
-
-        <TextView
-            android:id="@+id/cardlist_num"
-            android:layout_width="179dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/cardlist_name"
-            android:layout_marginTop="109dp"
-            android:text="Phone-number : " />
-
-        <TextView
-            android:id="@+id/cardlist_email"
-            android:layout_width="181dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/cardlist_name"
-            android:layout_marginTop="149dp"
-            android:text="Email : " />
-    </RelativeLayout>
+    </android.support.v7.widget.RecyclerView>
 
 </android.support.constraint.ConstraintLayout>
