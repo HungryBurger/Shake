@@ -53,11 +53,6 @@ public class DialogueActivity extends Activity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_dialogue);
-
-        /**
-         * 사용자 정보 얻기
-         * 초기 레이아웃 셋팅 및 맵핑
-         */
         init();
 
         convertQRButton.setOnClickListener(new View.OnClickListener() {
