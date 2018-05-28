@@ -42,6 +42,13 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView"
                 android:layout_toRightOf="@+id/imageView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3"
+                android:layout_below="@+id/textView2"
+                android:layout_toRightOf="@+id/imageView"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

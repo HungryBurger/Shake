@@ -40,13 +40,10 @@ public class ReadNFC extends AppCompatActivity{
          */
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if(nfcAdapter == null)
-        {
-            text.setText("NFC가 꺼짐");
-        }
+            text.setText("NFC is off");
         else
-        {
-            text.setText("NFC가 켜짐");
-        }
+            text.setText("NFC is on");
+
         /*
          * 2. intent 값 지정
          */

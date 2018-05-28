@@ -13,10 +13,12 @@ import java.util.List;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     Context context;
     List<ContactInformation>productList = new ArrayList<>();
+    View.OnClickListener mListener;
 
-    public MyAdapter(Context context, List<ContactInformation> productList) {
+    public MyAdapter(Context context, List<ContactInformation> productList, View.OnClickListener mListener) {
         this.context = context;
         this.productList = productList;
+        this.mListener = mListener;
     }
 
     @Override
@@ -29,8 +31,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         ContactInformation product  = productList.get(position);
 
-        holder.mTextView.setText(product.getText1());
-        holder.mTextView2.setText(product.getText2());
+        holder.name.setText(product.getText1());
+        holder.pnum.setText(product.getText2());
+        holder.email.setText(product.getText3());
         holder.mImageView.setImageResource(product.getImage());
 
     }
@@ -42,17 +45,21 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView mImageView;
-        TextView mTextView;
-        TextView mTextView2;
+        TextView name;
+        TextView pnum;
+        TextView email;
         public ViewHolder(View itemView) {
             super(itemView);
             this.mImageView = (ImageView) itemView.findViewById(R.id.imageView);
-            this.mTextView = (TextView) itemView.findViewById(R.id.textView);
-            this.mTextView2 = (TextView) itemView.findViewById(R.id.textView2);
+            this.name = (TextView) itemView.findViewById(R.id.textView);
+            this.pnum = (TextView) itemView.findViewById(R.id.textView2);
+            this.email = itemView.findViewById(R.id.textView3);
+            if(mListener != null)
+                itemView.setOnClickListener(mListener);
         }
     }
     public static class ContactInformation {
-        String text1, text2;
+        String text1, text2, text3;
         int image;
 
         public String getText1() {
@@ -69,6 +76,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         public void setText2(String text2) {
             this.text2 = text2;
+        }
+        public String getText3() {
+            return text3;
+        }
+
+        public void setText3(String text3) {
+            this.text3 = text3;
         }
 
         public int getImage() {

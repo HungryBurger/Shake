@@ -58,22 +58,6 @@
                 <data android:mimeType="application/org.androidtown.shaketest" />
             </intent-filter>
         </activity>
-        <activity android:name=".NFCActivity">
-            <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.nfc.action.TAG_DISCOVERED" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.nfc.action.TECH_DISCOVERED"
-                android:resource="@xml/tech_list" />
-        </activity>
         <activity
             android:name=".DialogueActivity"
             android:theme="@android:style/Theme.DeviceDefault.Dialog"

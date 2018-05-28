@@ -45,9 +45,9 @@ public class Second extends Activity {
     }
     /*
      * 이 함수는 intent 값을 변환 한다. 변환되는 과정은 다음과 같다.
-     * 1. Intent -> Parcelable
-     * 2. Parcelable -> NdefRecord
-     * 3. NdefRecord -> byte
+     * 1. Intent -> Parcelable(커스텀 클래스나 객체를 전달하기 위해서)
+     * 2. Parcelable -> NdefRecord(NFC 데이터 교환 포맷)
+     * 3. NdefRecord -> byte()
      * 4. byte -> String
      *
      * Parcelable[] data : 전달된 명령어 묶음이 몇묶음 인지를 담는다.
@@ -75,11 +75,9 @@ public class Second extends Activity {
                     NdefRecord[] recs = ((NdefMessage)data[i]).getRecords();
 
                     for(j = 0; j<recs.length; j++)
-                    {
-                        /*
+                    {    /*
                          * byte로 날라온 텍스트 처리
                          */
-
                         if(recs[j].getTnf() == NdefRecord.TNF_WELL_KNOWN && Arrays.equals(recs[j].getType(),
                                 NdefRecord.RTD_TEXT)){
                             byte[] payload = recs[j].getPayload();

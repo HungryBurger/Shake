@@ -26,9 +26,6 @@ public class WriteNFC extends AppCompatActivity {
         String mName = myBundle.getString("name");
         String mPhoneNum = myBundle.getString("phoneNum");
         String mMail = myBundle.getString("E-mail");
-        Log.d("shake", mName);
-        Log.d("shake",mMail);
-        Log.d("shake",mPhoneNum);
         text = findViewById(R.id.text);
         nfcAdapter = NfcAdapter.getDefaultAdapter(getApplicationContext());
         if(nfcAdapter != null)
