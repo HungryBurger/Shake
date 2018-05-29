@@ -5,69 +5,83 @@
     android:layout_height="300dp"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@color/basicColor"
+    android:background="@drawable/dialouge_design"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/user_picture"
         android:layout_width="96dp"
-        android:layout_gravity="left"
         android:layout_height="96dp"
+        android:layout_gravity="left"
         android:background="@mipmap/ic_launcher_round"
-        app:civ_border_width="2dp"
-        app:civ_border_color="#FF000000"/>
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Name : "
+            android:layout_weight="2"
             android:padding="8dp"
-            android:layout_weight="2"/>
+            android:text="Name : "
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Text" />
+            android:text="Text"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:padding="8dp"
-            android:text="Phone Number : "
-            android:layout_weight="2"/>
+            android:text="Phone : "
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/user_phone_num"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Text" />
+            android:text="Text"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:padding="8dp"
             android:text="E-Mail : "
-            android:layout_weight="2"/>
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/user_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Text" />
+            android:text="Text"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView

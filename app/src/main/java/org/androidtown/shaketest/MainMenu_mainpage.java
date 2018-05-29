@@ -28,6 +28,7 @@ public class MainMenu_mainpage extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     //This section shows the fragment.
     @Nullable
     @Override
@@ -35,26 +36,9 @@ public class MainMenu_mainpage extends Fragment {
         ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.activity_main_menu_mainpage, container, false);
         SharedPrefManager mSharedPrefs = SharedPrefManager.getInstance(getActivity());
         mSharedPrefs.setUI_ItemNo(1);
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser mUser = mAuth.getCurrentUser();
 
-        String userName = mUser.getDisplayName();
-        String userEmail = mUser.getEmail();
-        String phoneNumber = getPhoneNum();
 
-            return mView;
-    }
-    private String getPhoneNum() {
-        TelephonyManager telephonyManager = (TelephonyManager) getActivity().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 
-        try {
-            String phoneNum = telephonyManager.getLine1Number();
-            if (phoneNum.startsWith("+82")) {
-                phoneNum = phoneNum.replace("+82", "0");
-            } return PhoneNumberUtils.formatNumber(phoneNum);
-
-        } catch (SecurityException e) {
-            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
-        } return null;
+        return mView;
     }
 }

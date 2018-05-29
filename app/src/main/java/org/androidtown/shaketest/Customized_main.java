@@ -36,7 +36,8 @@ public class Customized_main extends Fragment {
     CustomizedAdapter mAdapter;
     ArrayList<CustomizedAdapter.Item> list;
     String displayUserPhoneNumber;
-
+    private SharedPrefManager mSharedPrefs;
+    int itemPosition;
 
     public static Customized_main newInstance() {
         Bundle args = new Bundle();
@@ -51,12 +52,10 @@ public class Customized_main extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.activity_customized_main, container, false);
-        getPhonenum();
-        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        final DatabaseReference mRef = FirebaseDatabase.getInstance().getReference().child("USER").child(mUser.getUid()).child(displayUserPhoneNumber).child("customized_num/value");
         list = new ArrayList<CustomizedAdapter.Item>();
         setInitialData();
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.list);
+        mSharedPrefs = SharedPrefManager.getInstance(getActivity());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mAdapter = new CustomizedAdapter(list, getActivity());
@@ -70,19 +69,9 @@ public class Customized_main extends Fragment {
         list.add(new CustomizedAdapter.Item("Style3", "hjjooace@gmail.com", R.drawable.card3));
         list.add(new CustomizedAdapter.Item("Style4", "hjjooace@gmail.com", R.drawable.card4));
     }
-
-
-    private void getPhonenum() {
-        TelephonyManager telephonyManager = (TelephonyManager) getActivity().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-
-        try {
-            String phoneNum = telephonyManager.getLine1Number();
-            if (phoneNum.startsWith("+82")) {
-                phoneNum = phoneNum.replace("+82", "0");
-            }
-            displayUserPhoneNumber = PhoneNumberUtils.formatNumber(phoneNum);
-        } catch (SecurityException e) {
-            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
-        }
+    public void onClick(final View view) {
+        itemPosition = mRecyclerView.getChildPosition(view);
+        Integer item = list.size();
+        Toast.makeText(getActivity(), item, Toast.LENGTH_LONG).show();
     }
 }

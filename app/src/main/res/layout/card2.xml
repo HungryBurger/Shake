@@ -1,93 +1,104 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="360dp"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
     android:layout_height="300dp"
-    android:gravity="center"
+    android:background="@drawable/card2"
+    android:gravity="top|center"
     android:orientation="vertical"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-    <ImageView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="230dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/card2" />
-
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/dialogue_activity_picture"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_gravity="left"
-        android:layout_marginStart="16dp"
-        android:background="@mipmap/ic_launcher_round"
-        app:civ_border_color="#FF000000"
-        app:civ_border_width="2dp" />
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="20dp">
 
-    <LinearLayout
-        android:layout_width="243dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="22dp"
-        android:layout_marginTop="48dp">
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/user_picture"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_gravity="left"
+            android:background="@mipmap/ic_launcher_round"
+            android:padding="10dp"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:padding="8dp"
-            android:text="Name : " />
+            android:orientation="vertical"
+            >
 
-        <TextView
-            android:id="@+id/dialogue_activity_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Text" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="이름 :"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/card2_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Text"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="전화번호"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/card2_phone_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Text"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="이메일"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/card2_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Text"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="297dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/dialogue_activity_picture"
-        android:layout_marginTop="93dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:padding="8dp"
-            android:text="Phone Number : " />
-
-        <TextView
-            android:id="@+id/dialogue_activity_pNum"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Text" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="241dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="101dp"
-        android:layout_marginStart="40dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:padding="8dp"
-            android:text="E-Mail : " />
-
-        <TextView
-            android:id="@+id/dialogue_activity_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Text" />
-    </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

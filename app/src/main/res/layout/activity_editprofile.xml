@@ -6,50 +6,41 @@
     android:layout_margin="5dp"
     android:orientation="vertical">
 
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/user_picture"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_gravity="left"
+        android:background="@mipmap/ic_launcher_round"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="102dp"
-
-        android:orientation="horizontal"
-        android:startColor="#404040"
-        android:endColor="#F1F1F1"
-        android:angle="270">
-
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/user_picture"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_gravity="left"
-            android:background="@mipmap/ic_launcher_round"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_weight="2"
+                android:padding="8dp"
+                android:text="전화번호 "
+                android:textAlignment="viewStart"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:padding="8dp"
-                    android:text="전화번호 "
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/phone_number2"
-                    android:layout_width="match_parent"
-                    android:layout_height="53dp"
-                    android:layout_weight="1"
-                    android:text="Text"
-                    android:textSize="20sp" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/phone_number2"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:layout_weight="1"
+                android:text="Text"
+                android:textSize="20sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -57,15 +48,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
             android:padding="10dp"
-            android:text="이름        :"
-            android:textAlignment="center"
+            android:text="이름"
+            android:textAlignment="viewStart"
             android:textSize="20sp" />
 
         <TextView
@@ -76,18 +68,20 @@
             android:text="Text"
             android:textSize="20sp" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
             android:padding="10dp"
-            android:text="이메일     :"
-            android:textAlignment="center"
+            android:text="이메일 "
+            android:textAlignment="viewStart"
             android:textSize="20sp" />
 
         <TextView
@@ -103,9 +97,9 @@
         android:id="@+id/button2"
         android:layout_width="match_parent"
         android:layout_height="66dp"
-        android:background="#FFFFFF"
-        android:text="프로필 카드 수정하기"
         android:layout_margin="5dp"
+        android:background="#FFFFFF"
+        android:text="커스터마이징 수정하기"
         android:textAllCaps="false"
         android:textSize="20sp" />
 </LinearLayout>

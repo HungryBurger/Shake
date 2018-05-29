@@ -72,7 +72,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private FirebaseAuth.AuthStateListener mListener;
-    private String displayUserName, displayUserEmail, displayUserPhoneNumber;
+    public String displayUserName, displayUserEmail, displayUserPhoneNumber;
     // [END declare_auth]
     private GoogleSignInClient mGoogleSignInClient;
     private FragmentManager fragmentManager;
@@ -86,6 +86,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         /**
          * 자동 권한 요청하기
          */
+
         PermissionListener permissionListener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
@@ -114,7 +115,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
-        fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card1.newInstance()).commit();
+        fragmentManager.beginTransaction().replace(R.id.frameLayout_card, Card1.newInstance()).commit();
         //초기 값 설정 카드 넘버 저장
         mSharedPrefs = SharedPrefManager.getInstance(this);
         Log.d("SharedPref", String.valueOf(mSharedPrefs.getUI_ItemNo()));
@@ -139,7 +140,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainMenu.this,ReadNFC.class);
+                Intent intent = new Intent(MainMenu.this, ReadNFC.class);
                 startActivity(intent);
             }
         });
@@ -148,14 +149,18 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             public void onClick(View v) {
                 Intent intent = new Intent(MainMenu.this, WriteNFC.class);
                 Bundle myBundle = new Bundle();
-                myBundle.putString("name",mName.getText().toString());
-                myBundle.putString("phoneNum",mPhoneNum.getText().toString());
-                myBundle.putString("E-mail",mEmail.getText().toString());
+                myBundle.putString("name", mName.getText().toString());
+                myBundle.putString("phoneNum", mPhoneNum.getText().toString());
+                myBundle.putString("E-mail", mEmail.getText().toString());
                 intent.putExtras(myBundle);
+
                 startActivity(intent);
             }
         });
     }
+
+
+
 
     private void onNFC() {
         nfcAdapter = NfcAdapter.getDefaultAdapter(MainMenu.this);
@@ -183,6 +188,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             alertBox.show();
         }
     }
+
 
     @Override
     protected void onResume() {
@@ -235,6 +241,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         mPhoneNum = (TextView) nav_header_view.findViewById(R.id.profile_phone_number);
         mPicture = (CircleImageView) nav_header_view.findViewById(R.id.profile_picture);
 
+
         mPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -277,6 +284,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 read.setVisibility(View.GONE);
                 write.setVisibility(View.GONE);
                 break;
+
             case R.id.log_out:
                 click_log_out();
                 break;
