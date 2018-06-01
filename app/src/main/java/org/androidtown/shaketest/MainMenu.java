@@ -3,12 +3,15 @@ package org.androidtown.shaketest;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Build;
@@ -27,27 +30,40 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
-import org.w3c.dom.Text;
-
-import java.io.IOException;
+import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -62,12 +78,10 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     TextView mName, mPhoneNum, mEmail;
     CircleImageView mPicture;
     ImageButton settingButton;
-    Button read,write;
+    Button read, write;
     private static final int FROM_ALBUM = 1;
     private static final int REQUEST_IMAGE_CROP = 2;
-
-    private int chklist=1;
-    Uri photoURI;
+    private Uri filePath;
     NfcAdapter nfcAdapter;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
@@ -76,7 +90,9 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     // [END declare_auth]
     private GoogleSignInClient mGoogleSignInClient;
     private FragmentManager fragmentManager;
+    private DatabaseReference databaseReference;
     SharedPrefManager mSharedPrefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +134,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         fragmentManager.beginTransaction().replace(R.id.frameLayout_card, Card1.newInstance()).commit();
         //초기 값 설정 카드 넘버 저장
         mSharedPrefs = SharedPrefManager.getInstance(this);
+
         Log.d("SharedPref", String.valueOf(mSharedPrefs.getUI_ItemNo()));
         mAuth = FirebaseAuth.getInstance();
         mListener = new FirebaseAuth.AuthStateListener() {
@@ -130,6 +147,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                     displayUserEmail = mUser.getEmail();
                     getPhonenum();
                     //callDialog();
+                    databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).child("userImg");
                     setProfile();
                 } else {
                     startActivity(new Intent(MainMenu.this, MainActivity.class));
@@ -158,8 +176,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             }
         });
     }
-
-
 
 
     private void onNFC() {
@@ -203,6 +219,19 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         } else {
             stopService(intent);
         }
+        if(databaseReference != null){
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String value = (String)dataSnapshot.getValue();
+                    if(value != null) {
+                        mPicture.setImageBitmap(stringToBitmap(value));
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
+        }
     }
 
     @Override
@@ -214,25 +243,27 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             case FROM_ALBUM: {
                 //앨범에서 가져오기
                 if (data.getData() != null) {
+                    filePath = data.getData();
                     galleryAddPic();
                     //이미지뷰에 이미지 셋팅
                     CropPicture(data.getData());
+
                     break;
                 }
             }
             case REQUEST_IMAGE_CROP:
                 Bundle extras = data.getExtras();
 
-                // String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/shake/" + System.currentTimeMillis() + ".jpg";
-
-                if (extras != null) {
+                 if (extras != null) {
                     Log.d("ekit", "ekit");
                     Bitmap imageBitmap = (Bitmap) extras.get("data");
-                    mPicture.setImageBitmap(imageBitmap);
+                    uploadDB(imageBitmap);
                     break;
                 }
         }
     }
+
+
 
     private void setProfile() {
         mEmail = (TextView) nav_header_view.findViewById(R.id.profile_E_mail);
@@ -240,8 +271,18 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         mName = (TextView) nav_header_view.findViewById(R.id.profile_name);
         mPhoneNum = (TextView) nav_header_view.findViewById(R.id.profile_phone_number);
         mPicture = (CircleImageView) nav_header_view.findViewById(R.id.profile_picture);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String value = (String)dataSnapshot.getValue();
+                if(value != null) {
+                    mPicture.setImageBitmap(stringToBitmap(value));
+                }
+            }
 
-
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
         mPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -272,15 +313,15 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             case R.id.item3:
                 Toast.makeText(this, "Main page clicked..", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
-                String temp1 = "Card"+mSharedPrefs.getUI_ItemNo()+".newInstance()";
-                if(mSharedPrefs.getUI_ItemNo()==1)
-                    fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card1.newInstance()).commit();
-                else if(mSharedPrefs.getUI_ItemNo()==2)
-                    fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card2.newInstance()).commit();
-                else if(mSharedPrefs.getUI_ItemNo()==3)
-                    fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card3.newInstance()).commit();
-                else if(mSharedPrefs.getUI_ItemNo()==4)
-                    fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card4.newInstance()).commit();
+                String temp1 = "Card" + mSharedPrefs.getUI_ItemNo() + ".newInstance()";
+                if (mSharedPrefs.getUI_ItemNo() == 1)
+                    fragmentManager.beginTransaction().replace(R.id.frameLayout_card, Card1.newInstance()).commit();
+                else if (mSharedPrefs.getUI_ItemNo() == 2)
+                    fragmentManager.beginTransaction().replace(R.id.frameLayout_card, Card2.newInstance()).commit();
+                else if (mSharedPrefs.getUI_ItemNo() == 3)
+                    fragmentManager.beginTransaction().replace(R.id.frameLayout_card, Card3.newInstance()).commit();
+                else if (mSharedPrefs.getUI_ItemNo() == 4)
+                    fragmentManager.beginTransaction().replace(R.id.frameLayout_card, Card4.newInstance()).commit();
                 read.setVisibility(View.GONE);
                 write.setVisibility(View.GONE);
                 break;
@@ -337,7 +378,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 toolbar,
                 R.string.open_drawer,
                 R.string.close_drawer
-        ){
+        ) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -382,6 +423,8 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mListener);
+
+
     }
 
     @Override
@@ -391,6 +434,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         if (mListener != null) {
             mAuth.removeAuthStateListener(mListener);
         }
+
     }
 
     private void getPhonenum() {
@@ -425,6 +469,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                     }
                 });
     }
+
     public void imageDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
         builder.setTitle("사진 선택");
@@ -443,6 +488,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
     public void galleryAddPic() {
         Intent pickPic = new Intent(Intent.ACTION_PICK);
         pickPic.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -451,13 +497,14 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             startActivityForResult(pickPic, FROM_ALBUM);
         }
     }
+
     public void CropPicture(Uri uri) {
         Intent cropPic = new Intent("com.android.camera.action.CROP");
         cropPic.setDataAndType(uri, "image/*");
-        cropPic.putExtra("outputX", 200); // crop한 이미지의 x축 크기 (integer)
-        cropPic.putExtra("outputY", 200); // crop한 이미지의 y축 크기 (integer)
-        cropPic.putExtra("aspectX", 1); // crop 박스의 x축 비율 (integer)
-        cropPic.putExtra("aspectY", 1); // crop 박스의 y축 비율 (integer)
+        cropPic.putExtra("outputX", 400); // crop한 이미지의 x축 크기 (integer)
+        cropPic.putExtra("outputY", 300); // crop한 이미지의 y축 크기 (integer)
+        cropPic.putExtra("aspectX", 4); // crop 박스의 x축 비율 (integer)
+        cropPic.putExtra("aspectY", 3); // crop 박스의 y축 비율 (integer)
         cropPic.putExtra("scale", true);
         cropPic.putExtra("return-data", true);
         if (cropPic.resolveActivity(getPackageManager()) != null) {
@@ -465,6 +512,20 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         }
     }
 
+    public void uploadDB(Bitmap bitmap){
+        //mSharedPrefs.setImage(bitmap);
+        databaseReference.setValue(bitmapToString(this, bitmap));
+    }
+    public static Bitmap stringToBitmap(String bitmapString){
+        byte[] bytes = Base64.decode(bitmapString, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+    }
+    public static String bitmapToString(Context context, Bitmap bitmap){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+        return Base64.encodeToString(stream.toByteArray(),Base64.DEFAULT);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -472,3 +533,4 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         Log.d("AppLifeCycle", "MainMenu");
     }
 }
+

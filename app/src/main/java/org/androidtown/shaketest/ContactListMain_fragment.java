@@ -64,7 +64,6 @@ public class ContactListMain_fragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 LayoutInflater layoutInflater = getActivity().getLayoutInflater();
                 builder.setView(layoutInflater.inflate(R.layout.fragment_dialog_receiver,null));
-
                 builder.create().show();
             }
         });

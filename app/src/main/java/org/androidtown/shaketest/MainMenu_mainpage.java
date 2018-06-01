@@ -37,8 +37,6 @@ public class MainMenu_mainpage extends Fragment {
         SharedPrefManager mSharedPrefs = SharedPrefManager.getInstance(getActivity());
         mSharedPrefs.setUI_ItemNo(1);
 
-
-
         return mView;
     }
 }

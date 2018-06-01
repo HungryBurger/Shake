@@ -21,6 +21,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -42,15 +44,12 @@ public class DialogueActivity extends Activity {
     private String DisplayName;
     private String MobileNumber;
     private String emailAddress;
-
     private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         activity = this;
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_dialogue);
         init();
@@ -109,8 +108,7 @@ public class DialogueActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().
-                child("users").child(mUser.getUid()).child("contact_list");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).child("contact_list");
 
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
