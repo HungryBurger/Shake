@@ -35,7 +35,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/phone_number2"
+                android:id="@+id/edit_phone"
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
                 android:layout_weight="1"
@@ -61,7 +61,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/edit_name"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_weight="1"
@@ -85,7 +85,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/qr"
+            android:id="@+id/edit_email"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_weight="1"
@@ -94,7 +94,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/edit_customize"
         android:layout_width="match_parent"
         android:layout_height="66dp"
         android:layout_margin="5dp"

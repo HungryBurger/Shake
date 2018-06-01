@@ -44,11 +44,9 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.screenBrightness = 1;
         getWindow().setAttributes(params);
-
         Log.d("QRCODE", makeContents());
         /* Create QR code and Connect it with ImageView */
         generateQRCode(makeContents());
-
         capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.decode();

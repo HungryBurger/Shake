@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,9 +42,16 @@ public class Editprofile extends Fragment {
 
         ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.activity_editprofile, container, false);
         fragmentManager = getActivity().getSupportFragmentManager();
-        Button Customize = (Button)mView.findViewById(R.id.button2);
-    //  getPhonenum();
+        Button Customize = (Button)mView.findViewById(R.id.edit_customize);
+        getPhonenum();
+        getinfo();
 
+        TextView name = (TextView) mView.findViewById(R.id.edit_phone);
+        TextView phone = (TextView) mView.findViewById(R.id.edit_name);
+        TextView email = (TextView) mView.findViewById(R.id.edit_email);
+        name.setText(userName);
+        phone.setText(userPhoneNum);
+        email.setText(userEmail);
         Customize.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -55,22 +63,23 @@ public class Editprofile extends Fragment {
     }
     private void getPhonenum() {
         TelephonyManager telephonyManager = (TelephonyManager) getActivity().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-
         try {
             String phoneNum = telephonyManager.getLine1Number();
             if (phoneNum.startsWith("+82")) {
                 phoneNum = phoneNum.replace("+82", "0");
+                userPhoneNum = phoneNum;
             }
             displayUserPhoneNumber = PhoneNumberUtils.formatNumber(phoneNum);
         } catch (SecurityException e) {
             Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
         }
     }
-    private void init() {
+    private void getinfo() {
+
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
+
         userName = mUser.getDisplayName();
         userEmail = mUser.getEmail();
-        userPhoneNum = displayUserPhoneNumber;
     }
 }
