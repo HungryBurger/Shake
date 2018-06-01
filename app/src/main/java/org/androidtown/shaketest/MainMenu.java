@@ -44,10 +44,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
-
-import org.w3c.dom.Text;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -65,9 +61,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     Button read,write;
     private static final int FROM_ALBUM = 1;
     private static final int REQUEST_IMAGE_CROP = 2;
-
-    private int chklist=1;
-    Uri photoURI;
     NfcAdapter nfcAdapter;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
@@ -109,11 +102,8 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                         Manifest.permission.BIND_NFC_SERVICE
                 )
                 .check();
-
         initLayout();
-
         fragmentManager = getSupportFragmentManager();
-
         fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
         fragmentManager.beginTransaction().replace(R.id.frameLayout_card, Card1.newInstance()).commit();
         //초기 값 설정 카드 넘버 저장
@@ -129,7 +119,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                     displayUserName = mUser.getDisplayName();
                     displayUserEmail = mUser.getEmail();
                     getPhonenum();
-                    //callDialog();
                     setProfile();
                 } else {
                     startActivity(new Intent(MainMenu.this, MainActivity.class));
@@ -153,15 +142,10 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 myBundle.putString("phoneNum", mPhoneNum.getText().toString());
                 myBundle.putString("E-mail", mEmail.getText().toString());
                 intent.putExtras(myBundle);
-
                 startActivity(intent);
             }
         });
     }
-
-
-
-
     private void onNFC() {
         nfcAdapter = NfcAdapter.getDefaultAdapter(MainMenu.this);
 
@@ -189,11 +173,9 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         }
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
-
         Intent intent = new Intent(getApplicationContext(), ShakeService.class);
         SharedPreferences setRefer = PreferenceManager
                 .getDefaultSharedPreferences(this);
@@ -222,9 +204,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             }
             case REQUEST_IMAGE_CROP:
                 Bundle extras = data.getExtras();
-
                 // String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/shake/" + System.currentTimeMillis() + ".jpg";
-
                 if (extras != null) {
                     Log.d("ekit", "ekit");
                     Bitmap imageBitmap = (Bitmap) extras.get("data");
@@ -337,7 +317,8 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 toolbar,
                 R.string.open_drawer,
                 R.string.close_drawer
-        ){
+        )
+        {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -387,12 +368,10 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     protected void onStop() {
         super.onStop();
-
         if (mListener != null) {
             mAuth.removeAuthStateListener(mListener);
         }
     }
-
     private void getPhonenum() {
         TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -468,7 +447,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         Log.d("AppLifeCycle", "MainMenu");
     }
 }

@@ -1,8 +1,13 @@
 package org.androidtown.shaketest;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,14 +31,14 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class Card1 extends Fragment {
     private FragmentManager fragmentManager;
     String displayUserPhoneNumber;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private String userName, userPhoneNum, userEmail;
-    private Object mMyData;
-    private FirebaseAuth.AuthStateListener mListener;
 
     public static Card1 newInstance() {
         Bundle args = new Bundle();
@@ -56,6 +61,8 @@ public class Card1 extends Fragment {
         name.setText(userName);
         phone.setText(userPhoneNum);
         email.setText(userEmail);
+
+
         return mView;
     }
 
