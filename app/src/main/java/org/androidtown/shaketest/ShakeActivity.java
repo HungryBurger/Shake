@@ -1,20 +1,15 @@
 package org.androidtown.shaketest;
 
 import android.app.Activity;
-
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.ContactsContract;
-import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,15 +21,12 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+public class ShakeActivity extends AppCompatActivity {
 
-public class DialogueActivity extends AppCompatActivity {
-    TextView get_name, get_pNum, get_email;
-    CircleImageView mPicture,convertQRButton;
     private String userName, userPhoneNum, userEmail;
+    private int userTemplate;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
-    private Activity activity;
 
     /* Instance Variable for SaveContact method */
     private ArrayList<ContentProviderOperation> operationLists;
@@ -47,57 +39,29 @@ public class DialogueActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_shake);
 
-        activity = this;
-
-     //   requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_dialogue);
         init();
 
-        convertQRButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startScanning();
-                Toast.makeText(DialogueActivity.this, "QR is Clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
+        DialogFragment fragment = DialogFragment.newInstance(10, 5, false, false,2);
+        fragment.show(getFragmentManager(), "blur_sample");
     }
 
-    /*public void setContentCard (int id) {
-                    switch (id) {
-                        case 1: {
-                            getSupportFragmentManager().
-                                    beginTransaction().
-                                    replace(R.id.fragment_dialogue, Card1.newInstance()).
-                                    commit();
-                            break;
-                        }
-                        case 2: {
-                            getSupportFragmentManager().
-                                    beginTransaction().
-                                    replace(R.id.fragment_dialogue, Card2.newInstance()).
-                                    commit();
-                            break;
-                        }
-                        case 3: {
-                            getSupportFragmentManager().
-                                    beginTransaction().
-                                    replace(R.id.fragment_dialogue, Card3.newInstance()).
-                                    commit();
-                break;
-            }
-            case 4: {
-                getSupportFragmentManager().
-                        beginTransaction().
-                        replace(R.id.fragment_dialogue, Card4.newInstance()).
-                        commit();
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-    }*/
+    /**
+     * Get the current user's information by using FirebaseAuth
+     */
+    private void init () {
+
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+
+        userName = mUser.getDisplayName();
+        userEmail = mUser.getEmail();
+        userPhoneNum = getPhoneNum();
+
+        SharedPrefManager mSharedPrefs = SharedPrefManager.getInstance(this);
+        userTemplate = mSharedPrefs.getUI_ItemNo();
+    }
 
     /**
      * Interpreting data from QR code
@@ -144,69 +108,6 @@ public class DialogueActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Get the current user's information by using FirebaseAuth
-     */
-    private void init () {
-
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
-
-        userName = mUser.getDisplayName();
-        userEmail = mUser.getEmail();
-        userPhoneNum = getPhoneNum();
-
-        SharedPrefManager mSharedPrefs = SharedPrefManager.getInstance(this);
-        //setContentCard(mSharedPrefs.getUI_ItemNo());
-
-        convertQRButton = findViewById(R.id.convertQR);
-        mPicture = findViewById(R.id.user_picture);
-        get_name = findViewById(R.id.user_name);
-        get_pNum = findViewById(R.id.user_phone_num);
-        get_email = findViewById(R.id.user_email);
-
-        get_name.setText(userName);
-        get_pNum.setText(userPhoneNum);
-        get_email.setText(userEmail);
-    }
-
-    /**
-     * Get user's phonenumber
-     * @return
-     */
-    private String getPhoneNum() {
-        TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-
-        try {
-            String phoneNum = telephonyManager.getLine1Number();
-            if (phoneNum.startsWith("+82")) {
-                phoneNum = phoneNum.replace("+82", "0");
-            } return PhoneNumberUtils.formatNumber(phoneNum);
-
-        } catch (SecurityException e) {
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-        } return null;
-    }
-
-    /**
-     * Start Scanning
-     */
-    private void startScanning () {
-
-        new IntentIntegrator(activity).
-                setBeepEnabled(false).
-                setOrientationLocked(false).
-                setCaptureActivity(CustomScannerActivity.class).
-                initiateScan();
-    }
-
-    /**
-     * Receive the data from NFC or QR code
-     * and then Insert received data into the phone's contact DB
-     * @param name
-     * @param num
-     * @param email
-     */
     public void saveContacts(String name, String num, String email) {
         DisplayName = name;
         MobileNumber = num;
@@ -230,6 +131,7 @@ public class DialogueActivity extends AppCompatActivity {
                             DisplayName
                     ).build());
         }
+
         if (MobileNumber != null) {
             operationLists.add(ContentProviderOperation.
                     newInsert(ContactsContract.Data.CONTENT_URI)
@@ -260,11 +162,18 @@ public class DialogueActivity extends AppCompatActivity {
             finish();
         }
     }
+    private String getPhoneNum() {
+        TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+        try {
+            String phoneNum = telephonyManager.getLine1Number();
+            if (phoneNum.startsWith("+82")) {
+                phoneNum = phoneNum.replace("+82", "0");
+            } return PhoneNumberUtils.formatNumber(phoneNum);
 
-        Log.d("AppLifeCycle", "DialogueActivity");
+        } catch (SecurityException e) {
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+        } return null;
     }
+
 }

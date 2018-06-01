@@ -2,11 +2,11 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="350dp"
-    android:layout_height="300dp"
+    android:layout_height="350dp"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@drawable/dialouge_design"
-    android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+    android:background="@drawable/dialouge_design">
+    <!--android:theme="@style/Theme.AppCompat.Light.NoActionBar"-->
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/user_picture"

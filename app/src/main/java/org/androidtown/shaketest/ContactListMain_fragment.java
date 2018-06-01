@@ -55,6 +55,7 @@ public class ContactListMain_fragment extends Fragment {
         recyclerView = (RecyclerView) mView.findViewById(R.id.list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
+
         myAdapter = new MyAdapter(getActivity(), productList, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +65,6 @@ public class ContactListMain_fragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 LayoutInflater layoutInflater = getActivity().getLayoutInflater();
                 builder.setView(layoutInflater.inflate(R.layout.fragment_dialog_receiver,null));
-
                 builder.create().show();
             }
         });
@@ -72,6 +72,7 @@ public class ContactListMain_fragment extends Fragment {
 
         return mView;
     }
+
     private void setInitialData(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference contactListRef = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("contact_list");

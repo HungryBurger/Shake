@@ -107,15 +107,14 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                         android.Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.NFC,
                         Manifest.permission.BIND_NFC_SERVICE
-                )
-                .check();
+                ).check();
 
         initLayout();
 
         fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
-        fragmentManager.beginTransaction().replace(R.id.frameLayout_card, Card1.newInstance()).commit();
+        //fragmentManager.beginTransaction().replace(R.id.frameLayout_card, Card1.newInstance()).commit();
         //초기 값 설정 카드 넘버 저장
         mSharedPrefs = SharedPrefManager.getInstance(this);
         Log.d("SharedPref", String.valueOf(mSharedPrefs.getUI_ItemNo()));
@@ -273,15 +272,15 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 Toast.makeText(this, "Main page clicked..", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
                 String temp1 = "Card"+mSharedPrefs.getUI_ItemNo()+".newInstance()";
-                if(mSharedPrefs.getUI_ItemNo()==1)
-                    fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card1.newInstance()).commit();
+                /*if(mSharedPrefs.getUI_ItemNo()==1)
+                    //fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card1.newInstance()).commit();
                 else if(mSharedPrefs.getUI_ItemNo()==2)
-                    fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card2.newInstance()).commit();
+                    //fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card2.newInstance()).commit();
                 else if(mSharedPrefs.getUI_ItemNo()==3)
-                    fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card3.newInstance()).commit();
+                    //fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card3.newInstance()).commit();
                 else if(mSharedPrefs.getUI_ItemNo()==4)
-                    fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card4.newInstance()).commit();
-                read.setVisibility(View.GONE);
+                    //fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card4.newInstance()).commit();
+                */read.setVisibility(View.GONE);
                 write.setVisibility(View.GONE);
                 break;
 

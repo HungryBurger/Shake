@@ -1,17 +1,19 @@
 package org.androidtown.shaketest;
 
 
+
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
+
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 /**
@@ -89,8 +91,9 @@ public class ShakeService extends Service implements SensorEventListener {
                     return;
                 } mShakeTime = currentTime;
 
-                Intent intent = new Intent(ShakeService.this, DialogueActivity.class);
+                Intent intent = new Intent(ShakeService.this, ShakeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                startActivity(intent);
                 startActivity(intent);
             }
         }
