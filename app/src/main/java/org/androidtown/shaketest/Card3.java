@@ -27,13 +27,10 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 public class Card3 extends Fragment {
-    private FragmentManager fragmentManager;
     String displayUserPhoneNumber;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private String userName, userPhoneNum, userEmail;
-    private Object mMyData;
-    private FirebaseAuth.AuthStateListener mListener;
 
     public static Card3 newInstance() {
         Bundle args = new Bundle();
@@ -75,10 +72,8 @@ public class Card3 extends Fragment {
     }
 
     private void getinfo() {
-
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
-
         userName = mUser.getDisplayName();
         userEmail = mUser.getEmail();
     }
