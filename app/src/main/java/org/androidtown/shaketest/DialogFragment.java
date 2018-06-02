@@ -132,7 +132,13 @@ public class DialogFragment extends BlurDialogFragment {
                 break;
             default:
                 break;
-        }
+        } setCardContent();
+
+        builder.setView(view);
+        return builder.create();
+    }
+
+    private void setCardContent () {
 
         getPhonenum();
         getinfo();
@@ -152,9 +158,6 @@ public class DialogFragment extends BlurDialogFragment {
         name.setText(userName);
         phone.setText(userPhoneNum);
         email.setText(userEmail);
-
-        builder.setView(view);
-        return builder.create();
     }
 
     private void getPhonenum() {
