@@ -74,6 +74,7 @@ public class Editprofile extends Fragment {
             Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void getinfo() {
 
         mAuth = FirebaseAuth.getInstance();

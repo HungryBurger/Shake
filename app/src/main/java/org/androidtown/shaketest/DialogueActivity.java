@@ -51,7 +51,7 @@ public class DialogueActivity extends AppCompatActivity {
         activity = this;
 
         //   requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_dialogue);
+        setContentView(R.layout.activity_shake);
         init();
 
         convertQRButton.setOnClickListener(new View.OnClickListener() {

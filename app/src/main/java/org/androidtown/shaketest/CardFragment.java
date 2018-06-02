@@ -57,6 +57,7 @@ public class CardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         view = (ViewGroup)inflater.inflate(R.layout.card1, container, false);
+
         switch (mTemplate) {
             case 2: {
                 view = (ViewGroup)inflater.inflate(R.layout.card2, container, false);
@@ -64,15 +65,19 @@ public class CardFragment extends Fragment {
             }
             case 3: {
                 view = (ViewGroup)inflater.inflate(R.layout.card3, container, false);
+                break;
             }
             case 4: {
                 view = (ViewGroup)inflater.inflate(R.layout.card4, container, false);
+                break;
             }
             case 5:{
                 view = (ViewGroup)inflater.inflate(R.layout.card5, container, false);
+                break;
             }
             case 6:{
                 view = (ViewGroup)inflater.inflate(R.layout.card6, container, false);
+                break;
             }
 
             default:
