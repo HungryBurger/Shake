@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class CardFragment extends Fragment {
     private static final String BUNDLE_KEY_TEMPLATE = "bundle_key_template";
     private int mTemplate;
@@ -22,6 +24,8 @@ public class CardFragment extends Fragment {
     private FirebaseUser mUser;
     private String displayUserPhoneNumber;
     private String userName, userPhoneNum, userEmail;
+
+    CircleImageView mPicture,convertQRButton;
 
     public static CardFragment newInstance (int template) {
         CardFragment fragment = new CardFragment();
@@ -85,6 +89,9 @@ public class CardFragment extends Fragment {
         TextView name = view.findViewById(R.id.card_name);
         TextView phone = view.findViewById(R.id.card_phoneNumber);
         TextView email = view.findViewById(R.id.card_email);
+
+        convertQRButton = view.findViewById(R.id.convertQR);
+        convertQRButton.setVisibility(View.INVISIBLE);
 
         name.setText(userName);
         phone.setText(userPhoneNum);
