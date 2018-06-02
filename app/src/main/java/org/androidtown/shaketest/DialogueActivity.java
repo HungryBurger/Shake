@@ -1,11 +1,14 @@
 package org.androidtown.shaketest;
 
 import android.app.Activity;
+
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.ContactsContract;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -16,20 +19,16 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DialogueActivity extends Activity {
+public class DialogueActivity extends AppCompatActivity {
     TextView get_name, get_pNum, get_email;
     CircleImageView mPicture,convertQRButton;
     private String userName, userPhoneNum, userEmail;
@@ -51,7 +50,7 @@ public class DialogueActivity extends Activity {
 
         activity = this;
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //   requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_dialogue);
         init();
 
@@ -63,43 +62,6 @@ public class DialogueActivity extends Activity {
             }
         });
     }
-
-    /*public void setContentCard (int id) {
-                    switch (id) {
-                        case 1: {
-                            getSupportFragmentManager().
-                                    beginTransaction().
-                                    replace(R.id.fragment_dialogue, Card1.newInstance()).
-                                    commit();
-                            break;
-                        }
-                        case 2: {
-                            getSupportFragmentManager().
-                                    beginTransaction().
-                                    replace(R.id.fragment_dialogue, Card2.newInstance()).
-                                    commit();
-                            break;
-                        }
-                        case 3: {
-                            getSupportFragmentManager().
-                                    beginTransaction().
-                                    replace(R.id.fragment_dialogue, Card3.newInstance()).
-                                    commit();
-                break;
-            }
-            case 4: {
-                getSupportFragmentManager().
-                        beginTransaction().
-                        replace(R.id.fragment_dialogue, Card4.newInstance()).
-                        commit();
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-    }*/
-
     /**
      * Interpreting data from QR code
      * @param requestCode
@@ -122,15 +84,17 @@ public class DialogueActivity extends Activity {
                 Toast.makeText(getApplicationContext(), result.getContents(), Toast.LENGTH_SHORT).show();
                 if (result.getContents().startsWith("shake")) {
                     Log.d("RESULTRESULT", result.getContents());
-                    final String[] arr = result.getContents().split("#");
+                    String[] arr = result.getContents().split("#");
+                    //
                     saveContacts(arr[1], arr[2], arr[3]);
-
-                    final ContactData current_data =  new ContactData(
-                            arr[1],
-                            arr[2],
-                            arr[3],
-                            Integer.parseInt(arr[4])
+                    // 파이어베이스 들어갈 정보 객체 생성
+                    ContactData current_data =  new ContactData(
+                            arr[1], //이름
+                            arr[2], //번호
+                            arr[3], //이메일
+                            Integer.parseInt(arr[4]) //템플릿 넘버
                     );
+                    // 실제 파이어베이스에 저장 arr[5] 유저의 Uid 값
                     mDatabase.child(arr[5]).setValue(current_data);
 
                 } else {
