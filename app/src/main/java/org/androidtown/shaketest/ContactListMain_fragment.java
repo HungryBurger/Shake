@@ -61,15 +61,16 @@ public class ContactListMain_fragment extends Fragment {
             public void onClick(View v) {
                 int position = recyclerView.getChildAdapterPosition(v);
 
-                MyAdapter.ContactInformation information = productList.get(position);
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-                builder.setView(layoutInflater.inflate(R.layout.fragment_dialog_receiver,null));
-                builder.create().show();
+                DialogFragment fragment = DialogFragment.newInstance(10, 5, false, false,2);
+                fragment.show(getActivity().getFragmentManager(), "blur_sample");
+//                MyAdapter.ContactInformation information = productList.get(position);
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                LayoutInflater layoutInflater = getActivity().getLayoutInflater();
+//                builder.setView(layoutInflater.inflate(R.layout.fragment_dialog_receiver,null));
+//                builder.create().show();
             }
         });
         recyclerView.setAdapter(myAdapter);
-
         return mView;
     }
 

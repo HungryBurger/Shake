@@ -21,11 +21,13 @@ public class WriteNFC extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.writenfc);
+
         Intent intent = getIntent();
         Bundle myBundle = intent.getExtras();
         String mName = myBundle.getString("name");
         String mPhoneNum = myBundle.getString("phoneNum");
         String mMail = myBundle.getString("E-mail");
+
         text = findViewById(R.id.text);
         nfcAdapter = NfcAdapter.getDefaultAdapter(getApplicationContext());
         if(nfcAdapter != null)

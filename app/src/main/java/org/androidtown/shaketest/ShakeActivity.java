@@ -1,9 +1,11 @@
 package org.androidtown.shaketest;
 
-import android.app.Activity;
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.Intent;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,9 +21,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ShakeActivity extends AppCompatActivity {
+    /* Variables for Nfc communication */
+    private NfcAdapter nfcAdapter;
+    private NdefMessage mNdeMessage;
 
     private String userName, userPhoneNum, userEmail;
     private int userTemplate;
@@ -45,6 +52,56 @@ public class ShakeActivity extends AppCompatActivity {
 
         DialogFragment fragment = DialogFragment.newInstance(10, 5, false, false,2);
         fragment.show(getFragmentManager(), "blur_sample");
+
+        /*
+        *
+        */
+        nfcAdapter = NfcAdapter.getDefaultAdapter(getApplicationContext());
+        if (nfcAdapter != null) {
+            Toast.makeText(getApplicationContext(), "휴대폰을 가까이 붙여주세요!", Toast.LENGTH_SHORT).show();
+            mNdeMessage = new NdefMessage(new NdefRecord[]{
+                    createNewTextRecord(userName, Locale.KOREAN, true),
+                    createNewTextRecord(userPhoneNum, Locale.KOREAN, true),
+                    createNewTextRecord(userEmail, Locale.ENGLISH, true),
+                    createNewTextRecord(Integer.toString(userTemplate), Locale.KOREAN, true),
+                    createNewTextRecord(mUser.getUid().toString(), Locale.ENGLISH, true)
+            });
+        } else {
+            Toast.makeText(getApplicationContext(), "NFC 기능을 활성화 시켜주세요!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (nfcAdapter != null) {
+            nfcAdapter.enableForegroundNdefPush(this, mNdeMessage);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (nfcAdapter != null) {
+            nfcAdapter.disableForegroundNdefPush(this);
+        }
+    }
+
+    public static NdefRecord createNewTextRecord(String text, Locale locale, boolean encodelnUtf8){
+        byte[] langBytes = locale.getLanguage().getBytes(Charset.forName("US-ASCII"));
+        Charset utfEncoding = encodelnUtf8 ? Charset.forName("UTF-8"):Charset.forName("UTF-16");
+        byte[] textBytes = text.getBytes(utfEncoding);
+        int utfBit = encodelnUtf8 ? 0:(1<<7);
+        char status = (char)(utfBit + langBytes.length);
+        byte[] data = new byte[1 + langBytes.length + textBytes.length];
+
+        data[0] = (byte)status;
+
+        System.arraycopy(langBytes, 0, data, 1, langBytes.length);
+        System.arraycopy(textBytes, 0, data, 1 + langBytes.length, textBytes.length);
+        return new NdefRecord(NdefRecord.TNF_WELL_KNOWN,NdefRecord.RTD_TEXT, new byte[0], data);
     }
 
     /**

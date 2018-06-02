@@ -112,7 +112,9 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         initLayout();
         mSharedPrefs = SharedPrefManager.getInstance(this);
         fragmentManager = getSupportFragmentManager();
+
         fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
+        fragmentManager.beginTransaction().replace(R.id.frameLayout_card, CardFragment.newInstance(mSharedPrefs.getUI_ItemNo())).commit();
         //초기 값 설정 카드 넘버 저장
 
         Log.d("SharedPref", String.valueOf(mSharedPrefs.getUI_ItemNo()));
@@ -134,6 +136,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 }
             }
         };
+
         read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,6 +144,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 startActivity(intent);
             }
         });
+
         write.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,7 +195,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     protected void onResume() {
         super.onResume();
 
-        fragmentManager.beginTransaction().replace(R.id.frameLayout_card, CardFragment.newInstance(2)).commit();
         Intent intent = new Intent(getApplicationContext(), ShakeService.class);
         SharedPreferences setRefer = PreferenceManager
                 .getDefaultSharedPreferences(this);
@@ -268,18 +271,11 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 break;
             case R.id.item3:
                 Toast.makeText(this, "Main page clicked..", Toast.LENGTH_SHORT).show();
-                fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
-                String temp1 = "Card"+mSharedPrefs.getUI_ItemNo()+".newInstance()";
 
-                /*if(mSharedPrefs.getUI_ItemNo()==1)
-                    //fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card1.newInstance()).commit();
-                else if(mSharedPrefs.getUI_ItemNo()==2)
-                    //fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card2.newInstance()).commit();
-                else if(mSharedPrefs.getUI_ItemNo()==3)
-                    //fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card3.newInstance()).commit();
-                else if(mSharedPrefs.getUI_ItemNo()==4)
-                    //fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card4.newInstance()).commit();
-                */read.setVisibility(View.GONE);
+                fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
+                fragmentManager.beginTransaction().replace(R.id.frameLayout_card, CardFragment.newInstance(mSharedPrefs.getUI_ItemNo())).commit();
+
+                read.setVisibility(View.GONE);
                 write.setVisibility(View.GONE);
                 break;
 
