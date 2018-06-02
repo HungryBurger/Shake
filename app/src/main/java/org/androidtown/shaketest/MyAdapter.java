@@ -53,7 +53,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             this.mImageView = (ImageView) itemView.findViewById(R.id.imageView);
             this.name = (TextView) itemView.findViewById(R.id.textView);
             this.pnum = (TextView) itemView.findViewById(R.id.textView2);
-            this.email = itemView.findViewById(R.id.textView3);
+            this.email = (TextView)itemView.findViewById(R.id.textView3);
             if(mListener != null)
                 itemView.setOnClickListener(mListener);
         }
