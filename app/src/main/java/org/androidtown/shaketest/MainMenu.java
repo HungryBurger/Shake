@@ -110,13 +110,11 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 ).check();
 
         initLayout();
-
-        fragmentManager = getSupportFragmentManager();
-
-        fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
-        //fragmentManager.beginTransaction().replace(R.id.frameLayout_card, Card1.newInstance()).commit();
-        //초기 값 설정 카드 넘버 저장
         mSharedPrefs = SharedPrefManager.getInstance(this);
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
+        //초기 값 설정 카드 넘버 저장
+
         Log.d("SharedPref", String.valueOf(mSharedPrefs.getUI_ItemNo()));
         mAuth = FirebaseAuth.getInstance();
         mListener = new FirebaseAuth.AuthStateListener() {
@@ -193,6 +191,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     protected void onResume() {
         super.onResume();
 
+        fragmentManager.beginTransaction().replace(R.id.frameLayout_card, CardFragment.newInstance(2)).commit();
         Intent intent = new Intent(getApplicationContext(), ShakeService.class);
         SharedPreferences setRefer = PreferenceManager
                 .getDefaultSharedPreferences(this);
@@ -240,7 +239,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         mPhoneNum = (TextView) nav_header_view.findViewById(R.id.profile_phone_number);
         mPicture = (CircleImageView) nav_header_view.findViewById(R.id.profile_picture);
 
-
         mPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -272,6 +270,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 Toast.makeText(this, "Main page clicked..", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
                 String temp1 = "Card"+mSharedPrefs.getUI_ItemNo()+".newInstance()";
+
                 /*if(mSharedPrefs.getUI_ItemNo()==1)
                     //fragmentManager.beginTransaction().replace(R.id.frameLayout_card,Card1.newInstance()).commit();
                 else if(mSharedPrefs.getUI_ItemNo()==2)
@@ -347,6 +346,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 super.onDrawerClosed(drawerView);
             }
         };
+
         drawerLayout.addDrawerListener(drawerToggle);
         navigationView.setNavigationItemSelectedListener(MainMenu.this);
         nav_header_view = navigationView.getHeaderView(0);

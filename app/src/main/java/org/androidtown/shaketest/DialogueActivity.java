@@ -62,43 +62,6 @@ public class DialogueActivity extends AppCompatActivity {
             }
         });
     }
-
-    /*public void setContentCard (int id) {
-                    switch (id) {
-                        case 1: {
-                            getSupportFragmentManager().
-                                    beginTransaction().
-                                    replace(R.id.fragment_dialogue, Card1.newInstance()).
-                                    commit();
-                            break;
-                        }
-                        case 2: {
-                            getSupportFragmentManager().
-                                    beginTransaction().
-                                    replace(R.id.fragment_dialogue, Card2.newInstance()).
-                                    commit();
-                            break;
-                        }
-                        case 3: {
-                            getSupportFragmentManager().
-                                    beginTransaction().
-                                    replace(R.id.fragment_dialogue, Card3.newInstance()).
-                                    commit();
-                break;
-            }
-            case 4: {
-                getSupportFragmentManager().
-                        beginTransaction().
-                        replace(R.id.fragment_dialogue, Card4.newInstance()).
-                        commit();
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-    }*/
-
     /**
      * Interpreting data from QR code
      * @param requestCode
