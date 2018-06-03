@@ -57,9 +57,7 @@ public class ShakeActivity extends AppCompatActivity {
         DialogFragment fragment = DialogFragment.newInstance(10, 5, false, false,2);
         fragment.show(getFragmentManager(), "blur_sample");
 
-        /*
-         *
-         */
+
         nfcAdapter = NfcAdapter.getDefaultAdapter(getApplicationContext());
         if (nfcAdapter != null) {
             Toast.makeText(getApplicationContext(), "휴대폰을 가까이 붙여주세요!", Toast.LENGTH_SHORT).show();
@@ -126,6 +124,7 @@ public class ShakeActivity extends AppCompatActivity {
 
     /**
      * Interpreting data from QR code
+     * Save Received Data into USER's Contact
      * @param requestCode
      * @param resultCode
      * @param data
@@ -142,10 +141,15 @@ public class ShakeActivity extends AppCompatActivity {
             } else {
                 if (result.getContents().startsWith("shake")) {
                     String[] arr = result.getContents().split("#");
+
                     final String uid = arr[1];
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     final DatabaseReference contactListRef = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("contact_list");
 
+                    /*
+                    * Get Target user's data via QR Scanner
+                    * Save received data into Firebase DB and User Contact list
+                    */
                     contactListRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -182,26 +186,9 @@ public class ShakeActivity extends AppCompatActivity {
 
                         }
                     });
+                } else {
+                    Toast.makeText(getApplicationContext(), "잘 못된 형식의 데이터 입니다.", Toast.LENGTH_SHORT).show();
                 }
-//                Toast.makeText(getApplicationContext(), result.getContents(), Toast.LENGTH_SHORT).show();
-//                if (result.getContents().startsWith("shake")) {
-//                    Log.d("RESULTRESULT", result.getContents());
-//                    String[] arr = result.getContents().split("#");
-//                    //
-//                    saveContacts(arr[1], arr[2], arr[3]);
-//                    // 파이어베이스 들어갈 정보 객체 생성
-//                    ContactData current_data =  new ContactData(
-//                            arr[1], //이름
-//                            arr[2], //번호
-//                            arr[3], //이메일
-//                            Integer.parseInt(arr[4]) //템플릿 넘버
-//                    );
-//                    // 실제 파이어베이스에 저장 arr[5] 유저의 Uid 값
-//                    mDatabase.child(arr[5]).setValue(current_data);
-//
-//                } else {
-//                    /* Wrong Value */
-//                }
             }
         } else {
             // This is important, otherwise the result will not be passed to the fragment
@@ -209,6 +196,12 @@ public class ShakeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Save 상대방 연락처 into user's device contact list
+     * @param name
+     * @param num
+     * @param email
+     */
     public void saveContacts(String name, String num, String email) {
         DisplayName = name;
         MobileNumber = num;
@@ -221,6 +214,7 @@ public class ShakeActivity extends AppCompatActivity {
                 .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
                 .build());
 
+        // 상대방 이름 저장
         if (DisplayName != null) {
             operationLists.add(ContentProviderOperation.newInsert(
                     ContactsContract.Data.CONTENT_URI)
@@ -232,7 +226,7 @@ public class ShakeActivity extends AppCompatActivity {
                             DisplayName
                     ).build());
         }
-
+        // 휴대폰 번호 저장
         if (MobileNumber != null) {
             operationLists.add(ContentProviderOperation.
                     newInsert(ContactsContract.Data.CONTENT_URI)
@@ -244,6 +238,7 @@ public class ShakeActivity extends AppCompatActivity {
                             ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
                     .build());
         }
+        // 이메일 저장
         if (emailAddress != null) {
             operationLists.add(ContentProviderOperation.
                     newInsert(ContactsContract.Data.CONTENT_URI)
@@ -263,6 +258,11 @@ public class ShakeActivity extends AppCompatActivity {
             finish();
         }
     }
+
+    /**
+     * Get user's Phone Number
+     * @return
+     */
     private String getPhoneNum() {
         TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 

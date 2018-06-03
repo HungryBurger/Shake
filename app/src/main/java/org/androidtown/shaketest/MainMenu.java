@@ -258,14 +258,19 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         switch (item.getItemId()) {
             case R.id.item1:
                 Toast.makeText(this, "Contact List clicked..", Toast.LENGTH_SHORT).show();
-                fragmentManager.beginTransaction().replace(R.id.frameLayout, ContactListMain_fragment.newInstance()).commit();
+                fragmentManager.beginTransaction().replace(R.id.frameLayout, ContactListMain_fragment.newInstance())
+                        .addToBackStack(null)
+                        .commit();
 
                 read.setVisibility(View.GONE);
                 write.setVisibility(View.GONE);
                 break;
             case R.id.item2:
                 Toast.makeText(this, "Editprofile clicked..", Toast.LENGTH_SHORT).show();
-                fragmentManager.beginTransaction().replace(R.id.frameLayout, Editprofile.newInstance()).commit();
+                fragmentManager.beginTransaction().replace(R.id.frameLayout, Editprofile.newInstance())
+                        .addToBackStack(null)
+                        .addToBackStack(null)
+                        .commit();
                 read.setVisibility(View.GONE);
                 write.setVisibility(View.GONE);
                 break;
@@ -420,6 +425,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                     }
                 });
     }
+
     public void imageDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
         builder.setTitle("사진 선택");
