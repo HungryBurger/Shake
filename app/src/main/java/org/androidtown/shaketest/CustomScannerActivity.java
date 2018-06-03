@@ -70,7 +70,8 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
      * @return
      */
     private String makeContents () {
-        return (HEADER + userName + "#" + userPhoneNum + "#" +userEmail + "#" + mSharedPrefs.getUI_ItemNo() + "#" + mUser.getUid());
+        return (HEADER + mUser.getUid());
+        //return (HEADER + userName + "#" + userPhoneNum + "#" +userEmail + "#" + mSharedPrefs.getUI_ItemNo() + "#" + mUser.getUid());
     }
 
     /**

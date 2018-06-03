@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -36,6 +38,8 @@ public class ContactListMain_fragment extends Fragment {
     ContactData contactData;
     static TextView name,pnum,email;
     List<MyAdapter.ContactInformation> productList = new ArrayList<>();
+    ArrayList<ContactData> contactDataList;
+
     public static ContactListMain_fragment newInstance() {
         Bundle args = new Bundle();
 
@@ -52,9 +56,11 @@ public class ContactListMain_fragment extends Fragment {
         name = mView.findViewById(R.id.user_name);
         pnum = mView.findViewById(R.id.user_phone_num);
         email = mView.findViewById(R.id.user_email);
+
         recyclerView = (RecyclerView) mView.findViewById(R.id.list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
+
         myAdapter = new MyAdapter(getActivity(), productList, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,21 +74,54 @@ public class ContactListMain_fragment extends Fragment {
                 builder.create().show();
             }
         });
+        myAdapter = new MyAdapter(getActivity(), productList, new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(getActivity(), "롱클릭", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
         recyclerView.setAdapter(myAdapter);
 
         return mView;
     }
     private void setInitialData(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference contactListRef = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("contact_list");
+        DatabaseReference contactListRef = FirebaseDatabase.getInstance().getReference().child("users");
+        contactDataList = new ArrayList<>();
 
         contactListRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                contactData = dataSnapshot.getValue(ContactData.class);
-                productList.add(new MyAdapter.ContactInformation(contactData.getName(),contactData.getPhoneNum(),R.mipmap.ic_launcher));
-                myAdapter.notifyDataSetChanged();
-                Log.d("FireDB", "Value " + contactData.getName());
+                Iterator<String> iterator =  ((ServiceApplication)getActivity().getApplication()).myContactList.iterator();
+                while (iterator.hasNext()) {
+                    String cur = iterator.next();
+                    if (cur.equals(dataSnapshot.getValue().toString())) {
+                        DatabaseReference newRef = FirebaseDatabase.getInstance().getReference().child(cur).child("myInfo");
+
+                        newRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                contactDataList.add(dataSnapshot.getValue(ContactData.class));
+                                ContactData cur = dataSnapshot.getValue(ContactData.class);
+                                productList.add(new MyAdapter.ContactInformation(
+                                       cur.getName(), // 이름
+                                        cur.getPhoneNum(), // 번호
+                                        R.mipmap.ic_launcher) // 사진
+                                );
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+//                contactData = dataSnapshot.getValue(ContactData.class);
+//                productList.add(new MyAdapter.ContactInformation(contactData.getName(),contactData.getPhoneNum(),R.mipmap.ic_launcher));
+//                myAdapter.notifyDataSetChanged();
+//                Log.d("FireDB", "Value " + contactData.getName());
             }
 
             @Override

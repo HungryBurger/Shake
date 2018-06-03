@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -27,6 +28,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -41,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseAuth.AuthStateListener mListener;
     // [END declare_auth]
     private GoogleSignInClient mGoogleSignInClient;
+    private DatabaseReference mDatabase;
+    private SharedPrefManager mSharedPrefManager;
     private String displayUserName;
     private String displayUserEmail;
     private String displayUserPhoneNumber;
@@ -49,6 +57,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mSharedPrefManager = SharedPrefManager.getInstance(this);
+
 
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
@@ -59,6 +70,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 
                 mUser = mAuth.getCurrentUser();
                 if(mUser != null) {
+                    mDatabase = FirebaseDatabase.getInstance().getReference().
+                            child("users").child(mUser.getUid()).child("myInfo");
+
+                    ContactData current_data =  new ContactData(
+                            mUser.getDisplayName(), //이름
+                            getPhoneNum(), //번호
+                            mUser.getEmail(), //이메일
+                            mSharedPrefManager.getUI_ItemNo(),//템플릿 넘버
+                            null
+                    );
+                    mDatabase.setValue(current_data);
+                    setMyContactList();
+
                     startActivity(new Intent(getApplicationContext(), MainMenu.class));
                     finish();
                 } else {
@@ -67,6 +91,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         };
+    }
+
+    private void setMyContactList () {
+        DatabaseReference mReference = FirebaseDatabase.getInstance().getReference().child(mUser.getUid()).child("contact_list");
+
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ((ServiceApplication)getApplication()).myContactList = (ArrayList<String>) dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private String getPhoneNum() {
+        TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+
+        try {
+            String phoneNum = telephonyManager.getLine1Number();
+            if (phoneNum.startsWith("+82")) {
+                phoneNum = phoneNum.replace("+82", "0");
+            }
+            displayUserPhoneNumber = PhoneNumberUtils.formatNumber(phoneNum);
+        } catch (SecurityException e) {
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+        } return displayUserPhoneNumber;
     }
 
     private void init() {

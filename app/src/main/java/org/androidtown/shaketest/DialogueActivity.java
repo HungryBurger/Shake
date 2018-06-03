@@ -88,14 +88,14 @@ public class DialogueActivity extends AppCompatActivity {
                     //
                     saveContacts(arr[1], arr[2], arr[3]);
                     // 파이어베이스 들어갈 정보 객체 생성
-                    ContactData current_data =  new ContactData(
-                            arr[1], //이름
-                            arr[2], //번호
-                            arr[3], //이메일
-                            Integer.parseInt(arr[4]) //템플릿 넘버
-                    );
+//                    ContactData current_data =  new ContactData(
+//                            arr[1], //이름
+//                            arr[2], //번호
+//                            arr[3], //이메일
+//                            Integer.parseInt(arr[4]) //템플릿 넘버
+//                    );
                     // 실제 파이어베이스에 저장 arr[5] 유저의 Uid 값
-                    mDatabase.child(arr[5]).setValue(current_data);
+                    //mDatabase.child(arr[5]).setValue(current_data);
 
                 } else {
                     /* Wrong Value */

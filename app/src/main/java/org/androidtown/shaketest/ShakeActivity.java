@@ -16,8 +16,12 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -129,35 +133,75 @@ public class ShakeActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().
-                child("users").child(mUser.getUid()).child("contact_list");
-
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        final IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
                 Log.d("MainActivity", "Cancelled scan");
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
                 finish();
             } else {
-                Toast.makeText(getApplicationContext(), result.getContents(), Toast.LENGTH_SHORT).show();
                 if (result.getContents().startsWith("shake")) {
-                    Log.d("RESULTRESULT", result.getContents());
                     String[] arr = result.getContents().split("#");
-                    //
-                    saveContacts(arr[1], arr[2], arr[3]);
-                    // 파이어베이스 들어갈 정보 객체 생성
-                    ContactData current_data =  new ContactData(
-                            arr[1], //이름
-                            arr[2], //번호
-                            arr[3], //이메일
-                            Integer.parseInt(arr[4]) //템플릿 넘버
-                    );
-                    // 실제 파이어베이스에 저장 arr[5] 유저의 Uid 값
-                    mDatabase.child(arr[5]).setValue(current_data);
+                    final String uid = arr[1];
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    final DatabaseReference contactListRef = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("contact_list");
 
-                } else {
-                    /* Wrong Value */
+                    contactListRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            ArrayList<String> contactList = null;
+                            if (dataSnapshot.exists()) {
+                                contactList = (ArrayList<String>) dataSnapshot.getValue();
+                            } else {
+                                contactList = new ArrayList<>();
+                            }
+                            contactList.add(uid);
+                            contactListRef.setValue(contactList);
+
+                            DatabaseReference newRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("myInfo");
+                            newRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    ContactData data = dataSnapshot.getValue(ContactData.class);
+                                    saveContacts(
+                                            data.getName(),
+                                            data.getPhoneNum(),
+                                            data.getEmail()
+                                    );
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
+//                Toast.makeText(getApplicationContext(), result.getContents(), Toast.LENGTH_SHORT).show();
+//                if (result.getContents().startsWith("shake")) {
+//                    Log.d("RESULTRESULT", result.getContents());
+//                    String[] arr = result.getContents().split("#");
+//                    //
+//                    saveContacts(arr[1], arr[2], arr[3]);
+//                    // 파이어베이스 들어갈 정보 객체 생성
+//                    ContactData current_data =  new ContactData(
+//                            arr[1], //이름
+//                            arr[2], //번호
+//                            arr[3], //이메일
+//                            Integer.parseInt(arr[4]) //템플릿 넘버
+//                    );
+//                    // 실제 파이어베이스에 저장 arr[5] 유저의 Uid 값
+//                    mDatabase.child(arr[5]).setValue(current_data);
+//
+//                } else {
+//                    /* Wrong Value */
+//                }
             }
         } else {
             // This is important, otherwise the result will not be passed to the fragment
