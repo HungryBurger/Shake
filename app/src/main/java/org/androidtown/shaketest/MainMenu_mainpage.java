@@ -1,22 +1,13 @@
 package org.androidtown.shaketest;
 
-import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.telephony.PhoneNumberUtils;
-import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainMenu_mainpage extends Fragment {
     FragmentManager fragmentManager;
@@ -24,7 +15,6 @@ public class MainMenu_mainpage extends Fragment {
     public static MainMenu_mainpage newInstance() {
         Bundle args = new Bundle();
         MainMenu_mainpage fragment = new MainMenu_mainpage();
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -36,9 +26,6 @@ public class MainMenu_mainpage extends Fragment {
         ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.activity_main_menu_mainpage, container, false);
         SharedPrefManager mSharedPrefs = SharedPrefManager.getInstance(getActivity());
         mSharedPrefs.setUI_ItemNo(1);
-
-
-
         return mView;
     }
 }

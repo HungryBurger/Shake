@@ -6,6 +6,7 @@
     android:layout_margin="5dp"
     android:orientation="vertical">
 
+
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/user_picture"
         android:layout_width="96dp"
@@ -23,24 +24,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:background="@drawable/dialouge_design">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:padding="8dp"
-                android:text="전화번호 "
+                android:padding="10dp"
+                android:text="-이름-"
                 android:textAlignment="viewStart"
+                android:textColor="#FFFFFF"
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/edit_phone"
+                android:id="@+id/edit_name"
                 android:layout_width="match_parent"
-                android:layout_height="53dp"
+                android:layout_height="55dp"
                 android:layout_weight="1"
                 android:text="Text"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -49,39 +54,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/dialouge_design">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:padding="10dp"
-            android:text="이름"
+            android:text="-전화번호-"
             android:textAlignment="viewStart"
+            android:textColor="#FFFFFF"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/edit_name"
+            android:id="@+id/edit_phone"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_weight="1"
             android:text="Text"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="#FFFFFF"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/dialouge_design">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:padding="10dp"
-            android:text="이메일 "
+            android:text="-이메일-"
             android:textAlignment="viewStart"
+            android:textColor="#FFFFFF"
             android:textSize="20sp" />
 
         <TextView
@@ -90,16 +100,18 @@
             android:layout_height="55dp"
             android:layout_weight="1"
             android:text="Text"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="#FFFFFF"/>
     </LinearLayout>
 
-    <Button
+    <ImageButton
         android:id="@+id/edit_customize"
         android:layout_width="match_parent"
-        android:layout_height="66dp"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:background="#FFFFFF"
-        android:text="커스터마이징 수정하기"
+        android:src="@drawable/dialouge_design"
+        android:scaleType="fitXY"
+        android:text="테마 변경"
         android:textAllCaps="false"
         android:textSize="20sp" />
 </LinearLayout>

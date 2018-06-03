@@ -56,11 +56,12 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
+
     ActionBarDrawerToggle drawerToggle;
     Toolbar toolbar;
     View nav_header_view;
     TextView mName, mPhoneNum, mEmail;
-    CircleImageView mPicture;
+    CircleImageView mPicture1;
     ImageButton settingButton;
     Button read,write;
     private static final int FROM_ALBUM = 1;
@@ -229,7 +230,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 if (extras != null) {
                     Log.d("ekit", "ekit");
                     Bitmap imageBitmap = (Bitmap) extras.get("data");
-                    mPicture.setImageBitmap(imageBitmap);
+                    mPicture1.setImageBitmap(imageBitmap);
                     break;
                 }
         }
@@ -240,9 +241,9 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         mEmail.setSelected(true);
         mName = (TextView) nav_header_view.findViewById(R.id.profile_name);
         mPhoneNum = (TextView) nav_header_view.findViewById(R.id.profile_phone_number);
-        mPicture = (CircleImageView) nav_header_view.findViewById(R.id.profile_picture);
+        mPicture1 = (CircleImageView) nav_header_view.findViewById(R.id.profile_picture);
 
-        mPicture.setOnClickListener(new View.OnClickListener() {
+        mPicture1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 imageDialog();
@@ -345,6 +346,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         drawerLayout.addDrawerListener(drawerToggle);
         navigationView.setNavigationItemSelectedListener(MainMenu.this);
         nav_header_view = navigationView.getHeaderView(0);
+
         toolbar.setTitle("Shake");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);

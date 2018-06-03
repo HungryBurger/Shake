@@ -57,6 +57,15 @@ public class CardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         view = (ViewGroup)inflater.inflate(R.layout.card1, container, false);
+        mPicture = (CircleImageView) view.findViewById(R.id.user_picture1);
+
+
+       /* mPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainMenu)getActivity()).imageDialog();
+            }
+        });*/
 
         switch (mTemplate) {
             case 2: {
@@ -126,4 +135,5 @@ public class CardFragment extends Fragment {
             userEmail = mUser.getEmail();
         }
     }
+
 }

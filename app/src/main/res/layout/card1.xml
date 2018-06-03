@@ -16,7 +16,7 @@
         android:padding="20dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/user_picture"
+            android:id="@+id/user_picture1"
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:background="@mipmap/ic_launcher_round"
@@ -35,14 +35,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="이름"
-                android:textSize="15sp" />
+                android:textAppearance="@android:style/TextAppearance.Widget.TextView"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/card_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Text"
-                android:textSize="15sp" />
+                android:textAppearance="@android:style/TextAppearance.Widget.TextView"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -56,14 +58,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="전화번호"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:textAppearance="@android:style/TextAppearance.Widget.TextView"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/card_phoneNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Text"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:textAppearance="@android:style/TextAppearance.Widget.TextView"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -77,16 +83,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="이메일"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:textAppearance="@android:style/TextAppearance.Widget.TextView"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/card_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Text"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:textAppearance="@android:style/TextAppearance.Widget.TextView"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
+
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/convertQR"
@@ -95,5 +106,4 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="3dp"
         android:src="@drawable/qr_code" />
-
 </LinearLayout>

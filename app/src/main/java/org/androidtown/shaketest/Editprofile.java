@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,12 +43,12 @@ public class Editprofile extends Fragment {
 
         ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.activity_editprofile, container, false);
         fragmentManager = getActivity().getSupportFragmentManager();
-        Button Customize = (Button)mView.findViewById(R.id.edit_customize);
+        ImageButton Customize = (ImageButton)mView.findViewById(R.id.edit_customize);
         getPhonenum();
         getinfo();
 
-        TextView name = (TextView) mView.findViewById(R.id.edit_phone);
-        TextView phone = (TextView) mView.findViewById(R.id.edit_name);
+        TextView name = (TextView) mView.findViewById(R.id.edit_name);
+        TextView phone = (TextView) mView.findViewById(R.id.edit_phone);
         TextView email = (TextView) mView.findViewById(R.id.edit_email);
         name.setText(userName);
         phone.setText(userPhoneNum);
