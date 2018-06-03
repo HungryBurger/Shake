@@ -1,6 +1,4 @@
 package org.androidtown.shaketest;
-
-
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,10 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-
 public class ContactListMain_fragment extends Fragment {
-
     private MyAdapter myAdapter;
     RecyclerView recyclerView;
     static TextView name, pnum, email;
@@ -41,7 +36,6 @@ public class ContactListMain_fragment extends Fragment {
 
     public static ContactListMain_fragment newInstance() {
         Bundle args = new Bundle();
-
         ContactListMain_fragment fragment = new ContactListMain_fragment();
         fragment.setArguments(args);
         return fragment;
@@ -134,25 +128,17 @@ public class ContactListMain_fragment extends Fragment {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
             }
-
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
             }
-
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
     }
-
-
 }

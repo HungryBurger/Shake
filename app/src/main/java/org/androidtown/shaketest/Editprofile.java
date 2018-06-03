@@ -43,7 +43,7 @@ public class Editprofile extends Fragment {
 
         ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.activity_editprofile, container, false);
         fragmentManager = getActivity().getSupportFragmentManager();
-        ImageButton Customize = (ImageButton)mView.findViewById(R.id.edit_customize);
+        Button Customize = (Button)mView.findViewById(R.id.edit_customize);
         getPhonenum();
         getinfo();
 
