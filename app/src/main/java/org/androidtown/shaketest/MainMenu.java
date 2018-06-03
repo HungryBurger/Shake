@@ -87,7 +87,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         /**
          * 자동 권한 요청하기
          */
-
         PermissionListener permissionListener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {

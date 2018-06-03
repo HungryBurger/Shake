@@ -59,30 +59,31 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }
     }
     public static class ContactInformation {
-        String text1, text2, text3;
+        String name, phoneNum, email;
         int image;
 
         public String getText1() {
-            return text1;
+            return name;
         }
 
-        public void setText1(String text1) {
-            this.text1 = text1;
+        public void setText1(String name) {
+            this.name = name;
         }
 
         public String getText2() {
-            return text2;
+            return phoneNum;
         }
 
-        public void setText2(String text2) {
-            this.text2 = text2;
+        public void setText2(String phonNum) {
+            this.phoneNum = phonNum;
         }
+
         public String getText3() {
-            return text3;
+            return email;
         }
 
-        public void setText3(String text3) {
-            this.text3 = text3;
+        public void setText3(String email) {
+            this.email = email;
         }
 
         public int getImage() {
@@ -93,9 +94,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             this.image = image;
         }
 
-        public ContactInformation(String text1, String text2, int image) {
-            this.text1 = text1;
-            this.text2 = text2;
+        public ContactInformation(String name, String phonNum, String email, int image) {
+            this.name = name;
+            this.phoneNum = phonNum;
+            this.email = email;
             this.image = image;
         }
     }

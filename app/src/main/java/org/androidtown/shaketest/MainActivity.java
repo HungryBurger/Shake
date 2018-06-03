@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(mUser != null) {
                     mDatabase = FirebaseDatabase.getInstance().getReference().
                             child("users").child(mUser.getUid()).child("myInfo");
-
+                    Log.d("CONTACT_LIST", "MainActivity");
                     ContactData current_data =  new ContactData(
                             mUser.getDisplayName(), //이름
                             getPhoneNum(), //번호
@@ -94,12 +94,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setMyContactList () {
-        DatabaseReference mReference = FirebaseDatabase.getInstance().getReference().child(mUser.getUid()).child("contact_list");
+        DatabaseReference mReference = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).child("contact_list");
 
-        mReference.addValueEventListener(new ValueEventListener() {
+        mReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ((ServiceApplication)getApplication()).myContactList = (ArrayList<String>) dataSnapshot.getValue();
+                if (dataSnapshot.exists())
+                    ((ServiceApplication)getApplication()).myContactList = (ArrayList<String>) dataSnapshot.getValue();
             }
 
             @Override

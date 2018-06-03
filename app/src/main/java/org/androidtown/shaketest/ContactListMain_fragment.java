@@ -35,8 +35,7 @@ public class ContactListMain_fragment extends Fragment {
 
     private MyAdapter myAdapter;
     RecyclerView recyclerView;
-    ContactData contactData;
-    static TextView name,pnum,email;
+    static TextView name, pnum, email;
     List<MyAdapter.ContactInformation> productList = new ArrayList<>();
     ArrayList<ContactData> contactDataList;
 
@@ -69,23 +68,24 @@ public class ContactListMain_fragment extends Fragment {
                 MyAdapter.ContactInformation information = productList.get(position);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-                builder.setView(layoutInflater.inflate(R.layout.fragment_dialog_receiver,null));
+                builder.setView(layoutInflater.inflate(R.layout.fragment_dialog_receiver, null));
 
                 builder.create().show();
             }
         });
-        myAdapter = new MyAdapter(getActivity(), productList, new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast.makeText(getActivity(), "롱클릭", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });
+//        myAdapter = new MyAdapter(getActivity(), productList, new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//                Toast.makeText(getActivity(), "롱클릭", Toast.LENGTH_SHORT).show();
+//                return true;
+//            }
+//        });
         recyclerView.setAdapter(myAdapter);
 
         return mView;
     }
-    private void setInitialData(){
+
+    private void setInitialData() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference contactListRef = FirebaseDatabase.getInstance().getReference().child("users");
         contactDataList = new ArrayList<>();
@@ -93,22 +93,29 @@ public class ContactListMain_fragment extends Fragment {
         contactListRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Iterator<String> iterator =  ((ServiceApplication)getActivity().getApplication()).myContactList.iterator();
-                while (iterator.hasNext()) {
-                    String cur = iterator.next();
-                    if (cur.equals(dataSnapshot.getValue().toString())) {
-                        DatabaseReference newRef = FirebaseDatabase.getInstance().getReference().child(cur).child("myInfo");
+                ArrayList<String> myList = ((ServiceApplication)getActivity().getApplication()).myContactList;
+                Iterator<String> iter = myList.iterator();
+
+                Log.d("CONTACT_LIST_MAIN", dataSnapshot.getKey());
+                Log.d("CONTACT_LIST_MAIN", myList.size() + " 개수");
+
+                while (iter.hasNext()) {
+                    String cur = iter.next();
+                    if (cur.equals(dataSnapshot.getKey())) {
+                        DatabaseReference newRef = FirebaseDatabase.getInstance().getReference().child("users").child(cur).child("myInfo");
 
                         newRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                contactDataList.add(dataSnapshot.getValue(ContactData.class));
-                                ContactData cur = dataSnapshot.getValue(ContactData.class);
-                                productList.add(new MyAdapter.ContactInformation(
-                                       cur.getName(), // 이름
-                                        cur.getPhoneNum(), // 번호
-                                        R.mipmap.ic_launcher) // 사진
+                                ContactData contactData = dataSnapshot.getValue(ContactData.class);
+
+                                contactDataList.add(contactData);
+                                productList.add(
+                                        new MyAdapter.ContactInformation (
+                                            contactData.getName(),contactData.getPhoneNum(), contactData.getEmail(), R.mipmap.ic_launcher
+                                        )
                                 );
+                                myAdapter.notifyDataSetChanged();
                             }
 
                             @Override
@@ -118,6 +125,7 @@ public class ContactListMain_fragment extends Fragment {
                         });
                     }
                 }
+//
 //                contactData = dataSnapshot.getValue(ContactData.class);
 //                productList.add(new MyAdapter.ContactInformation(contactData.getName(),contactData.getPhoneNum(),R.mipmap.ic_launcher));
 //                myAdapter.notifyDataSetChanged();
