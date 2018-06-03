@@ -2,21 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/item3"
-        android:icon="@mipmap/ic_launcher_round"
-        android:title="Home"/>
+        android:icon="@drawable/menu_home"
+        android:title="홈"/>
     <item
         android:id="@+id/item1"
-        android:icon="@mipmap/ic_launcher_round"
-        android:title="Contatct List"
+        android:icon="@drawable/menu_list"
+        android:title="연락처 리스트"
         />
     <item
         android:id="@+id/item2"
-        android:icon="@mipmap/ic_launcher_round"
-        android:title="Profile"
+        android:icon="@drawable/menu_profile"
+        android:title="프로필 수정"
         />
     <item
         android:id="@+id/log_out"
-        android:icon="@mipmap/ic_launcher_round"
-        android:title="Log out"
+        android:icon="@drawable/menu_logout"
+        android:title="로그아웃"
         />
 </menu>

@@ -13,19 +13,12 @@ import java.util.List;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     Context context;
     List<ContactInformation>productList = new ArrayList<>();
-    View.OnClickListener clickListener;
-    View.OnLongClickListener longClickListener;
+    View.OnClickListener mListener;
 
     public MyAdapter(Context context, List<ContactInformation> productList, View.OnClickListener mListener) {
         this.context = context;
         this.productList = productList;
-        this.clickListener = mListener;
-    }
-
-    public MyAdapter(Context context, List<ContactInformation> productList, View.OnLongClickListener mListener) {
-        this.context = context;
-        this.productList = productList;
-        this.longClickListener = mListener;
+        this.mListener = mListener;
     }
 
     @Override
@@ -55,17 +48,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         TextView name;
         TextView pnum;
         TextView email;
-
         public ViewHolder(View itemView) {
             super(itemView);
             this.mImageView = (ImageView) itemView.findViewById(R.id.imageView);
             this.name = (TextView) itemView.findViewById(R.id.textView);
             this.pnum = (TextView) itemView.findViewById(R.id.textView2);
-            this.email = itemView.findViewById(R.id.textView3);
-            if(clickListener != null)
-                itemView.setOnClickListener(clickListener);
-            if(longClickListener != null)
-                itemView.setOnLongClickListener(longClickListener);
+            this.email = (TextView)itemView.findViewById(R.id.textView3);
+            if(mListener != null)
+                itemView.setOnClickListener(mListener);
         }
     }
     public static class ContactInformation {

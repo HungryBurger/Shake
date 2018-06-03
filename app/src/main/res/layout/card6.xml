@@ -16,7 +16,7 @@
         android:padding="20dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/user_picture"
+            android:id="@+id/user_picture6"
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:background="@mipmap/ic_launcher_round"
@@ -34,17 +34,19 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
                 android:text="이름"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:textAppearance="@android:style/TextAppearance.Widget.TextView"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/card_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
                 android:text="Text"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:textAppearance="@android:style/TextAppearance.Widget.TextView"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -57,17 +59,19 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
                 android:text="전화번호"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:textAppearance="@android:style/TextAppearance.Widget.TextView"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/card_phoneNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
                 android:text="Text"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:textAppearance="@android:style/TextAppearance.Widget.TextView"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -80,17 +84,19 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
                 android:text="이메일"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:textAppearance="@android:style/TextAppearance.Widget.TextView"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/card_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
                 android:text="Text"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:textAppearance="@android:style/TextAppearance.Widget.TextView"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>
