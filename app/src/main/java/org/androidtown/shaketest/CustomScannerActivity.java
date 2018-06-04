@@ -1,9 +1,9 @@
 package org.androidtown.shaketest;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
@@ -15,13 +15,21 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.ResultPoint;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 
-public class CustomScannerActivity extends AppCompatActivity implements DecoratedBarcodeView.TorchListener {
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+public class CustomScannerActivity extends Activity implements DecoratedBarcodeView.TorchListener {
 
     private CaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
@@ -30,6 +38,26 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
     private FirebaseUser mUser;
     private SharedPrefManager mSharedPrefs;
     private final String  HEADER = "shake#";
+    private String lastText;
+
+    private BarcodeCallback callback = new BarcodeCallback() {
+        @Override
+        public void barcodeResult(BarcodeResult result) {
+            if (result.getText() == null || result.getText().equals(lastText)) {
+                return;
+            }
+            lastText = result.getText();
+            barcodeScannerView.setStatusText(result.getText());
+
+            ImageView imageView = findViewById(R.id.qrView);
+            imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.BLACK));
+        }
+
+        @Override
+        public void possibleResultPoints(List<ResultPoint> resultPoints) {
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +65,25 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
         setContentView(R.layout.activity_custom_scanner);
 
         barcodeScannerView = findViewById(R.id.zxing_barcode_scanner);
-        barcodeScannerView.setTorchListener(CustomScannerActivity.this);
+        Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE, BarcodeFormat.CODE_39);
+        barcodeScannerView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory());
+        barcodeScannerView.decodeContinuous(callback);
 
-        init();
-
-        WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.screenBrightness = 1;
-        getWindow().setAttributes(params);
-        Log.d("QRCODE", makeContents());
-        /* Create QR code and Connect it with ImageView */
-        generateQRCode(makeContents());
-        capture = new CaptureManager(this, barcodeScannerView);
-        capture.initializeFromIntent(getIntent(), savedInstanceState);
-        capture.decode();
+//        barcodeScannerView = findViewById(R.id.zxing_barcode_scanner);
+//        barcodeScannerView.setTorchListener(CustomScannerActivity.this);
+//
+//        init();
+//
+//        WindowManager.LayoutParams params = getWindow().getAttributes();
+//        params.screenBrightness = 1;
+//        getWindow().setAttributes(params);
+//
+//        Log.d("QRCODE", makeContents());
+//        /* Create QR code and Connect it with ImageView */
+//        generateQRCode(makeContents());
+//        capture = new CaptureManager(this, barcodeScannerView);
+//        capture.initializeFromIntent(getIntent(), savedInstanceState);
+//        capture.decode();
     }
 
     private void init () {

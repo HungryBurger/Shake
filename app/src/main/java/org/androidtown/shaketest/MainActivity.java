@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mBroadCastManager = BroadCastManager.getInstance(getApplicationContext());
                     } else {
                         Log.d("MyReceiver", "동적 해제");
-                        BroadCastManager.unregistMyReceiver(getApplicationContext());
+                        //BroadCastManager.unregistMyReceiver(getApplicationContext());
                     }
 
                     startActivity(new Intent(getApplicationContext(), MainMenu.class));

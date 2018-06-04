@@ -38,7 +38,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
@@ -61,7 +60,6 @@
                 <data android:mimeType="application/org.androidtown.shaketest" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".DialogueActivity"
             android:theme="@style/Theme.MyDialog" />
@@ -71,8 +69,8 @@
         <activity android:name=".ReadNFC" />
         <activity android:name=".WriteNFC" />
         <activity android:name=".Second" />
-
-        <activity android:name=".ShakeActivity"></activity>
+        <activity android:name=".ShakeActivity" />
+        <activity android:name=".MadeByActivity"></activity>
     </application>
 
 </manifest>

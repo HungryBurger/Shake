@@ -164,11 +164,13 @@ public class ShakeActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     ContactData data = dataSnapshot.getValue(ContactData.class);
-                                    saveContacts(
-                                            data.getName(),
-                                            data.getPhoneNum(),
-                                            data.getEmail()
-                                    );
+                                    if (data != null) {
+                                        saveContacts(
+                                                data.getName(),
+                                                data.getPhoneNum(),
+                                                data.getEmail()
+                                        );
+                                    }
                                 }
 
                                 @Override

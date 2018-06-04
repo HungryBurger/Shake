@@ -106,6 +106,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                         android.Manifest.permission.READ_PHONE_STATE,
                         android.Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.NFC,
+                        Manifest.permission.READ_SMS,
                         Manifest.permission.BIND_NFC_SERVICE
                 ).check();
 

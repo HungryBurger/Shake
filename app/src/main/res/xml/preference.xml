@@ -11,4 +11,24 @@
             android:switchTextOff="OFF"/>
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="앱 정보">
+        <Preference
+            android:summary="개발자 정보를 확인합니다."
+            android:title="개발자 정보">
+
+            <intent
+                android:targetClass="org.androidtown.shaketest.MadeByActivity"
+                android:targetPackage="org.androidtown.shaketest"
+                />
+        </Preference>
+        <Preference
+            android:summary="개발자에게 메일을 보냅니다."
+            android:title="메일 보내기">
+            <intent
+                android:action="android.intent.action.SENDTO"
+                android:data="mailto:hesue615@gmail.com"/>
+
+        </Preference>
+    </PreferenceCategory>
+
 </PreferenceScreen>
