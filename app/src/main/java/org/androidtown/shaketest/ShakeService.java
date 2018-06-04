@@ -45,9 +45,6 @@ public class ShakeService extends Service implements SensorEventListener {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        if (mReceiver == null)
-            registerScreenOffAction();
-
         Log.d(TAG, "Start Service");
         mSensorManager.registerListener(this, mAccelermeter, SensorManager.SENSOR_DELAY_NORMAL);
 
@@ -83,7 +80,7 @@ public class ShakeService extends Service implements SensorEventListener {
 
             Log.d(TAG, "onSensorChanged " + ServiceApplication.service_flag + "");
 
-            if (gForce > SHAKE_THRESHOLD_GRAVITY && ServiceApplication.service_flag) {
+            if (gForce > SHAKE_THRESHOLD_GRAVITY ) {
                 /* 흔들림이 감지 되는 부분 */
                 long currentTime = System.currentTimeMillis();
 
@@ -98,12 +95,6 @@ public class ShakeService extends Service implements SensorEventListener {
         }
     }
 
-    private void registerScreenOffAction () {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        mReceiver = new ScreenOnOffBroadcastReceiver();
-        registerReceiver(mReceiver, intentFilter);
-    }
 
     @Override
     public void onDestroy() {
@@ -111,8 +102,6 @@ public class ShakeService extends Service implements SensorEventListener {
 
         Log.d(TAG, "Kill Service");
         mSensorManager.unregisterListener(this, mAccelermeter);
-        unregisterReceiver(mReceiver);
-        mReceiver = null;
     }
 
 }

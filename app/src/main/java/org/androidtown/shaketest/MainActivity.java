@@ -1,10 +1,13 @@
 package org.androidtown.shaketest;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -53,13 +56,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String displayUserEmail;
     private String displayUserPhoneNumber;
 
+    // SCREEN_ON_OFF_BROADCAST_RECEIVER
+    private BroadCastManager mBroadCastManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mSharedPrefManager = SharedPrefManager.getInstance(this);
-
 
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
@@ -70,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 
                 mUser = mAuth.getCurrentUser();
                 if(mUser != null) {
+
                     mDatabase = FirebaseDatabase.getInstance().getReference().
                             child("users").child(mUser.getUid()).child("myInfo");
                     Log.d("CONTACT_LIST", "MainActivity");
@@ -82,6 +88,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     );
                     mDatabase.setValue(current_data);
                     setMyContactList();
+
+                    Log.d("MyReceiver", "메인 엑티비티 온크리트 ");
+                    if (mSharedPrefManager.getServiceCheck()) {
+                        Log.d("MyReceiver", "동적 등록");
+                        mBroadCastManager = BroadCastManager.getInstance(getApplicationContext());
+                    } else {
+                        Log.d("MyReceiver", "동적 해제");
+                        BroadCastManager.unregistMyReceiver(getApplicationContext());
+                    }
 
                     startActivity(new Intent(getApplicationContext(), MainMenu.class));
                     finish();

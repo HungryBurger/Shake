@@ -10,6 +10,7 @@ public class SharedPrefManager {
     private static SharedPreferences.Editor mEditor;
 
     private static final String UI_ITEM_NO = "UI_Item_No";
+    private static final String SERVICE_CHECK = "ServiceCheck";
 
     private SharedPrefManager (Context context) {
         mSharedPrefs = context.getSharedPreferences(
@@ -33,4 +34,12 @@ public class SharedPrefManager {
         return mSharedPrefs.getInt(UI_ITEM_NO, 1);
     }
 
+    public void setServiceCheck (boolean isChecked) {
+        mEditor.putBoolean(SERVICE_CHECK, isChecked);
+        mEditor.commit();
+    }
+
+    public boolean getServiceCheck () {
+        return mSharedPrefs.getBoolean(SERVICE_CHECK, false);
+    }
 }

@@ -61,24 +61,17 @@
                 <data android:mimeType="application/org.androidtown.shaketest" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".DialogueActivity"
             android:theme="@style/Theme.MyDialog" />
         <activity android:name=".CustomScannerActivity" />
 
-        <receiver
-            android:name=".ScreenOnOffBroadcastReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.USER_PRESENT" />
-                <action android:name="android.intent.action.SCREEN_OFF" />
-            </intent-filter>
-        </receiver>
-
+        <!-- NFC Field -->
         <activity android:name=".ReadNFC" />
         <activity android:name=".WriteNFC" />
         <activity android:name=".Second" />
+
         <activity android:name=".ShakeActivity"></activity>
     </application>
 

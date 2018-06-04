@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
 
 public class SettingsActivity extends PreferenceActivity {
@@ -31,11 +32,14 @@ public class SettingsActivity extends PreferenceActivity {
     public static class SettingsFragment extends PreferenceFragment {
         private SharedPreferences.OnSharedPreferenceChangeListener prefListener;
         private Context context;
+        private SharedPrefManager mSharedPrefManager;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preference);
+
+            mSharedPrefManager = SharedPrefManager.getInstance(getActivity());
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             context = getActivity();
@@ -48,11 +52,19 @@ public class SettingsActivity extends PreferenceActivity {
                     SharedPreferences setRefer = PreferenceManager
                             .getDefaultSharedPreferences(context);
                     if (setRefer.getBoolean("shake_service_on", false)) {
-                        ServiceApplication.service_flag = true;
+                        Log.d("MyReceiver", "서비스 체크 참 ");
+
+                        mSharedPrefManager.setServiceCheck(true);
                         context.startService(intent);
+
+                        //TODO 동적 리시버 재등록
+                        //BroadCastManager.getInstance(getContext());
                     } else {
-                        ServiceApplication.service_flag = false;
+                        Log.d("MyReceiver", "서비스 체크 거짓");
+
+                        mSharedPrefManager.setServiceCheck(false);
                         context.stopService(intent);
+                        //TODO 동적 리시버 해제시키기
                     }
                 }
             }; prefs.registerOnSharedPreferenceChangeListener(prefListener);
