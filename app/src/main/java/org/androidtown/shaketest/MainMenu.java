@@ -84,9 +84,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         setContentView(R.layout.activity_main_menu);
         read = findViewById(R.id.read);
         write = findViewById(R.id.write);
-        /**
-         * 자동 권한 요청하기
-         */
+
         PermissionListener permissionListener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
@@ -260,7 +258,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             case R.id.item1:
                 Toast.makeText(this, "Contact List clicked..", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, ContactListMain_fragment.newInstance())
-                        .addToBackStack(null)
                         .commit();
 
                 read.setVisibility(View.GONE);
@@ -269,8 +266,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             case R.id.item2:
                 Toast.makeText(this, "Editprofile clicked..", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, Editprofile.newInstance())
-                        .addToBackStack(null)
-                        .addToBackStack(null)
                         .commit();
                 read.setVisibility(View.GONE);
                 write.setVisibility(View.GONE);

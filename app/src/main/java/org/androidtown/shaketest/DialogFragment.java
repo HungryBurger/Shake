@@ -130,6 +130,12 @@ public class DialogFragment extends BlurDialogFragment {
             case 4:
                 view = getActivity().getLayoutInflater().inflate(R.layout.card4, null);
                 break;
+            case 5:
+                view = getActivity().getLayoutInflater().inflate(R.layout.card5, null);
+                break;
+            case 6:
+                view = getActivity().getLayoutInflater().inflate(R.layout.card6, null);
+                break;
             default:
                 break;
         } setCardContent();

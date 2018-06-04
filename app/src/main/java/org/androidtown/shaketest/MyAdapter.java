@@ -10,6 +10,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     Context context;
     List<ContactInformation>productList = new ArrayList<>();
@@ -44,16 +46,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView mImageView;
+        CircleImageView mImageView;
         TextView name;
         TextView pnum;
         TextView email;
         public ViewHolder(View itemView) {
             super(itemView);
-            this.mImageView = (ImageView) itemView.findViewById(R.id.imageView);
-            this.name = (TextView) itemView.findViewById(R.id.textView);
-            this.pnum = (TextView) itemView.findViewById(R.id.textView2);
-            this.email = (TextView)itemView.findViewById(R.id.textView3);
+            this.mImageView = (CircleImageView) itemView.findViewById(R.id.card_user_picture);
+            this.name = (TextView) itemView.findViewById(R.id.card_user_name);
+            this.pnum = (TextView) itemView.findViewById(R.id.card_user_phone);
+            this.email = (TextView)itemView.findViewById(R.id.card_user_email);
             if(mListener != null)
                 itemView.setOnClickListener(mListener);
         }
