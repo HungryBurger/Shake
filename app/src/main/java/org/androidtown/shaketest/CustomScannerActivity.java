@@ -1,63 +1,30 @@
 package org.androidtown.shaketest;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.telephony.PhoneNumberUtils;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.ResultPoint;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.journeyapps.barcodescanner.BarcodeCallback;
-import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 public class CustomScannerActivity extends Activity implements DecoratedBarcodeView.TorchListener {
 
     private CaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
-    private String userName, userPhoneNum, userEmail;
-    private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
-    private SharedPrefManager mSharedPrefs;
     private final String  HEADER = "shake#";
-    private String lastText;
-
-    private BarcodeCallback callback = new BarcodeCallback() {
-        @Override
-        public void barcodeResult(BarcodeResult result) {
-            if (result.getText() == null || result.getText().equals(lastText)) {
-                return;
-            }
-            lastText = result.getText();
-            barcodeScannerView.setStatusText(result.getText());
-
-            ImageView imageView = findViewById(R.id.qrView);
-            imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.BLACK));
-        }
-
-        @Override
-        public void possibleResultPoints(List<ResultPoint> resultPoints) {
-
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,35 +34,20 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
         barcodeScannerView = findViewById(R.id.zxing_barcode_scanner);
         Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE, BarcodeFormat.CODE_39);
         barcodeScannerView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory());
-        barcodeScannerView.decodeContinuous(callback);
 
-//        barcodeScannerView = findViewById(R.id.zxing_barcode_scanner);
-//        barcodeScannerView.setTorchListener(CustomScannerActivity.this);
-//
-//        init();
-//
-//        WindowManager.LayoutParams params = getWindow().getAttributes();
-//        params.screenBrightness = 1;
-//        getWindow().setAttributes(params);
-//
-//        Log.d("QRCODE", makeContents());
-//        /* Create QR code and Connect it with ImageView */
-//        generateQRCode(makeContents());
-//        capture = new CaptureManager(this, barcodeScannerView);
-//        capture.initializeFromIntent(getIntent(), savedInstanceState);
-//        capture.decode();
-    }
+        barcodeScannerView = findViewById(R.id.zxing_barcode_scanner);
+        barcodeScannerView.setTorchListener(CustomScannerActivity.this);
 
-    private void init () {
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.screenBrightness = 1;
+        getWindow().setAttributes(params);
 
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
-
-        userName = mUser.getDisplayName();
-        userEmail = mUser.getEmail();
-        userPhoneNum = getPhoneNum();
-
-        mSharedPrefs = SharedPrefManager.getInstance(this);
+        Log.d("QRCODE", makeContents());
+        /* Create QR code and Connect it with ImageView */
+        generateQRCode(makeContents());
+        capture = new CaptureManager(this, barcodeScannerView);
+        capture.initializeFromIntent(getIntent(), savedInstanceState);
+        capture.decode();
     }
 
     /**
@@ -104,8 +56,7 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
      * @return
      */
     private String makeContents () {
-        return (HEADER + mUser.getUid());
-        //return (HEADER + userName + "#" + userPhoneNum + "#" +userEmail + "#" + mSharedPrefs.getUI_ItemNo() + "#" + mUser.getUid());
+        return (HEADER + FirebaseAuth.getInstance().getUid());
     }
 
     /**
@@ -147,20 +98,6 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
                 bitmap.setPixel(x, y, matrix.get(x, y) ? Color.BLACK : Color.WHITE);
             }
         } return bitmap;
-    }
-
-    private String getPhoneNum() {
-        TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-
-        try {
-            String phoneNum = telephonyManager.getLine1Number();
-            if (phoneNum.startsWith("+82")) {
-                phoneNum = phoneNum.replace("+82", "0");
-            } return PhoneNumberUtils.formatNumber(phoneNum);
-
-        } catch (SecurityException e) {
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-        } return null;
     }
 
     @Override
