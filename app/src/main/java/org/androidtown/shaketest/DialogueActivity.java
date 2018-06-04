@@ -131,6 +131,7 @@ public class DialogueActivity extends AppCompatActivity {
         get_name.setText(userName);
         get_pNum.setText(userPhoneNum);
         get_email.setText(userEmail);
+        get_email.setSelected(true);
     }
 
     /**

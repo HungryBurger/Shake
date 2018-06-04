@@ -110,6 +110,7 @@ public class CardFragment extends Fragment {
         name.setText(userName);
         phone.setText(userPhoneNum);
         email.setText(userEmail);
+        email.setSelected(true);
     }
 
     private void getPhonenum() {

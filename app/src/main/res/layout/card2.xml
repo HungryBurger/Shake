@@ -94,7 +94,8 @@
                     android:textAppearance="@android:style/TextAppearance.Widget.TextView"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:ellipsize="marquee"/>
             </LinearLayout>
         </LinearLayout>
 

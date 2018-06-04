@@ -164,6 +164,7 @@ public class DialogFragment extends BlurDialogFragment {
         name.setText(userName);
         phone.setText(userPhoneNum);
         email.setText(userEmail);
+        email.setSelected(true);
     }
 
     private void getPhonenum() {
