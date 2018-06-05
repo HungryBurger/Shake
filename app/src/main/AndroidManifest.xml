@@ -66,9 +66,6 @@
         <activity android:name=".CustomScannerActivity" />
 
         <!-- NFC Field -->
-        <activity android:name=".ReadNFC" />
-        <activity android:name=".WriteNFC" />
-        <activity android:name=".Second" />
         <activity android:name=".ShakeActivity" />
         <activity android:name=".MadeByActivity"></activity>
     </application>

@@ -16,6 +16,11 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -27,7 +32,7 @@ public class DialogFragment extends BlurDialogFragment {
      * Bundle key used to start the blur dialog with a given scale factor (float).
      */
     private static final String BUNDLE_KEY_DOWN_SCALE_FACTOR = "bundle_key_down_scale_factor";
-
+    public DatabaseReference databaseReference;
     /**
      * Bundle key used to start the blur dialog with a given blur radius (int).
      */
@@ -43,19 +48,17 @@ public class DialogFragment extends BlurDialogFragment {
      */
     private static final String BUNDLE_KEY_DEBUG = "bundle_key_debug_effect";
     private static final String BUNDLE_KEY_TEMPLATE = "bundle_key_template";
-
+    userData userdata;
     private int mRadius;
     private float mDownScaleFactor;
     private boolean mDimming;
     private boolean mDebug;
     private int mTemplate;
     private View view;
-    String displayUserPhoneNumber;
-    private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
     private String userName, userPhoneNum, userEmail;
+    ShakeActivity shakeActivity;
+    CircleImageView mPicture, convertQRButton;
 
-    CircleImageView mPicture,convertQRButton;
     /**
      * Retrieve a new instance of the sample fragment.
      *
@@ -112,6 +115,8 @@ public class DialogFragment extends BlurDialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        shakeActivity = (ShakeActivity) getActivity();
+        userdata = new userData(shakeActivity);
     }
 
     @NonNull
@@ -120,6 +125,7 @@ public class DialogFragment extends BlurDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         view = getActivity().getLayoutInflater().inflate(R.layout.card1, null);
         switch (mTemplate) {
+
             case 2:
                 view = getActivity().getLayoutInflater().inflate(R.layout.card2, null);
                 break;
@@ -137,17 +143,16 @@ public class DialogFragment extends BlurDialogFragment {
                 break;
             default:
                 break;
-        } setCardContent();
+        }
+        setCardContent();
 
         builder.setView(view);
         return builder.create();
     }
 
-    private void setCardContent () {
-
-        getPhonenum();
-        getinfo();
-
+    private void setCardContent() {
+        userdata.getPhonenum();
+        mPicture = view.findViewById(R.id.user_picture1);
         TextView name = view.findViewById(R.id.card_name);
         TextView phone = view.findViewById(R.id.card_phoneNumber);
         TextView email = view.findViewById(R.id.card_email);
@@ -159,29 +164,16 @@ public class DialogFragment extends BlurDialogFragment {
                 startScanning();
             }
         });
-
+        getinfo();
+        changeImage();
         name.setText(userName);
         phone.setText(userPhoneNum);
         email.setText(userEmail);
         email.setSelected(true);
+        mPicture.setImageBitmap(userdata.imageBitmap);
     }
 
-    private void getPhonenum() {
-        TelephonyManager telephonyManager = (TelephonyManager) getActivity().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-
-        try {
-            String phoneNum = telephonyManager.getLine1Number();
-            if (phoneNum.startsWith("+82")) {
-                phoneNum = phoneNum.replace("+82", "0");
-                userPhoneNum = phoneNum;
-            }
-            displayUserPhoneNumber = PhoneNumberUtils.formatNumber(phoneNum);
-        } catch (SecurityException e) {
-            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void startScanning () {
+    private void startScanning() {
         new IntentIntegrator(getActivity()).
                 setBeepEnabled(false).
                 setOrientationLocked(false).
@@ -190,36 +182,67 @@ public class DialogFragment extends BlurDialogFragment {
     }
 
     private void getinfo() {
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if(mUser != null) {
-            userName = mUser.getDisplayName();
-            userEmail = mUser.getEmail();
+        userdata.mUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (userdata.mUser != null) {
+            userName = userdata.mUser.getDisplayName();
+            userEmail = userdata.mUser.getEmail();
+            userdata.databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(userdata.mUser.getUid()).child("userImg");
+            userPhoneNum = userdata.displayUserPhoneNumber;
         }
     }
+
     @Override
     protected boolean isDebugEnable() {
         return mDebug;
     }
+
     @Override
     protected boolean isDimmingEnable() {
         return mDimming;
     }
+
     @Override
     protected boolean isActionBarBlurred() {
         return true;
     }
+
     @Override
     protected float getDownScaleFactor() {
         return mDownScaleFactor;
     }
+
     @Override
     protected int getBlurRadius() {
         return mRadius;
     }
+
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
         getActivity().finish();
+    }
+
+    private void changeImage() {
+        if (userdata.databaseReference != null) {
+            userdata.databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String value = (String) dataSnapshot.getValue();
+                    if (value != null) {
+                        mPicture.setImageBitmap(userdata.stringToBitmap(value));
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        changeImage();
     }
 }

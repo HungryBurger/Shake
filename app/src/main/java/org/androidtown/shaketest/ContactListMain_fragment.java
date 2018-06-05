@@ -33,7 +33,7 @@ public class ContactListMain_fragment extends Fragment {
     static TextView name, pnum, email;
     List<MyAdapter.ContactInformation> productList = new ArrayList<>();
     ArrayList<ContactData> contactDataList;
-
+    Iterator<String> iter;
     public static ContactListMain_fragment newInstance() {
         Bundle args = new Bundle();
         ContactListMain_fragment fragment = new ContactListMain_fragment();
@@ -88,7 +88,8 @@ public class ContactListMain_fragment extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 ArrayList<String> myList = ((ServiceApplication)getActivity().getApplication()).myContactList;
-                Iterator<String> iter = myList.iterator();
+                if(myList != null)
+                    iter = myList.iterator();
 
                 Log.d("CONTACT_LIST_MAIN", dataSnapshot.getKey());
                 Log.d("CONTACT_LIST_MAIN", myList.size() + " 개수");

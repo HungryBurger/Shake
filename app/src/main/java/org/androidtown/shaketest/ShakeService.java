@@ -1,12 +1,13 @@
 package org.androidtown.shaketest;
 
 
-
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -14,7 +15,16 @@ import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Hee-Su, Lee
@@ -26,8 +36,10 @@ public class ShakeService extends Service implements SensorEventListener {
     private String TAG = "AtServiceClass";
     private static final int SHAKE_SKIP_TIME = 5000; // 스킵 시간
     private static final float SHAKE_THRESHOLD_GRAVITY = 3.0F;
-
+    private Context context;
     private BroadcastReceiver mReceiver = null;
+
+
 
     public ShakeService() {
 
@@ -36,7 +48,7 @@ public class ShakeService extends Service implements SensorEventListener {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        context = getApplicationContext();
         Log.d(TAG, "Service onCreate");
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAccelermeter = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -78,15 +90,15 @@ public class ShakeService extends Service implements SensorEventListener {
             double squaredD = Math.sqrt(f.doubleValue());
             float gForce = (float) squaredD;
 
-            Log.d(TAG, "onSensorChanged " + ServiceApplication.service_flag + "");
 
-            if (gForce > SHAKE_THRESHOLD_GRAVITY ) {
+            if (gForce > SHAKE_THRESHOLD_GRAVITY) {
                 /* 흔들림이 감지 되는 부분 */
                 long currentTime = System.currentTimeMillis();
 
                 if (mShakeTime + SHAKE_SKIP_TIME > currentTime) {
                     return;
-                } mShakeTime = currentTime;
+                }
+                mShakeTime = currentTime;
 
                 Intent intent = new Intent(ShakeService.this, ShakeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);

@@ -1,5 +1,6 @@
 package org.androidtown.shaketest;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,14 +20,23 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.qrcode.encoder.QRCode;
 import com.journeyapps.barcodescanner.ViewfinderView;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class Editprofile extends Fragment {
     private FragmentManager fragmentManager;
     String displayUserPhoneNumber;
+    CircleImageView mPicture;
+    userData userdata;
+    MainMenu activity;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private String userName, userPhoneNum, userEmail;
@@ -37,6 +47,13 @@ public class Editprofile extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        activity = (MainMenu)getActivity();
+        userdata = new userData(activity);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,12 +61,14 @@ public class Editprofile extends Fragment {
         ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.activity_editprofile, container, false);
         fragmentManager = getActivity().getSupportFragmentManager();
         Button Customize = (Button)mView.findViewById(R.id.edit_customize);
-        getPhonenum();
+        userdata.getPhonenum();
         getinfo();
 
         TextView name = (TextView) mView.findViewById(R.id.edit_name);
         TextView phone = (TextView) mView.findViewById(R.id.edit_phone);
         TextView email = (TextView) mView.findViewById(R.id.edit_email);
+        mPicture = mView.findViewById(R.id.user_picture);
+
         name.setText(userName);
         phone.setText(userPhoneNum);
         email.setText(userEmail);
@@ -62,26 +81,36 @@ public class Editprofile extends Fragment {
         });
         return mView;
     }
-    private void getPhonenum() {
-        TelephonyManager telephonyManager = (TelephonyManager) getActivity().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-        try {
-            String phoneNum = telephonyManager.getLine1Number();
-            if (phoneNum.startsWith("+82")) {
-                phoneNum = phoneNum.replace("+82", "0");
-                userPhoneNum = phoneNum;
-            }
-            displayUserPhoneNumber = PhoneNumberUtils.formatNumber(phoneNum);
-        } catch (SecurityException e) {
-            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     private void getinfo() {
+        userdata.mUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (userdata.mUser != null) {
+            userName = userdata.mUser.getDisplayName();
+            userEmail = userdata.mUser.getEmail();
+            userdata.databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(userdata.mUser.getUid()).child("userImg");
+            userPhoneNum = userdata.displayUserPhoneNumber;
+        }
+    }
+    private void changeImage() {
+        if (userdata.databaseReference != null) {
+            userdata.databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String value = (String) dataSnapshot.getValue();
+                    if (value != null) {
+                        mPicture.setImageBitmap(userdata.stringToBitmap(value));
+                    }
+                }
 
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
-
-        userName = mUser.getDisplayName();
-        userEmail = mUser.getEmail();
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        changeImage();
     }
 }
