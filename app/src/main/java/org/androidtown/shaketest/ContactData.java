@@ -1,5 +1,4 @@
 package org.androidtown.shaketest;
-
 public class ContactData {
 
     private String name;

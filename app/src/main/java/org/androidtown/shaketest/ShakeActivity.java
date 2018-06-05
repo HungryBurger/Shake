@@ -43,17 +43,17 @@ public class ShakeActivity extends AppCompatActivity {
     private String DisplayName;
     private String MobileNumber;
     private String emailAddress;
+    SharedPrefManager mSharedPrefs = SharedPrefManager.getInstance(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shake);
-
+        mSharedPrefs = SharedPrefManager.getInstance(this);
         init();
 
-        DialogFragment fragment = DialogFragment.newInstance(10, 5, false, false,2);
+        DialogFragment fragment = DialogFragment.newInstance(10, 5, false, false,mSharedPrefs.getUI_ItemNo());
         fragment.show(getFragmentManager(), "blur_sample");
-
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(getApplicationContext());
         if (nfcAdapter != null) {

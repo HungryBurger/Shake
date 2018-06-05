@@ -94,7 +94,6 @@ public class DialogFragment extends BlurDialogFragment {
         );
 
         fragment.setArguments(args);
-
         return fragment;
     }
 

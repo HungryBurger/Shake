@@ -106,7 +106,7 @@ public class ContactListMain_fragment extends Fragment {
                                 contactDataList.add(contactData);
                                 productList.add(
                                         new MyAdapter.ContactInformation (
-                                            contactData.getName(),contactData.getPhoneNum(), contactData.getEmail(), R.mipmap.ic_launcher
+                                                contactData.getName(),contactData.getPhoneNum(), contactData.getEmail(), R.mipmap.ic_launcher
                                         )
                                 );
                                 myAdapter.notifyDataSetChanged();
