@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -174,11 +175,15 @@ public class DialogFragment extends BlurDialogFragment {
     }
 
     private void startScanning() {
-        new IntentIntegrator(getActivity()).
-                setBeepEnabled(false).
-                setOrientationLocked(false).
-                setCaptureActivity(CustomScannerActivity.class).
-                initiateScan();
+        Intent intent = new Intent(getActivity(), ContinuousCaptureActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
+//        new IntentIntegrator(getActivity()).
+//                setBeepEnabled(false).
+//                setOrientationLocked(false).
+//                setCaptureActivity(CustomScannerActivity.class).
+//                initiateScan();
     }
 
     private void getinfo() {

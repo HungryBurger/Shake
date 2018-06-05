@@ -68,6 +68,7 @@
         <!-- NFC Field -->
         <activity android:name=".ShakeActivity" />
         <activity android:name=".MadeByActivity"></activity>
+        <activity android:name=".ContinuousCaptureActivity"/>
     </application>
 
 </manifest>

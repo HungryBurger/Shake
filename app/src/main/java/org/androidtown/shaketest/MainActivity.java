@@ -93,9 +93,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (mSharedPrefManager.getServiceCheck()) {
                         Log.d("MyReceiver", "동적 등록");
                         mBroadCastManager = BroadCastManager.getInstance(getApplicationContext());
-                    } else {
-                        Log.d("MyReceiver", "동적 해제");
-                        //BroadCastManager.unregistMyReceiver(getApplicationContext());
                     }
 
                     startActivity(new Intent(getApplicationContext(), MainMenu.class));
@@ -220,7 +217,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                             updateUI(null);
                         }
-
                         // [START_EXCLUDE]
                         // [END_EXCLUDE]
                     }

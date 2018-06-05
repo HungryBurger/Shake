@@ -53,27 +53,23 @@ public class SettingsActivity extends PreferenceActivity {
                             .getDefaultSharedPreferences(context);
                     if (setRefer.getBoolean("shake_service_on", false)) {
                         Log.d("MyReceiver", "서비스 체크 참 ");
-
                         mSharedPrefManager.setServiceCheck(true);
                         context.startService(intent);
-
-                        //TODO 동적 리시버 재등록
-                        //BroadCastManager.getInstance(getContext());
+                        BroadCastManager.getInstance(getContext());
                     } else {
                         Log.d("MyReceiver", "서비스 체크 거짓");
-
                         mSharedPrefManager.setServiceCheck(false);
                         context.stopService(intent);
-                        //TODO 동적 리시버 해제시키기
+                        BroadCastManager.getInstance(context).unregisterMyReceiver();
                     }
                 }
             }; prefs.registerOnSharedPreferenceChangeListener(prefListener);
         }
     }
 
+
     @Override
     protected void onStop() {
         super.onStop();
-
     }
 }
