@@ -1,4 +1,5 @@
 package org.androidtown.shaketest;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,13 +28,16 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 public class ContactListMain_fragment extends Fragment {
     private MyAdapter myAdapter;
     RecyclerView recyclerView;
     static TextView name, pnum, email;
+    TextView list_pos;
     List<MyAdapter.ContactInformation> productList = new ArrayList<>();
     ArrayList<ContactData> contactDataList;
     Iterator<String> iter;
+
     public static ContactListMain_fragment newInstance() {
         Bundle args = new Bundle();
         ContactListMain_fragment fragment = new ContactListMain_fragment();
@@ -49,33 +53,25 @@ public class ContactListMain_fragment extends Fragment {
         name = mView.findViewById(R.id.user_name);
         pnum = mView.findViewById(R.id.user_phone_num);
         email = mView.findViewById(R.id.user_email);
-
         recyclerView = (RecyclerView) mView.findViewById(R.id.list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
+
 
         myAdapter = new MyAdapter(getActivity(), productList, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = recyclerView.getChildAdapterPosition(v);
-
                 MyAdapter.ContactInformation information = productList.get(position);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 LayoutInflater layoutInflater = getActivity().getLayoutInflater();
                 builder.setView(layoutInflater.inflate(R.layout.fragment_dialog_receiver, null));
-
                 builder.create().show();
             }
         });
-//        myAdapter = new MyAdapter(getActivity(), productList, new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View v) {
-//                Toast.makeText(getActivity(), "롱클릭", Toast.LENGTH_SHORT).show();
-//                return true;
-//            }
-//        });
-        recyclerView.setAdapter(myAdapter);
 
+
+        recyclerView.setAdapter(myAdapter);
         return mView;
     }
 
@@ -87,8 +83,9 @@ public class ContactListMain_fragment extends Fragment {
         contactListRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                ArrayList<String> myList = ((ServiceApplication)getActivity().getApplication()).myContactList;
-                if(myList != null)
+                ArrayList<String> myList = ((ServiceApplication) getActivity().getApplication()).myContactList;
+
+                if (myList != null)
                     iter = myList.iterator();
 
                 Log.d("CONTACT_LIST_MAIN", dataSnapshot.getKey());
@@ -106,8 +103,8 @@ public class ContactListMain_fragment extends Fragment {
 
                                 contactDataList.add(contactData);
                                 productList.add(
-                                        new MyAdapter.ContactInformation (
-                                                contactData.getName(),contactData.getPhoneNum(), contactData.getEmail(), R.mipmap.ic_launcher
+                                        new MyAdapter.ContactInformation(
+                                                contactData.getName(), contactData.getPhoneNum(), contactData.getEmail(), R.mipmap.ic_launcher
                                         )
                                 );
                                 myAdapter.notifyDataSetChanged();
@@ -130,16 +127,21 @@ public class ContactListMain_fragment extends Fragment {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             }
+
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
             }
+
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
+
+
     }
 }

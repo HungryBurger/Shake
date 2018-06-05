@@ -37,6 +37,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -70,9 +71,13 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     // [END declare_auth]
     public GoogleSignInClient mGoogleSignInClient;
     private FragmentManager fragmentManager;
+    int backbuttonChk = 0;
     SharedPrefManager mSharedPrefs;
     userData userdata;
-    public static final int FROM_ALBUM = 1;
+    public static final int FROM_ALBUM = 0;
+    private long backKeyPressedTime = 0;
+    private Toast toast;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,14 +109,15 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         initLayout();
         mSharedPrefs = SharedPrefManager.getInstance(this);
         fragmentManager = getSupportFragmentManager();
-
         fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
         fragmentManager.beginTransaction().replace(R.id.frameLayout_card, CardFragment.newInstance(mSharedPrefs.getUI_ItemNo())).commit();
+        backbuttonChk = 1;
         //초기 값 설정 카드 넘버 저장
 
         Log.d("SharedPref", String.valueOf(mSharedPrefs.getUI_ItemNo()));
 
     }
+
     public void galleryAddPic() {
         Log.d("tag", "galleryAddPic: ");
         Intent pickPic = new Intent(Intent.ACTION_PICK);
@@ -135,7 +141,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         } else {
             stopService(intent);
         }
-        if(userdata.databaseReference != null) {
+        if (userdata.databaseReference != null) {
             userdata.databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -199,27 +205,25 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         switch (item.getItemId()) {
             case R.id.item1:
                 Toast.makeText(this, "Contact List clicked..", Toast.LENGTH_SHORT).show();
-                fragmentManager.beginTransaction().replace(R.id.frameLayout, ContactListMain_fragment.newInstance())
-                        .commit();
+                fragmentManager.beginTransaction().replace(R.id.frameLayout, ContactListMain_fragment.newInstance()).commit();
+                backbuttonChk=1;
                 break;
             case R.id.item2:
                 Toast.makeText(this, "Editprofile clicked..", Toast.LENGTH_SHORT).show();
-                fragmentManager.beginTransaction().replace(R.id.frameLayout, Editprofile.newInstance())
-                        .commit();
+                fragmentManager.beginTransaction().replace(R.id.frameLayout, Editprofile.newInstance()).commit();
+                backbuttonChk=1;
                 break;
             case R.id.item3:
                 Toast.makeText(this, "Main page clicked..", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout_card, CardFragment.newInstance(mSharedPrefs.getUI_ItemNo())).commit();
-
+                backbuttonChk=0;
                 break;
-
             case R.id.log_out:
                 click_log_out();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
-
         return false;
     }
 
@@ -266,7 +270,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 userdata.toolbar,
                 R.string.open_drawer,
                 R.string.close_drawer
-        ){
+        ) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -303,17 +307,41 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 
     @Override
     public void onBackPressed() {
+
         if (drawerLayout.isDrawerOpen(GravityCompat.START))
             drawerLayout.closeDrawer(GravityCompat.START);
-        else
-            super.onBackPressed();
+        else if (backbuttonChk == 1) {
+            fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
+            fragmentManager.beginTransaction().replace(R.id.frameLayout_card, CardFragment.newInstance(mSharedPrefs.getUI_ItemNo())).commit();
+            backbuttonChk = 0;
+
+        } else {
+            if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+                backKeyPressedTime = System.currentTimeMillis();
+                showGuide();
+                return;
+            }
+            if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+
+                toast.cancel();
+                super.onBackPressed();
+            }
+        }
     }
+
+    public void showGuide() {
+        toast = Toast.makeText(getApplicationContext(), "\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
 
     @Override
     protected void onStart() {
         super.onStart();
         userdata.mAuth.addAuthStateListener(userdata.mListener);
     }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -322,6 +350,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             userdata.mAuth.removeAuthStateListener(userdata.mListener);
         }
     }
+
     private void signOut() {
         // Firebase sign out
         userdata.mAuth.signOut();

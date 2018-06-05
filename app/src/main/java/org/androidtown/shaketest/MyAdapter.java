@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     Context context;
     List<ContactInformation>productList = new ArrayList<>();
     View.OnClickListener mListener;
+    View.OnLongClickListener mLongListener;
 
     public MyAdapter(Context context, List<ContactInformation> productList, View.OnClickListener mListener) {
         this.context = context;
@@ -36,7 +39,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.name.setText(product.getText1());
         holder.pnum.setText(product.getText2());
         holder.email.setText(product.getText3());
+        holder.list_pos.setText(String.valueOf(position+1));
         holder.mImageView.setImageResource(product.getImage());
+
 
     }
 
@@ -50,16 +55,27 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         TextView name;
         TextView pnum;
         TextView email;
+        TextView list_pos;
         public ViewHolder(View itemView) {
             super(itemView);
             this.mImageView = (CircleImageView) itemView.findViewById(R.id.card_user_picture);
             this.name = (TextView) itemView.findViewById(R.id.card_user_name);
             this.pnum = (TextView) itemView.findViewById(R.id.card_user_phone);
             this.email = (TextView)itemView.findViewById(R.id.card_user_email);
+            this.list_pos=(TextView)itemView.findViewById(R.id.list_pos);
             if(mListener != null)
+            {
                 itemView.setOnClickListener(mListener);
+                itemView.setOnLongClickListener(mLongListener);
+            }
         }
     }
+//    @Override
+//    public boolean onLongClick(View v) {
+//        Toast.makeText(context,"hello",Toast.LENGTH_LONG).show();
+//        return true;
+//
+//    }
     public static class ContactInformation {
         String name, phoneNum, email;
         int image;
@@ -87,15 +103,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public void setText3(String email) {
             this.email = email;
         }
-
         public int getImage() {
             return image;
         }
-
         public void setImage(int image) {
             this.image = image;
         }
-
         public ContactInformation(String name, String phonNum, String email, int image) {
             this.name = name;
             this.phoneNum = phonNum;
@@ -103,5 +116,4 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             this.image = image;
         }
     }
-
 }

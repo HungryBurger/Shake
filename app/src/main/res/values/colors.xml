@@ -21,5 +21,7 @@
 
     <color name="white">#ffffff</color>
     <color name="light_grey">#e1e1e1</color>
+    <color name="orange">#FF8C00</color>
+    <color name="snow">	#FFFAFA</color>
 
 </resources>

@@ -53,6 +53,7 @@ public class CustomizedAdapter extends RecyclerView.Adapter<CustomizedAdapter.Vi
                 Toast.makeText(mContext,i+1+"번 테마로 변경 되었습니다.",Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
 
