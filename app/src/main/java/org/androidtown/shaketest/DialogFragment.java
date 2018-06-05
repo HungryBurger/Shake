@@ -183,7 +183,6 @@ public class DialogFragment extends BlurDialogFragment {
     }
 
     private void startScanning () {
-
         new IntentIntegrator(getActivity()).
                 setBeepEnabled(false).
                 setOrientationLocked(false).
@@ -199,37 +198,29 @@ public class DialogFragment extends BlurDialogFragment {
             userEmail = mUser.getEmail();
         }
     }
-
     @Override
     protected boolean isDebugEnable() {
         return mDebug;
     }
-
     @Override
     protected boolean isDimmingEnable() {
         return mDimming;
     }
-
     @Override
     protected boolean isActionBarBlurred() {
         return true;
     }
-
     @Override
     protected float getDownScaleFactor() {
         return mDownScaleFactor;
     }
-
     @Override
     protected int getBlurRadius() {
         return mRadius;
     }
-
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
         getActivity().finish();
     }
-
-
 }

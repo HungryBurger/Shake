@@ -34,9 +34,6 @@ public class MainMenu_mainpage extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.activity_main_menu_mainpage, container, false);
-        SharedPrefManager mSharedPrefs = SharedPrefManager.getInstance(getActivity());
-        mSharedPrefs.setUI_ItemNo(1);
-
         return mView;
     }
 }

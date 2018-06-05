@@ -66,9 +66,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     Button read,write;
     private static final int FROM_ALBUM = 1;
     private static final int REQUEST_IMAGE_CROP = 2;
-
-    private int chklist=1;
-    Uri photoURI;
     NfcAdapter nfcAdapter;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
