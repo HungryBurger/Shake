@@ -45,6 +45,7 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
         Log.d("QRCODE", makeContents());
         /* Create QR code and Connect it with ImageView */
         generateQRCode(makeContents());
+
         capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.decode();

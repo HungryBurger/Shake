@@ -5,6 +5,7 @@ import android.content.ContentProviderOperation;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,6 +32,8 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 public class ContinuousCaptureActivity extends Activity {
@@ -38,19 +41,12 @@ public class ContinuousCaptureActivity extends Activity {
     private DecoratedBarcodeView barcodeView;
     private BeepManager beepManager;
     private String lastText;
-
-    /* Instance Variable for SaveContact method */
-    private ArrayList<ContentProviderOperation> operationLists;
-    private String DisplayName;
-    private String MobileNumber;
-    private String emailAddress;
-
-    private final String  HEADER = "shake#";
+    private final String HEADER = "shake#";
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
-            if(result.getText() == null || result.getText().equals(lastText)) {
+            if (result.getText() == null || result.getText().equals(HEADER + lastText)) {
                 // Prevent duplicate scans
                 return;
             }
@@ -77,20 +73,40 @@ public class ContinuousCaptureActivity extends Activity {
                         if (!contactList.contains(uid)) {
                             contactList.add(uid);
                             contactListRef.setValue(contactList);
+
+                            DatabaseReference newRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("myInfo");
+                            newRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    ContactData data = dataSnapshot.getValue(ContactData.class);
+                                    if (data != null) {
+                                        saveContacts(
+                                                data.getName(),
+                                                data.getPhoneNum(),
+                                                data.getEmail()
+                                        );
+                                    }
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
+                            });
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
                     }
                 });
-            } beepManager.playBeepSoundAndVibrate();
+            } else {
+                Toast.makeText(getApplicationContext(), "잘 못된 형식의 데이터 입니다.", Toast.LENGTH_SHORT).show();
+            }
 
             //Added preview of scanned barcode
             ImageView imageView = findViewById(R.id.barcodePreview);
             imageView.setImageBitmap(generateQRCode(makeContents(lastText)));
         }
+
         @Override
         public void possibleResultPoints(List<ResultPoint> resultPoints) {
         }
@@ -101,7 +117,7 @@ public class ContinuousCaptureActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.continuous_scan);
-        ((ImageView)findViewById(R.id.qrView)).setImageBitmap(generateQRCode(makeContents()));
+        ((ImageView) findViewById(R.id.qrView)).setImageBitmap(generateQRCode(makeContents()));
 
         barcodeView = findViewById(R.id.barcode_scanner);
         Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE, BarcodeFormat.CODE_39);
@@ -114,26 +130,29 @@ public class ContinuousCaptureActivity extends Activity {
     /**
      * Make Content to be used for QR
      * by Our Format
+     *
      * @return
      */
-    private String makeContents () {
+    private String makeContents() {
         return (HEADER + FirebaseAuth.getInstance().getUid());
     }
+
     //Overloading
-    private String makeContents (String content) {
+    private String makeContents(String content) {
         return (HEADER + content);
     }
 
     /**
      * Create QR code and Connect it with ImageView
+     *
      * @param content
      */
-    public Bitmap generateQRCode (String content) {
+    public Bitmap generateQRCode(String content) {
         Bitmap bitmap = null;
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         try {
             // 한글 지원
-            String data = new String (content.getBytes("UTF-8"), "ISO-8859-1");
+            String data = new String(content.getBytes("UTF-8"), "ISO-8859-1");
             bitmap = toBitmap(
                     qrCodeWriter.encode(
                             data,
@@ -144,25 +163,81 @@ public class ContinuousCaptureActivity extends Activity {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
-        } return bitmap;
+        }
+        return bitmap;
     }
 
     /**
      * Convert Content to Bitmap
      * then, Return it
+     *
      * @param matrix
      * @return
      */
-    public Bitmap toBitmap (BitMatrix matrix) {
+    public Bitmap toBitmap(BitMatrix matrix) {
         int height = matrix.getHeight();
         int width = matrix.getWidth();
 
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        for (int x = 0; x < width; ++ x) {
-            for (int y = 0; y < height; ++ y) {
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
                 bitmap.setPixel(x, y, matrix.get(x, y) ? Color.BLACK : Color.WHITE);
             }
-        } return bitmap;
+        }
+        return bitmap;
+    }
+
+    public void saveContacts(String name, String phonNum, String email) {
+        ArrayList<ContentProviderOperation> operationLists;
+
+        operationLists = new ArrayList<>();
+        operationLists.add(ContentProviderOperation.newInsert(
+                ContactsContract.RawContacts.CONTENT_URI)
+                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
+                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
+                .build());
+
+        // 상대방 이름 저장
+        if (name != null) {
+            operationLists.add(ContentProviderOperation.newInsert(
+                    ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                    .withValue(ContactsContract.Data.MIMETYPE,
+                            ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                    .withValue(
+                            ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
+                            name
+                    ).build());
+        }
+        // 휴대폰 번호 저장
+        if (phonNum != null) {
+            operationLists.add(ContentProviderOperation.
+                    newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                    .withValue(ContactsContract.Data.MIMETYPE,
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phonNum)
+                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
+                            ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                    .build());
+        }
+        // 이메일 저장
+        if (email != null) {
+            operationLists.add(ContentProviderOperation.
+                    newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                    .withValue(ContactsContract.Data.MIMETYPE,
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Email.ADDRESS, email)
+                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
+                            ContactsContract.CommonDataKinds.Phone.TYPE_WORK)
+                    .build());
+        }
+        try {
+            getContentResolver().applyBatch(ContactsContract.AUTHORITY, operationLists);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
