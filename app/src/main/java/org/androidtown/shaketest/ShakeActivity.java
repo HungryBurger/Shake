@@ -2,6 +2,8 @@ package org.androidtown.shaketest;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ShakeActivity extends AppCompatActivity {
@@ -18,6 +20,9 @@ public class ShakeActivity extends AppCompatActivity {
         userdata = new userData(ShakeActivity.this);
         mSharedPrefs = SharedPrefManager.getInstance(this);
         init();
+
+        ((ServiceApplication)getApplication()).isShaking = true;
+        Log.d("isShaking", ((ServiceApplication)getApplication()).isShaking + "");
 
         DialogFragment fragment = DialogFragment.newInstance(10, 5, false, false,mSharedPrefs.getUI_ItemNo());
         fragment.show(getFragmentManager(), "blur_sample");
@@ -44,5 +49,13 @@ public class ShakeActivity extends AppCompatActivity {
 
         SharedPrefManager mSharedPrefs = SharedPrefManager.getInstance(this);
         userTemplate = mSharedPrefs.getUI_ItemNo();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        ((ServiceApplication)getApplication()).isShaking = false;
+        Log.d("isShaking", ((ServiceApplication)getApplication()).isShaking + "");
     }
 }

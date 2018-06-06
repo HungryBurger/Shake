@@ -21,12 +21,13 @@
                 android:targetPackage="org.androidtown.shaketest"
                 />
         </Preference>
+
         <Preference
             android:summary="개발자에게 메일을 보냅니다."
             android:title="메일 보내기">
             <intent
                 android:action="android.intent.action.SENDTO"
-                android:data="mailto:hesue615@gmail.com"/>
+                android:data="mailto:hesue615@gmail.com, hjjooace24@gmail.com, hjhng125@gmail.com"/>
 
         </Preference>
     </PreferenceCategory>

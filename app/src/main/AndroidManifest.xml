@@ -60,9 +60,6 @@
                 <data android:mimeType="application/org.androidtown.shaketest" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".DialogueActivity"
-            android:theme="@style/Theme.MyDialog" />
         <activity android:name=".CustomScannerActivity" />
 
         <!-- NFC Field -->

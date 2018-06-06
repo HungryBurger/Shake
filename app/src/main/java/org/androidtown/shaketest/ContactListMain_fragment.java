@@ -118,11 +118,7 @@ public class ContactListMain_fragment extends Fragment {
                         });
                     }
                 }
-//
-//                contactData = dataSnapshot.getValue(ContactData.class);
-//                productList.add(new MyAdapter.ContactInformation(contactData.getName(),contactData.getPhoneNum(),R.mipmap.ic_launcher));
-//                myAdapter.notifyDataSetChanged();
-//                Log.d("FireDB", "Value " + contactData.getName());
+
             }
 
             @Override

@@ -45,7 +45,6 @@ dependencies {
     //blurFragment
     implementation 'fr.tvbarthel.blurdialogfragment:lib:2.2.0'
 
-    implementation 'com.google.code.gson:gson:2.8.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
