@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="@drawable/card4"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/user_picture1"
@@ -19,7 +19,6 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginLeft="5dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -29,7 +28,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginLeft="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -37,7 +37,6 @@
                     android:layout_marginTop="20dp"
                     android:text="이름"
                     android:textAppearance="@android:style/TextAppearance.Widget.TextView"
-                    android:textColor="#FFFFFF"
                     android:textStyle="bold" />
 
                 <TextView
@@ -46,7 +45,6 @@
                     android:layout_marginTop="30dp"
                     android:text="전화번호"
                     android:textAppearance="@android:style/TextAppearance.Widget.TextView"
-                    android:textColor="#FFFFFF"
                     android:textStyle="bold" />
 
                 <TextView
@@ -55,7 +53,6 @@
                     android:layout_marginTop="30dp"
                     android:text="이메일"
                     android:textAppearance="@android:style/TextAppearance.Widget.TextView"
-                    android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -73,7 +70,6 @@
                     android:layout_marginTop="20dp"
                     android:text="Text"
                     android:textAppearance="@android:style/TextAppearance.Widget.TextView"
-                    android:textColor="#FFFFFF"
                     android:textStyle="bold" />
 
                 <TextView
@@ -83,7 +79,6 @@
                     android:layout_marginTop="30dp"
                     android:text="Text"
                     android:textAppearance="@android:style/TextAppearance.Widget.TextView"
-                    android:textColor="#FFFFFF"
                     android:textStyle="bold" />
 
                 <TextView
@@ -95,7 +90,6 @@
                     android:singleLine="true"
                     android:text="Text"
                     android:textAppearance="@android:style/TextAppearance.Widget.TextView"
-                    android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
             </LinearLayout>

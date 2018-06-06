@@ -1,10 +1,12 @@
 package org.androidtown.shaketest;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,7 +18,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     Context context;
-    List<ContactInformation>productList = new ArrayList<>();
+    List<ContactInformation> productList = new ArrayList<>();
     View.OnClickListener mListener;
     View.OnLongClickListener mLongListener;
 
@@ -33,20 +35,29 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        ContactInformation product  = productList.get(position);
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        ContactInformation product = productList.get(position);
 
         holder.name.setText(product.getText1());
         holder.pnum.setText(product.getText2());
         holder.email.setText(product.getText3());
-        holder.list_pos.setText(String.valueOf(position+1));
+        holder.list_pos.setText(String.valueOf(position + 1));
         holder.mImageView.setImageResource(product.getImage());
 
-
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                SharedPrefManager mSharedPrefs = SharedPrefManager.getInstance(context);
+                mSharedPrefs.setUI_ItemNo(position + 1);
+                Toast.makeText(context, position + 1 + "번 클릭", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
+
         return productList.size();
     }
 
@@ -56,21 +67,22 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         TextView pnum;
         TextView email;
         TextView list_pos;
+
         public ViewHolder(View itemView) {
             super(itemView);
             this.mImageView = (CircleImageView) itemView.findViewById(R.id.card_user_picture);
             this.name = (TextView) itemView.findViewById(R.id.card_user_name);
             this.pnum = (TextView) itemView.findViewById(R.id.card_user_phone);
-            this.email = (TextView)itemView.findViewById(R.id.card_user_email);
-            this.list_pos=(TextView)itemView.findViewById(R.id.list_pos);
-            if(mListener != null)
-            {
+            this.email = (TextView) itemView.findViewById(R.id.card_user_email);
+            this.list_pos = (TextView) itemView.findViewById(R.id.list_pos);
+            if (mListener != null) {
                 itemView.setOnClickListener(mListener);
                 itemView.setOnLongClickListener(mLongListener);
             }
         }
     }
-//    @Override
+
+    //    @Override
 //    public boolean onLongClick(View v) {
 //        Toast.makeText(context,"hello",Toast.LENGTH_LONG).show();
 //        return true;
@@ -103,12 +115,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public void setText3(String email) {
             this.email = email;
         }
+
         public int getImage() {
             return image;
         }
+
         public void setImage(int image) {
             this.image = image;
         }
+
         public ContactInformation(String name, String phonNum, String email, int image) {
             this.name = name;
             this.phoneNum = phonNum;

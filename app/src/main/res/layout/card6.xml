@@ -36,7 +36,6 @@
                     android:layout_marginTop="20dp"
                     android:text="이름"
                     android:textAppearance="@android:style/TextAppearance.Widget.TextView"
-                    android:textColor="#FFFFFF"
                     android:textStyle="bold" />
 
                 <TextView
@@ -45,7 +44,6 @@
                     android:layout_marginTop="30dp"
                     android:text="전화번호"
                     android:textAppearance="@android:style/TextAppearance.Widget.TextView"
-                    android:textColor="#FFFFFF"
                     android:textStyle="bold" />
 
                 <TextView
@@ -54,7 +52,6 @@
                     android:layout_marginTop="30dp"
                     android:text="이메일"
                     android:textAppearance="@android:style/TextAppearance.Widget.TextView"
-                    android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -72,7 +69,6 @@
                     android:layout_marginTop="20dp"
                     android:text="Text"
                     android:textAppearance="@android:style/TextAppearance.Widget.TextView"
-                    android:textColor="#FFFFFF"
                     android:textStyle="bold" />
 
                 <TextView
@@ -82,7 +78,6 @@
                     android:layout_marginTop="30dp"
                     android:text="Text"
                     android:textAppearance="@android:style/TextAppearance.Widget.TextView"
-                    android:textColor="#FFFFFF"
                     android:textStyle="bold" />
 
                 <TextView
@@ -90,13 +85,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
+                    android:ellipsize="marquee"
                     android:singleLine="true"
                     android:text="Text"
                     android:textAppearance="@android:style/TextAppearance.Widget.TextView"
-                    android:textColor="#FFFFFF"
                     android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:ellipsize="marquee"/>
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
 

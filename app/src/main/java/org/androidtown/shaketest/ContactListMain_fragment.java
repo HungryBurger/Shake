@@ -89,9 +89,6 @@ public class ContactListMain_fragment extends Fragment {
                 if (myList != null)
                     iter = myList.iterator();
 
-                Log.d("CONTACT_LIST_MAIN", dataSnapshot.getKey());
-                Log.d("CONTACT_LIST_MAIN", myList.size() + " 개수");
-
                 while (iter.hasNext()) {
                     String cur = iter.next();
                     if (cur.equals(dataSnapshot.getKey())) {
