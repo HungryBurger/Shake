@@ -2,7 +2,11 @@ package org.androidtown.shaketest;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,8 +45,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.name.setText(product.getText1());
         holder.pnum.setText(product.getText2());
         holder.email.setText(product.getText3());
-        holder.list_pos.setText(String.valueOf(position + 1));
-        holder.mImageView.setImageResource(product.getImage());
+        if (product.getImage() != null)
+            holder.mImageView.setImageBitmap(product.getImage());
+        else
+            holder.mImageView.setImageResource(R.drawable.user_profile);
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -87,15 +93,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }
     }
 
-    //    @Override
-//    public boolean onLongClick(View v) {
-//        Toast.makeText(context,"hello",Toast.LENGTH_LONG).show();
-//        return true;
-//
-//    }
     public static class ContactInformation {
-        String name, phoneNum, email;
-        int image;
+        String name, phoneNum, email, image;
+
+        int templateNo;
 
         public String getText1() {
             return name;
@@ -121,19 +122,36 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             this.email = email;
         }
 
-        public int getImage() {
-            return image;
+        public int getTemplateNo() {
+            return templateNo;
         }
 
-        public void setImage(int image) {
+        public void setTemplateNo(int image) {
+            this.templateNo = image;
+        }
+
+        public void setImage (String image) {
             this.image = image;
         }
 
-        public ContactInformation(String name, String phonNum, String email, int image) {
-            this.name = name;
-            this.phoneNum = phonNum;
-            this.email = email;
-            this.image = image;
+        public Bitmap getImage () {
+            return stringToBitmap(this.image);
+        }
+
+        public ContactInformation(ContactData current) {
+            setText1(current.getName());
+            setText2(current.getPhoneNum());
+            setText3(current.getEmail());
+            setTemplateNo(current.getTemplate_no());
+            setImage(current.getImage());
+        }
+
+        public Bitmap stringToBitmap(String bitmapString) {
+            if (bitmapString == null) return null;
+
+            Log.d("tag", "stringToBitmap: ");
+            byte[] bytes = Base64.decode(bitmapString, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         }
     }
 }
