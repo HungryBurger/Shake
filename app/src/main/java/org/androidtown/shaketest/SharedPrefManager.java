@@ -2,6 +2,7 @@ package org.androidtown.shaketest;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class SharedPrefManager {
 
@@ -11,12 +12,17 @@ public class SharedPrefManager {
 
     private static final String UI_ITEM_NO = "UI_Item_No";
     private static final String SERVICE_CHECK = "ServiceCheck";
+    private static final String CHECK_FIRST = "isFirst";
+    private static final String MY_INFO = "MyInfo";
 
     private SharedPrefManager (Context context) {
-        mSharedPrefs = context.getSharedPreferences(
-                "pref", Context.MODE_PRIVATE
-        );
-        mEditor =mSharedPrefs.edit();
+        try {
+            mSharedPrefs = context.getSharedPreferences("pref", Context.MODE_PRIVATE);
+            mEditor = mSharedPrefs.edit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("Test",e.getMessage());
+        }
     }
 
     public static SharedPrefManager getInstance (Context context) {
@@ -42,4 +48,15 @@ public class SharedPrefManager {
     public boolean getServiceCheck () {
         return mSharedPrefs.getBoolean(SERVICE_CHECK, false);
     }
+
+    public void setCheckFirst (boolean isFirst) {
+        mEditor.putBoolean(CHECK_FIRST, isFirst);
+        mEditor.commit();
+    }
+
+    public boolean getCheckFirst () {
+        return mSharedPrefs.getBoolean(CHECK_FIRST, false);
+    }
+
+
 }

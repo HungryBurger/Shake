@@ -71,7 +71,6 @@ public class ContactListMain_fragment extends Fragment {
             }
         });
 
-
         recyclerView.setAdapter(myAdapter);
         return mView;
     }

@@ -53,6 +53,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 return false;
             }
         });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "onClick", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

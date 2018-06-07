@@ -42,7 +42,7 @@ public class SettingsActivity extends PreferenceActivity {
             mSharedPrefManager = SharedPrefManager.getInstance(getActivity());
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            context = getActivity();
+            context = getActivity().getApplicationContext();
 
             prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
                 @Override
@@ -54,12 +54,12 @@ public class SettingsActivity extends PreferenceActivity {
                         Log.d("MyReceiver", "서비스 체크 참 ");
                         mSharedPrefManager.setServiceCheck(true);
                         context.startService(intent);
-                        BroadCastManager.getInstance(getContext());
+                        BroadCastManager.getInstance(context);
                     } else {
                         Log.d("MyReceiver", "서비스 체크 거짓");
                         mSharedPrefManager.setServiceCheck(false);
                         context.stopService(intent);
-                        BroadCastManager.getInstance(context).unregisterMyReceiver();
+                        BroadCastManager.getInstance(context).unregisterMyReceiver(context);
                     }
                 }
             }; prefs.registerOnSharedPreferenceChangeListener(prefListener);

@@ -84,12 +84,14 @@ public class userData {
             }
         };
     }
+
     private void setProfile() {
         mEmail =  nav_header_view.findViewById(R.id.profile_E_mail);
         mEmail.setSelected(true);
         mName = nav_header_view.findViewById(R.id.profile_name);
         mPhoneNum =  nav_header_view.findViewById(R.id.profile_phone_number);
         mPicture1 =  nav_header_view.findViewById(R.id.profile_picture);
+
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -159,12 +161,13 @@ public class userData {
         //mSharedPrefs.setImage(bitmap);
         databaseReference.setValue(bitmapToString(activity, bitmap));
     }
+
     public  Bitmap stringToBitmap(String bitmapString){
         Log.d("tag", "stringToBitmap: ");
         byte[] bytes = Base64.decode(bitmapString, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-
     }
+
     public  String bitmapToString(Context context, Bitmap bitmap){
         Log.d("tag", "bitmapToString: ");
         ByteArrayOutputStream stream = new ByteArrayOutputStream();

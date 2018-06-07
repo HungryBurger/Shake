@@ -9,7 +9,6 @@ import android.util.Log;
 public class BroadCastManager  {
     private static BroadCastManager bcmInstance;
     private static BroadcastReceiver broadcastReceiver;
-    private static Context mConext;
     private final String SCREEN_ON = "android.intent.action.USER_PRESENT";
     private final String SCREEN_OFF = "android.intent.action.SCREEN_OFF";
 
@@ -20,7 +19,6 @@ public class BroadCastManager  {
     public static BroadCastManager getInstance (Context context) {
         if (bcmInstance == null) {
             bcmInstance = new BroadCastManager(context);
-            mConext = context;
         } return bcmInstance;
     }
 
@@ -45,11 +43,11 @@ public class BroadCastManager  {
         context.registerReceiver(this.broadcastReceiver, intentFilter);
     }
 
-    public void unregisterMyReceiver () {
+    public void unregisterMyReceiver (Context context) {
         Log.d("MyReceiver", "동적 해제 최종");
 
         if (this.broadcastReceiver != null) {
-            mConext.unregisterReceiver(this.broadcastReceiver);
+            context.unregisterReceiver(this.broadcastReceiver);
         } this.broadcastReceiver = null;
           this.bcmInstance = null;
     }

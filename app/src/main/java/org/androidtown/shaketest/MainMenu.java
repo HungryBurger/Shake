@@ -132,15 +132,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     protected void onResume() {
         super.onResume();
 
-        Intent intent = new Intent(getApplicationContext(), ShakeService.class);
-        SharedPreferences setRefer = PreferenceManager
-                .getDefaultSharedPreferences(this);
-
-        if (setRefer.getBoolean("shake_service_on", false)) {
-            startService(intent);
-        } else {
-            stopService(intent);
-        }
         if (userdata.databaseReference != null) {
             userdata.databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -323,7 +314,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 return;
             }
             if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-
                 toast.cancel();
                 super.onBackPressed();
             }

@@ -36,19 +36,13 @@ public class ShakeService extends Service implements SensorEventListener {
     private String TAG = "AtServiceClass";
     private static final int SHAKE_SKIP_TIME = 5000; // 스킵 시간
     private static final float SHAKE_THRESHOLD_GRAVITY = 3.0F;
-    private Context context;
-    private BroadcastReceiver mReceiver = null;
 
-
-
-    public ShakeService() {
-
-    }
+    public ShakeService() { }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        context = getApplicationContext();
+
         Log.d(TAG, "Service onCreate");
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAccelermeter = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);

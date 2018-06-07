@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 
                 mUser = mAuth.getCurrentUser();
                 if(mUser != null) {
-
                     mDatabase = FirebaseDatabase.getInstance().getReference().
                             child("users").child(mUser.getUid()).child("myInfo");
                     Log.d("CONTACT_LIST", "MainActivity");
@@ -89,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Log.d("MyReceiver", "메인 엑티비티 온크리트 ");
                     if (mSharedPrefManager.getServiceCheck()) {
                         Log.d("MyReceiver", "동적 등록");
+                        startService(new Intent(getApplicationContext(), ShakeService.class));
                         mBroadCastManager = BroadCastManager.getInstance(getApplicationContext());
                     }
 

@@ -3,7 +3,6 @@ package org.androidtown.shaketest;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ShakeActivity extends AppCompatActivity {
@@ -11,14 +10,14 @@ public class ShakeActivity extends AppCompatActivity {
     private String userName, userPhoneNum, userEmail;
     private int userTemplate;
     userData userdata;
-    SharedPrefManager mSharedPrefs = SharedPrefManager.getInstance(this);
+    SharedPrefManager mSharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shake);
         userdata = new userData(ShakeActivity.this);
-        mSharedPrefs = SharedPrefManager.getInstance(this);
+        mSharedPrefs = SharedPrefManager.getInstance(getApplicationContext());
         init();
 
         ((ServiceApplication)getApplication()).isShaking = true;
