@@ -143,7 +143,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         android.Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.NFC,
                         Manifest.permission.READ_SMS,
-                        Manifest.permission.BIND_NFC_SERVICE
+                        Manifest.permission.BIND_NFC_SERVICE,
+                        Manifest.permission.CALL_PHONE
                 ).check();
     }
 

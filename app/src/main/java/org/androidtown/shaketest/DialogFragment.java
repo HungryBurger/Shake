@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -180,8 +181,8 @@ public class DialogFragment extends BlurDialogFragment {
 
         mPicture = view.findViewById(R.id.user_picture1);
         TextView name = view.findViewById(R.id.card_name);
-        TextView phone = view.findViewById(R.id.card_phoneNumber);
-        TextView email = view.findViewById(R.id.card_email);
+        final TextView phone = view.findViewById(R.id.card_phoneNumber);
+        final TextView email = view.findViewById(R.id.card_email);
         convertQRButton = view.findViewById(R.id.convertQR);
         convertQRButton.setVisibility(View.INVISIBLE);
 
@@ -193,6 +194,27 @@ public class DialogFragment extends BlurDialogFragment {
             mPicture.setImageBitmap(stringToBitmap(arr[3]));
         else
             mPicture.setImageResource(R.drawable.user_profile);
+
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(
+                        Intent.ACTION_CALL,
+                        Uri.parse("tel:" + phone.getText())
+                ));
+            }
+        });
+
+        email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(
+                        Intent.ACTION_SENDTO,
+                        Uri.parse("mailto:" + email.getText())
+                ));
+            }
+        });
     }
 
     private void startScanning() {
