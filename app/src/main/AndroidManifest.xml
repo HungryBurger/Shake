@@ -62,7 +62,6 @@
                 <data android:mimeType="application/org.androidtown.shaketest" />
             </intent-filter>
         </activity>
-        <activity android:name=".CustomScannerActivity" />
 
         <!-- NFC Field -->
         <activity android:name=".ShakeActivity" />

@@ -80,7 +80,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             this.name = (TextView) itemView.findViewById(R.id.user_name);
             this.pnum = (TextView) itemView.findViewById(R.id.user_phone);
             this.email = (TextView) itemView.findViewById(R.id.user_email);
-            this.list_pos = (TextView) itemView.findViewById(R.id.list_pos);
             if (mListener != null) {
                 itemView.setOnClickListener(mListener);
                 itemView.setOnLongClickListener(mLongListener);
