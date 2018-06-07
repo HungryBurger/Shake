@@ -48,7 +48,7 @@ public class ContactListMain_fragment extends Fragment {
         ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.activity_contact_list_main_fragment, container, false);
         setInitialData();
         name = mView.findViewById(R.id.user_name);
-        pnum = mView.findViewById(R.id.user_phone_num);
+        pnum = mView.findViewById(R.id.user_phone);
         email = mView.findViewById(R.id.user_email);
         recyclerView = (RecyclerView) mView.findViewById(R.id.list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

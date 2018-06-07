@@ -309,20 +309,25 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item1:
-                Toast.makeText(this, "Contact List clicked..", Toast.LENGTH_SHORT).show();
-                fragmentManager.beginTransaction().replace(R.id.frameLayout, ContactListMain_fragment.newInstance()).commit();
-                backbuttonChk=1;
-                break;
-            case R.id.item2:
-                Toast.makeText(this, "Editprofile clicked..", Toast.LENGTH_SHORT).show();
-                fragmentManager.beginTransaction().replace(R.id.frameLayout, Editprofile.newInstance()).commit();
-                backbuttonChk=1;
-                break;
-            case R.id.item3:
-                Toast.makeText(this, "Main page clicked..", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "메인 페이지가 클릭 되었습니다.", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout_card, CardFragment.newInstance(mSharedPrefs.getUserTemplateNo())).commit();
                 backbuttonChk=0;
+                break;
+            case R.id.item2:
+                Toast.makeText(this, "컨텍트 리스트가 클릭 되었습니다.", Toast.LENGTH_SHORT).show();
+                fragmentManager.beginTransaction().replace(R.id.frameLayout, ContactListMain_fragment.newInstance()).commit();
+                backbuttonChk=1;
+                break;
+            case R.id.item3:
+                Toast.makeText(this, "프로필 수정이 클릭 되었습니다.", Toast.LENGTH_SHORT).show();
+                fragmentManager.beginTransaction().replace(R.id.frameLayout, Editprofile.newInstance()).commit();
+                backbuttonChk=1;
+                break;
+            case R.id.item4:
+                Toast.makeText(this, "사용법이 클릭 되었습니다.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, HowToUse.class);
+                startActivity(intent);
                 break;
             case R.id.log_out:
                 click_log_out();

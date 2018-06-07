@@ -76,10 +76,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.mImageView = (CircleImageView) itemView.findViewById(R.id.card_user_picture);
-            this.name = (TextView) itemView.findViewById(R.id.card_user_name);
-            this.pnum = (TextView) itemView.findViewById(R.id.card_user_phone);
-            this.email = (TextView) itemView.findViewById(R.id.card_user_email);
+            this.mImageView = (CircleImageView) itemView.findViewById(R.id.user_picture);
+            this.name = (TextView) itemView.findViewById(R.id.user_name);
+            this.pnum = (TextView) itemView.findViewById(R.id.user_phone);
+            this.email = (TextView) itemView.findViewById(R.id.user_email);
             this.list_pos = (TextView) itemView.findViewById(R.id.list_pos);
             if (mListener != null) {
                 itemView.setOnClickListener(mListener);

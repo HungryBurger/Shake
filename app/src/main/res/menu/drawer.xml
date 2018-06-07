@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/item3"
+        android:id="@+id/item1"
         android:icon="@drawable/menu_home"
         android:title="홈"/>
     <item
-        android:id="@+id/item1"
+        android:id="@+id/item2"
         android:icon="@drawable/menu_list"
         android:title="연락처 리스트"
         />
     <item
-        android:id="@+id/item2"
+        android:id="@+id/item3"
         android:icon="@drawable/menu_profile"
         android:title="프로필 수정"
+        />
+    <item
+        android:id="@+id/item4"
+        android:icon="@drawable/question"
+        android:title="사용법"
         />
     <item
         android:id="@+id/log_out"
