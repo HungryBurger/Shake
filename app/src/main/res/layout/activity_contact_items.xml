@@ -27,16 +27,6 @@
                 android:layout_height="match_parent"
                 android:background="#00CED1">
 
-                <TextView
-                    android:id="@+id/list_pos"
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="text"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout

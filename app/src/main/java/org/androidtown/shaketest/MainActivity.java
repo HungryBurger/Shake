@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String displayUserName;
     private String displayUserEmail;
     private String displayUserPhoneNumber;
+    private boolean chkFirst=false;
 
     // SCREEN_ON_OFF_BROADCAST_RECEIVER
     private BroadCastManager mBroadCastManager;
@@ -81,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (!mSharedPrefManager.getCheckFirst()) {
                         Log.d("MainActivity", "아다임");
                         /* 첫 로그인 */
-                        mSharedPrefManager.setCheckFirst(true);
 
                         ContactData userData = new ContactData(
                                 mUser.getDisplayName(),
@@ -102,7 +102,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mBroadCastManager = BroadCastManager.getInstance(getApplicationContext());
                     }
 
-                    startActivity(new Intent(getApplicationContext(), MainMenu.class));
+                    if(mSharedPrefManager.getCheckFirst()==true)
+                        startActivity(new Intent(getApplicationContext(), MainMenu.class));
+
+                    else
+                    {
+                        startActivity(new Intent(getApplicationContext(), MainMenu.class));
+                        startActivity(new Intent(getApplicationContext(), HowToUse.class));
+                        mSharedPrefManager.setCheckFirst(true);
+
+                    }
+
                     finish();
                 } else {
                     init();
