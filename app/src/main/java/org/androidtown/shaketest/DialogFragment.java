@@ -153,7 +153,10 @@ public class DialogFragment extends BlurDialogFragment {
         email.setText(mSharedPrefManager.getUserEmail());
         email.setSelected(true);
 
-        mPicture.setImageBitmap(mSharedPrefManager.getUserImage());
+        if (mSharedPrefManager.getUserImage() != null)
+            mPicture.setImageBitmap(mSharedPrefManager.getUserImage());
+        else
+            mPicture.setImageResource(R.drawable.user_profile);
     }
 
     private void startScanning() {
@@ -201,6 +204,6 @@ public class DialogFragment extends BlurDialogFragment {
         if (mSharedPrefManager.getUserImage() != null) {
             mPicture.setImageBitmap(mSharedPrefManager.getUserImage());
         } else
-            mPicture.setImageBitmap(null);
+            mPicture.setImageResource(R.drawable.user_profile);
     }
 }

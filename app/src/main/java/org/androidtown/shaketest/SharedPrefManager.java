@@ -115,11 +115,9 @@ public class SharedPrefManager {
     }
 
     public void setUserImage(Bitmap userImage) {
-        if (userImage != null) {
-            mEditor.putString(USER_IMAGE, bitmapToString(userImage));
-            mEditor.commit();
-            updateMyImgInfo();
-        }
+        mEditor.putString(USER_IMAGE, bitmapToString(userImage));
+        mEditor.commit();
+        updateMyImgInfo();
     }
 
     public Bitmap getUserImage() {

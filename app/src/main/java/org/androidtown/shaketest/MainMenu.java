@@ -102,9 +102,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-//        userdata = new userData(MainMenu.this);
 
-//        userdata.getUserInfo();
         initLayout();
         mSharedPrefs = SharedPrefManager.getInstance(this);
 
@@ -127,7 +125,8 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         mPicture1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageDialog();
+                //imageDialog();
+                editDialog();
             }
         });
         mEmail.setText(mSharedPrefs.getUserEmail());
@@ -135,14 +134,35 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         mPhoneNum.setText(mSharedPrefs.getUserPhonenum());
     }
 
+    public void editDialog () {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("프로필 편집");
+        builder.setPositiveButton("편집", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                fragmentManager.beginTransaction().replace(R.id.frameLayout, Editprofile.newInstance()).commit();
+                backbuttonChk=1;
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
     public void imageDialog() {
         Log.d("tag", "imageDialog: ");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("사진 선택");
-        builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("카메라", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+                takePhoto();
             }
         });
         builder.setNegativeButton("앨범 찾기", new DialogInterface.OnClickListener() {
@@ -152,10 +172,12 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 goToAlbum();
             }
         });
-        builder.setNeutralButton("카메라", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton("기본 이미지", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                takePhoto();
+                mSharedPrefs.setUserImage(null);
+                fragmentManager.beginTransaction().replace(R.id.frameLayout, Editprofile.newInstance()).commit();
+                backbuttonChk=1;
             }
         });
         AlertDialog alertDialog = builder.create();
@@ -203,8 +225,9 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 
         if (mSharedPrefs.getUserImage() != null)
             mPicture1.setImageBitmap(mSharedPrefs.getUserImage());
-        else
-            mPicture1.setImageBitmap(null);
+        else {
+            mPicture1.setImageResource(R.drawable.user_profile);
+        }
     }
 
     @Override

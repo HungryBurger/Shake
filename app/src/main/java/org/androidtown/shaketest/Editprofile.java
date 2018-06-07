@@ -33,7 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Editprofile extends Fragment {
     private FragmentManager fragmentManager;
-    String displayUserPhoneNumber;
+    private SharedPrefManager mSharedPrefManager;
     CircleImageView mPicture;
     userData userdata;
     MainMenu activity;
@@ -50,8 +50,7 @@ public class Editprofile extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = (MainMenu)getActivity();
-        userdata = new userData(activity);
+        mSharedPrefManager = SharedPrefManager.getInstance(getContext());
     }
 
     @Nullable
@@ -61,17 +60,23 @@ public class Editprofile extends Fragment {
         ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.activity_editprofile, container, false);
         fragmentManager = getActivity().getSupportFragmentManager();
         Button Customize = (Button)mView.findViewById(R.id.edit_customize);
-        userdata.getPhonenum();
-        getinfo();
 
         TextView name = (TextView) mView.findViewById(R.id.edit_name);
         TextView phone = (TextView) mView.findViewById(R.id.edit_phone);
         TextView email = (TextView) mView.findViewById(R.id.edit_email);
         mPicture = mView.findViewById(R.id.user_picture);
+        mPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainMenu)getActivity()).imageDialog();
+                Log.d("이미지바꾸기", "버튼 클릭 ");
+                changeUserImage();
+            }
+        });
 
-        name.setText(userName);
-        phone.setText(userPhoneNum);
-        email.setText(userEmail);
+        name.setText(mSharedPrefManager.getUserName());
+        phone.setText(mSharedPrefManager.getUserPhonenum());
+        email.setText(mSharedPrefManager.getUserEmail());
         Customize.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -82,35 +87,20 @@ public class Editprofile extends Fragment {
         return mView;
     }
 
-    private void getinfo() {
-        userdata.mUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (userdata.mUser != null) {
-            userName = userdata.mUser.getDisplayName();
-            userEmail = userdata.mUser.getEmail();
-            userdata.databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(userdata.mUser.getUid()).child("userImg");
-            userPhoneNum = userdata.displayUserPhoneNumber;
-        }
-    }
-    private void changeImage() {
-        if (userdata.databaseReference != null) {
-            userdata.databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    String value = (String) dataSnapshot.getValue();
-                    if (value != null) {
-                        mPicture.setImageBitmap(userdata.stringToBitmap(value));
-                    }
-                }
+    private void changeUserImage () {
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
+        Log.d("이미지바꾸기", "바꾸기 메소드");
+        if (mSharedPrefManager.getUserImage() != null) {
+            mPicture.setImageBitmap(mSharedPrefManager.getUserImage());
+        } else {
+            mPicture.setImageResource(R.drawable.user_profile);
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
-        changeImage();
+        Log.d("이미지바꾸기", "온 리쥼 ");
+        changeUserImage();
     }
 }

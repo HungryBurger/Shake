@@ -96,6 +96,12 @@ public class CardFragment extends Fragment {
         TextView phone = view.findViewById(R.id.card_phoneNumber);
         TextView email = view.findViewById(R.id.card_email);
         mPicture =  view.findViewById(R.id.user_picture1);
+        mPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainMenu)getActivity()).editDialog();
+            }
+        });
 
         convertQRButton = view.findViewById(R.id.convertQR);
         convertQRButton.setVisibility(View.INVISIBLE);
@@ -108,7 +114,7 @@ public class CardFragment extends Fragment {
         if (mSharedPrefManager.getUserImage() != null)
             mPicture.setImageBitmap(mSharedPrefManager.getUserImage());
         else
-            mPicture.setImageBitmap(null);
+            mPicture.setImageResource(R.drawable.user_profile);
     }
 
     @Override
@@ -119,6 +125,6 @@ public class CardFragment extends Fragment {
         if (mSharedPrefManager.getUserImage() != null)
             mPicture.setImageBitmap(mSharedPrefManager.getUserImage());
         else
-            mPicture.setImageBitmap(null);
+            mPicture.setImageResource(R.drawable.user_profile);
     }
 }
