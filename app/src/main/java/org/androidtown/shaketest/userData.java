@@ -76,7 +76,7 @@ public class userData {
                     displayUserEmail = mUser.getEmail();
                     getPhonenum();
                     databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).child("userImg");
-                    setProfile();
+                    //setProfile();
                 } else {
                     activity.startActivity(new Intent(activity, MainActivity.class));
                     activity.finish();
@@ -85,35 +85,6 @@ public class userData {
         };
     }
 
-    private void setProfile() {
-        mEmail =  nav_header_view.findViewById(R.id.profile_E_mail);
-        mEmail.setSelected(true);
-        mName = nav_header_view.findViewById(R.id.profile_name);
-        mPhoneNum =  nav_header_view.findViewById(R.id.profile_phone_number);
-        mPicture1 =  nav_header_view.findViewById(R.id.profile_picture);
-
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String value = (String)dataSnapshot.getValue();
-                if(value != null) {
-                    mPicture1.setImageBitmap(stringToBitmap(value));
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
-
-        mPicture1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageDialog();
-            }
-        });
-        mEmail.setText(displayUserEmail);
-        mName.setText(displayUserName);
-        mPhoneNum.setText(displayUserPhoneNumber);
-    }
     public void getPhonenum() {
         TelephonyManager telephonyManager = (TelephonyManager)activity.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 

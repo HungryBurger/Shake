@@ -1,20 +1,15 @@
 package org.androidtown.shaketest;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,10 +21,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
+import static org.androidtown.shaketest.ServiceApplication.myContactList;
 
 public class ContactListMain_fragment extends Fragment {
     private MyAdapter myAdapter;
@@ -83,7 +78,7 @@ public class ContactListMain_fragment extends Fragment {
         contactListRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                ArrayList<String> myList = ((ServiceApplication) getActivity().getApplication()).myContactList;
+                ArrayList<String> myList = myContactList;
 
                 if (myList == null)
                     return;

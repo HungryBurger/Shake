@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ public class CardFragment extends Fragment {
     private static final String BUNDLE_KEY_TEMPLATE = "bundle_key_template";
     private int mTemplate;
     private ViewGroup view;
-    private String userName, userPhoneNum, userEmail;
+    private SharedPrefManager mSharedPrefManager;
     CircleImageView mPicture,convertQRButton;
     MainMenu activity;
     userData userdata;
@@ -49,8 +50,11 @@ public class CardFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = (MainMenu) getActivity();
-        userdata = new userData(activity);
+
+        mSharedPrefManager = SharedPrefManager.getInstance(getContext());
+        Log.d("TAG", "onCreate: card");
+        //activity = (MainMenu) getActivity();
+        //userdata = new userData(activity);
     }
 
     @Nullable
@@ -58,7 +62,7 @@ public class CardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         view = (ViewGroup)inflater.inflate(R.layout.card1, container, false);
-
+        Log.d("TAG", "onCreateView: card");
         switch (mTemplate) {
             case 2: {
                 view = (ViewGroup)inflater.inflate(R.layout.card2, container, false);
@@ -93,67 +97,28 @@ public class CardFragment extends Fragment {
         TextView email = view.findViewById(R.id.card_email);
         mPicture =  view.findViewById(R.id.user_picture1);
 
-        mPicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userdata.imageDialog();
-            }
-        });
+        convertQRButton = view.findViewById(R.id.convertQR);
+        convertQRButton.setVisibility(View.INVISIBLE);
 
-
-//        userdata.getPhonenum();
-//        TextView name = view.findViewById(R.id.card_name);
-//        TextView phone = view.findViewById(R.id.card_phoneNumber);
-//        TextView email = view.findViewById(R.id.card_email);
-//        mPicture =  view.findViewById(R.id.user_picture1);
-//
-//        convertQRButton = view.findViewById(R.id.convertQR);
-//        convertQRButton.setVisibility(View.INVISIBLE);
-//
-//        mPicture.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                userdata.imageDialog();
-//            }
-//        });
-//        getinfo();
 //        changeImage();
-//        name.setText(userName);
-//        phone.setText(userPhoneNum);
-//        email.setText(userEmail);
-//        email.setSelected(true);
-//        mPicture.setImageBitmap(userdata.imageBitmap);
-    }
-    private void changeImage(){
-        if(userdata.databaseReference != null) {
-            userdata.databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    String value = (String) dataSnapshot.getValue();
-                    if (value != null) {
-                        mPicture.setImageBitmap(userdata.stringToBitmap(value));
-                    }
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-        }
-    }
-    private void getinfo() {
-        userdata.mUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if(userdata.mUser != null) {
-            userName = userdata.mUser.getDisplayName();
-            userEmail = userdata.mUser.getEmail();
-            userdata.databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(userdata.mUser.getUid()).child("userImg");
-            userPhoneNum = userdata.displayUserPhoneNumber;
-        }
+        name.setText(mSharedPrefManager.getUserName());
+        phone.setText(mSharedPrefManager.getUserPhonenum());
+        email.setText(mSharedPrefManager.getUserEmail());
+        email.setSelected(true);
+        if (mSharedPrefManager.getUserImage() != null)
+            mPicture.setImageBitmap(mSharedPrefManager.getUserImage());
+        else
+            mPicture.setImageBitmap(null);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        changeImage();
+        Log.d("TAG", "onResume: card");
+
+        if (mSharedPrefManager.getUserImage() != null)
+            mPicture.setImageBitmap(mSharedPrefManager.getUserImage());
+        else
+            mPicture.setImageBitmap(null);
     }
 }

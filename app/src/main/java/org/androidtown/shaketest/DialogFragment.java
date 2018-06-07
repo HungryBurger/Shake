@@ -2,27 +2,13 @@ package org.androidtown.shaketest;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.telephony.PhoneNumberUtils;
-import android.telephony.TelephonyManager;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.zxing.integration.android.IntentIntegrator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.tvbarthel.lib.blurdialogfragment.BlurDialogFragment;
@@ -33,7 +19,6 @@ public class DialogFragment extends BlurDialogFragment {
      * Bundle key used to start the blur dialog with a given scale factor (float).
      */
     private static final String BUNDLE_KEY_DOWN_SCALE_FACTOR = "bundle_key_down_scale_factor";
-    public DatabaseReference databaseReference;
     /**
      * Bundle key used to start the blur dialog with a given blur radius (int).
      */
@@ -49,17 +34,15 @@ public class DialogFragment extends BlurDialogFragment {
      */
     private static final String BUNDLE_KEY_DEBUG = "bundle_key_debug_effect";
     private static final String BUNDLE_KEY_TEMPLATE = "bundle_key_template";
-    userData userdata;
     private int mRadius;
     private float mDownScaleFactor;
     private boolean mDimming;
     private boolean mDebug;
     private int mTemplate;
     private View view;
-    private String userName, userPhoneNum, userEmail;
-    ShakeActivity shakeActivity;
     CircleImageView mPicture, convertQRButton;
 
+    private SharedPrefManager mSharedPrefManager;
     /**
      * Retrieve a new instance of the sample fragment.
      *
@@ -116,8 +99,8 @@ public class DialogFragment extends BlurDialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        shakeActivity = (ShakeActivity) getActivity();
-        userdata = new userData(shakeActivity);
+
+        mSharedPrefManager = SharedPrefManager.getInstance(getContext());
     }
 
     @NonNull
@@ -152,7 +135,6 @@ public class DialogFragment extends BlurDialogFragment {
     }
 
     private void setCardContent() {
-        userdata.getPhonenum();
         mPicture = view.findViewById(R.id.user_picture1);
         TextView name = view.findViewById(R.id.card_name);
         TextView phone = view.findViewById(R.id.card_phoneNumber);
@@ -165,36 +147,21 @@ public class DialogFragment extends BlurDialogFragment {
                 startScanning();
             }
         });
-        getinfo();
-        changeImage();
-        name.setText(userName);
-        phone.setText(userPhoneNum);
-        email.setText(userEmail);
+
+        name.setText(mSharedPrefManager.getUserName());
+        phone.setText(mSharedPrefManager.getUserPhonenum());
+        email.setText(mSharedPrefManager.getUserEmail());
         email.setSelected(true);
-        mPicture.setImageBitmap(userdata.imageBitmap);
+
+        mPicture.setImageBitmap(mSharedPrefManager.getUserImage());
     }
 
     private void startScanning() {
         Intent intent = new Intent(getActivity(), ContinuousCaptureActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-
-//        new IntentIntegrator(getActivity()).
-//                setBeepEnabled(false).
-//                setOrientationLocked(false).
-//                setCaptureActivity(CustomScannerActivity.class).
-//                initiateScan();
     }
 
-    private void getinfo() {
-        userdata.mUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (userdata.mUser != null) {
-            userName = userdata.mUser.getDisplayName();
-            userEmail = userdata.mUser.getEmail();
-            userdata.databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(userdata.mUser.getUid()).child("userImg");
-            userPhoneNum = userdata.displayUserPhoneNumber;
-        }
-    }
 
     @Override
     protected boolean isDebugEnable() {
@@ -227,27 +194,13 @@ public class DialogFragment extends BlurDialogFragment {
         getActivity().finish();
     }
 
-    private void changeImage() {
-        if (userdata.databaseReference != null) {
-            userdata.databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    String value = (String) dataSnapshot.getValue();
-                    if (value != null) {
-                        mPicture.setImageBitmap(userdata.stringToBitmap(value));
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
-        changeImage();
+
+        if (mSharedPrefManager.getUserImage() != null) {
+            mPicture.setImageBitmap(mSharedPrefManager.getUserImage());
+        } else
+            mPicture.setImageBitmap(null);
     }
 }

@@ -118,6 +118,7 @@ public class SharedPrefManager {
         if (userImage != null) {
             mEditor.putString(USER_IMAGE, bitmapToString(userImage));
             mEditor.commit();
+            updateMyImgInfo();
         }
     }
 
@@ -162,17 +163,17 @@ public class SharedPrefManager {
     }
 
     public void updateMyImgInfo() {
-        mReference = FirebaseDatabase.getInstance().getReference().child("users").child(getUserUid()).child("user_img");
+                    mReference = FirebaseDatabase.getInstance().getReference().child("users").child(getUserUid()).child("myInfo");
 
-        mReference.setValue(null);
-        mReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mReference.setValue(getUserData());
-            }
+                    mReference.setValue(null);
+                    mReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            mReference.setValue(getUserData());
+                        }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
             }
         });
