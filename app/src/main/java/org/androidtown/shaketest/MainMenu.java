@@ -74,6 +74,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     int backbuttonChk = 0;
     SharedPrefManager mSharedPrefs;
     userData userdata;
+
     public static final int FROM_ALBUM = 0;
     private long backKeyPressedTime = 0;
     private Toast toast;
@@ -83,38 +84,16 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         userdata = new userData(MainMenu.this);
-        PermissionListener permissionListener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                Toast.makeText(getApplicationContext(), "권한 허가", Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(getApplicationContext(), "권한 거부", Toast.LENGTH_SHORT).show();
-            }
-        };
-        TedPermission.with(this)
-                .setPermissionListener(permissionListener)
-                .setPermissions(android.Manifest.permission.WRITE_CONTACTS,
-                        android.Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        android.Manifest.permission.READ_PHONE_STATE,
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.NFC,
-                        Manifest.permission.READ_SMS,
-                        Manifest.permission.BIND_NFC_SERVICE
-                ).check();
         userdata.getUserInfo();
         initLayout();
         mSharedPrefs = SharedPrefManager.getInstance(this);
+
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
-        fragmentManager.beginTransaction().replace(R.id.frameLayout_card, CardFragment.newInstance(mSharedPrefs.getUI_ItemNo())).commit();
+        fragmentManager.beginTransaction().replace(R.id.frameLayout_card, CardFragment.newInstance(mSharedPrefs.getUserTemplateNo())).commit();
         backbuttonChk = 1;
         //초기 값 설정 카드 넘버 저장
-
-        Log.d("SharedPref", String.valueOf(mSharedPrefs.getUI_ItemNo()));
 
     }
 
@@ -169,8 +148,10 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 
                 if (extras != null) {
                     Log.d("ekit", "ekit");
-                    userdata.imageBitmap = (Bitmap) extras.get("data");
-                    userdata.uploadDB(userdata.imageBitmap);
+                    mSharedPrefs.setUserImage((Bitmap) extras.get("data"));
+                    mSharedPrefs.updateMyImgInfo();
+                    //userdata.imageBitmap = (Bitmap) extras.get("data");
+                    //userdata.uploadDB(userdata.imageBitmap);
                     break;
                 }
         }
@@ -207,7 +188,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             case R.id.item3:
                 Toast.makeText(this, "Main page clicked..", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
-                fragmentManager.beginTransaction().replace(R.id.frameLayout_card, CardFragment.newInstance(mSharedPrefs.getUI_ItemNo())).commit();
+                fragmentManager.beginTransaction().replace(R.id.frameLayout_card, CardFragment.newInstance(mSharedPrefs.getUserTemplateNo())).commit();
                 backbuttonChk=0;
                 break;
             case R.id.log_out:
@@ -304,7 +285,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         else if (backbuttonChk == 1) {
             fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
-            fragmentManager.beginTransaction().replace(R.id.frameLayout_card, CardFragment.newInstance(mSharedPrefs.getUI_ItemNo())).commit();
+            fragmentManager.beginTransaction().replace(R.id.frameLayout_card, CardFragment.newInstance(mSharedPrefs.getUserTemplateNo())).commit();
             backbuttonChk = 0;
 
         } else {

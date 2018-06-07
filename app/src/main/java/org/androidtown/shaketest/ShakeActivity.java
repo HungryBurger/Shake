@@ -23,7 +23,7 @@ public class ShakeActivity extends AppCompatActivity {
         ((ServiceApplication)getApplication()).isShaking = true;
         Log.d("isShaking", ((ServiceApplication)getApplication()).isShaking + "");
 
-        DialogFragment fragment = DialogFragment.newInstance(10, 5, false, false,mSharedPrefs.getUI_ItemNo());
+        DialogFragment fragment = DialogFragment.newInstance(10, 5, false, false, mSharedPrefs.getUserTemplateNo());
         fragment.show(getFragmentManager(), "blur_sample");
     }
 
@@ -47,7 +47,7 @@ public class ShakeActivity extends AppCompatActivity {
         userPhoneNum = userdata.displayUserPhoneNumber;
 
         SharedPrefManager mSharedPrefs = SharedPrefManager.getInstance(this);
-        userTemplate = mSharedPrefs.getUI_ItemNo();
+        userTemplate = mSharedPrefs.getUserTemplateNo();
     }
 
     @Override

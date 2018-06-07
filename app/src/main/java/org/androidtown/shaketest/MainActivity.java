@@ -36,6 +36,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -61,30 +64,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getPermission();
         mSharedPrefManager = SharedPrefManager.getInstance(this);
-
+        Log.d("MainActivity", "메인엑티비티");
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
         mListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                
+                Log.d("MainActivity", "구글 인증");
                 mUser = mAuth.getCurrentUser();
                 if(mUser != null) {
-                    mDatabase = FirebaseDatabase.getInstance().getReference().
-                            child("users").child(mUser.getUid()).child("myInfo");
-                    Log.d("CONTACT_LIST", "MainActivity");
-                    ContactData current_data =  new ContactData(
-                            mUser.getDisplayName(), //이름
-                            getPhoneNum(), //번호
-                            mUser.getEmail(), //이메일
-                            mSharedPrefManager.getUI_ItemNo(),//템플릿 넘버
-                            null
-                    );
-                    mDatabase.setValue(current_data);
-                    setMyContactList();
+                    mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).child("myInfo");
 
+                    if (!mSharedPrefManager.getCheckFirst()) {
+                        Log.d("MainActivity", "아다임");
+                        /* 첫 로그인 */
+                        mSharedPrefManager.setCheckFirst(true);
+
+                        ContactData userData = new ContactData(
+                                mUser.getDisplayName(),
+                                getPhoneNum(),
+                                mUser.getEmail(),
+                                1,
+                                null
+                        );
+                        mSharedPrefManager.setUserData(mUser.getUid(), userData);
+                        mDatabase.setValue(mSharedPrefManager.getUserData());
+                    }
+
+                    setMyContactList();
                     Log.d("MyReceiver", "메인 엑티비티 온크리트 ");
                     if (mSharedPrefManager.getServiceCheck()) {
                         Log.d("MyReceiver", "동적 등록");
@@ -100,6 +110,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         };
+    }
+
+    private void getPermission () {
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                Toast.makeText(getApplicationContext(), "권한 허가", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(getApplicationContext(), "권한 거부", Toast.LENGTH_SHORT).show();
+            }
+        };
+        TedPermission.with(this)
+                .setPermissionListener(permissionListener)
+                .setPermissions(android.Manifest.permission.WRITE_CONTACTS,
+                        android.Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        android.Manifest.permission.READ_PHONE_STATE,
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.NFC,
+                        Manifest.permission.READ_SMS,
+                        Manifest.permission.BIND_NFC_SERVICE
+                ).check();
     }
 
     private void setMyContactList () {

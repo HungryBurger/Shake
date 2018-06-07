@@ -87,27 +87,42 @@ public class CardFragment extends Fragment {
     }
 
     private void setCardContent () {
-        userdata.getPhonenum();
+
         TextView name = view.findViewById(R.id.card_name);
         TextView phone = view.findViewById(R.id.card_phoneNumber);
         TextView email = view.findViewById(R.id.card_email);
         mPicture =  view.findViewById(R.id.user_picture1);
 
-        convertQRButton = view.findViewById(R.id.convertQR);
-        convertQRButton.setVisibility(View.INVISIBLE);
         mPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 userdata.imageDialog();
             }
         });
-        getinfo();
-        changeImage();
-        name.setText(userName);
-        phone.setText(userPhoneNum);
-        email.setText(userEmail);
-        email.setSelected(true);
-        mPicture.setImageBitmap(userdata.imageBitmap);
+
+
+//        userdata.getPhonenum();
+//        TextView name = view.findViewById(R.id.card_name);
+//        TextView phone = view.findViewById(R.id.card_phoneNumber);
+//        TextView email = view.findViewById(R.id.card_email);
+//        mPicture =  view.findViewById(R.id.user_picture1);
+//
+//        convertQRButton = view.findViewById(R.id.convertQR);
+//        convertQRButton.setVisibility(View.INVISIBLE);
+//
+//        mPicture.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                userdata.imageDialog();
+//            }
+//        });
+//        getinfo();
+//        changeImage();
+//        name.setText(userName);
+//        phone.setText(userPhoneNum);
+//        email.setText(userEmail);
+//        email.setSelected(true);
+//        mPicture.setImageBitmap(userdata.imageBitmap);
     }
     private void changeImage(){
         if(userdata.databaseReference != null) {

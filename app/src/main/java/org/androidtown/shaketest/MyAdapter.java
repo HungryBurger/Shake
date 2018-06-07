@@ -47,8 +47,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                SharedPrefManager mSharedPrefs = SharedPrefManager.getInstance(context);
-                mSharedPrefs.setUI_ItemNo(position + 1);
+
                 Toast.makeText(context, position + 1 + "번 클릭", Toast.LENGTH_SHORT).show();
                 return false;
             }

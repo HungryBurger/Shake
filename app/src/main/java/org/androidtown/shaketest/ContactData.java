@@ -8,7 +8,6 @@ public class ContactData {
     private String image;
 
     public ContactData () {
-
     }
 
     public ContactData (String name, String phoneNum, String email, int template_no, String image) {

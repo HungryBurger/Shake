@@ -85,9 +85,10 @@ public class ContactListMain_fragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 ArrayList<String> myList = ((ServiceApplication) getActivity().getApplication()).myContactList;
 
-                if (myList != null)
-                    iter = myList.iterator();
+                if (myList == null)
+                    return;
 
+                iter = myList.iterator();
                 while (iter.hasNext()) {
                     String cur = iter.next();
                     if (cur.equals(dataSnapshot.getKey())) {

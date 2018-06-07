@@ -70,9 +70,6 @@ public class Customized_main extends Fragment {
         list.add(new CustomizedAdapter.Item("Style4", "hjjooace@gmail.com", R.drawable.card4));
         list.add(new CustomizedAdapter.Item("Style5", "hjjooace@gmail.com", R.drawable.card5));
         list.add(new CustomizedAdapter.Item("Style6", "hjjooace@gmail.com", R.drawable.card6));
-
-
-
     }
     public void onClick(final View view) {
         itemPosition = mRecyclerView.getChildPosition(view);
