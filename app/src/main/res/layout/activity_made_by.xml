@@ -1,83 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MadeByActivity"
     android:orientation="vertical"
-    android:background="@drawable/shake_main">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/develop1"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="55dp"
-            android:layout_marginTop="149dp"
-            android:padding="10dp"
-            android:src="@drawable/user_profile"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp" />
-
-        <Button
-            android:id="@+id/develop1_email"
-            android:layout_width="120dp"
-            android:layout_height="30dp"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/develop1"
-            android:layout_marginStart="47dp"
-            android:background="@drawable/nametag"
-            android:text="홍 진 형" />
-
-        <Button
-            android:id="@+id/develop2_email"
-            android:layout_width="120dp"
-            android:layout_height="30dp"
-            android:layout_below="@+id/develop3"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="-162dp"
-            android:background="@drawable/nametag"
-            android:text="이 희 수" />
-
-        <Button
-            android:id="@+id/develop3_email"
-            android:layout_width="120dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/develop1"
-            android:layout_marginEnd="41dp"
-            android:background="@drawable/nametag"
-            android:text="주 형 진" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/develop2"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/develop1"
-            android:layout_marginEnd="55dp"
-            android:padding="10dp"
-            android:src="@drawable/user_profile"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/develop3"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="162dp"
-            android:padding="10dp"
-            android:src="@drawable/user_profile"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp" />
-    </RelativeLayout>
+    android:background="@drawable/developer">
 
 </LinearLayout>

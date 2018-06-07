@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -34,11 +38,14 @@ public class DialogFragment extends BlurDialogFragment {
      */
     private static final String BUNDLE_KEY_DEBUG = "bundle_key_debug_effect";
     private static final String BUNDLE_KEY_TEMPLATE = "bundle_key_template";
+    private static final String BUDLE_KEY_IS_USER = "bundle_key_isUser";
+
     private int mRadius;
     private float mDownScaleFactor;
     private boolean mDimming;
     private boolean mDebug;
     private int mTemplate;
+    private String isUser;
     private View view;
     CircleImageView mPicture, convertQRButton;
 
@@ -56,7 +63,8 @@ public class DialogFragment extends BlurDialogFragment {
                                              float downScaleFactor,
                                              boolean dimming,
                                              boolean debug,
-                                             int template) {
+                                             int template,
+                                             String isUser) {
         DialogFragment fragment = new DialogFragment();
         Bundle args = new Bundle();
         args.putInt(
@@ -79,6 +87,10 @@ public class DialogFragment extends BlurDialogFragment {
                 BUNDLE_KEY_TEMPLATE,
                 template
         );
+        args.putString(
+                BUDLE_KEY_IS_USER,
+                isUser
+        );
 
         fragment.setArguments(args);
         return fragment;
@@ -94,6 +106,7 @@ public class DialogFragment extends BlurDialogFragment {
         mDimming = args.getBoolean(BUNDLE_KEY_DIMMING);
         mDebug = args.getBoolean(BUNDLE_KEY_DEBUG);
         mTemplate = args.getInt(BUNDLE_KEY_TEMPLATE);
+        isUser = args.getString(BUDLE_KEY_IS_USER);
     }
 
     @Override
@@ -128,7 +141,10 @@ public class DialogFragment extends BlurDialogFragment {
             default:
                 break;
         }
-        setCardContent();
+        if (isUser == null)
+            setCardContent();
+        else
+            setCardContent(isUser);
 
         builder.setView(view);
         return builder.create();
@@ -159,12 +175,39 @@ public class DialogFragment extends BlurDialogFragment {
             mPicture.setImageResource(R.drawable.user_profile);
     }
 
+    private void setCardContent(String serial) {
+        String[] arr = serial.split("#");
+
+        mPicture = view.findViewById(R.id.user_picture1);
+        TextView name = view.findViewById(R.id.card_name);
+        TextView phone = view.findViewById(R.id.card_phoneNumber);
+        TextView email = view.findViewById(R.id.card_email);
+        convertQRButton = view.findViewById(R.id.convertQR);
+        convertQRButton.setVisibility(View.INVISIBLE);
+
+        name.setText(arr[0]);
+        phone.setText(arr[1]);
+        email.setText(arr[2]);
+        email.setSelected(true);
+        if (arr[3] != null)
+            mPicture.setImageBitmap(stringToBitmap(arr[3]));
+        else
+            mPicture.setImageResource(R.drawable.user_profile);
+    }
+
     private void startScanning() {
         Intent intent = new Intent(getActivity(), ContinuousCaptureActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
+    public Bitmap stringToBitmap(String bitmapString) {
+        if (bitmapString == null) return null;
+
+        Log.d("tag", "stringToBitmap: ");
+        byte[] bytes = Base64.decode(bitmapString, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
 
     @Override
     protected boolean isDebugEnable() {
@@ -194,7 +237,8 @@ public class DialogFragment extends BlurDialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        getActivity().finish();
+        if (isUser == null)
+            getActivity().finish();
     }
 
     @Override
