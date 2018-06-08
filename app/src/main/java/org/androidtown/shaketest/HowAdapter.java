@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 public class HowAdapter extends FragmentPagerAdapter {
     private Context _context;
-    public static int totalPage=4;
+    public static int totalPage=6;
     public HowAdapter(Context context, FragmentManager fm) {
         super(fm);
         _context=context;
@@ -29,6 +29,12 @@ public class HowAdapter extends FragmentPagerAdapter {
                 break;
             case 3:
                 f=HowPageManager.newInstance(4);
+                break;
+            case 4:
+                f=HowPageManager.newInstance(5);
+                break;
+            case 5:
+                f=HowPageManager.newInstance(6);
                 break;
             default:
 
