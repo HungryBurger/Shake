@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static org.androidtown.shaketest.ServiceApplication.myContactList;
+import static org.androidtown.shaketest.ServiceApplication.person;
 
 public class ContactListMain_fragment extends Fragment {
     private MyAdapter myAdapter;
@@ -46,7 +48,7 @@ public class ContactListMain_fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup mView = (ViewGroup) inflater.inflate(R.layout.activity_contact_list_main_fragment, container, false);
-        setInitialData();
+
         name = mView.findViewById(R.id.user_name);
         pnum = mView.findViewById(R.id.user_phone);
         email = mView.findViewById(R.id.user_email);
@@ -54,6 +56,7 @@ public class ContactListMain_fragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
+        setInitialData();
         myAdapter = new MyAdapter(getActivity(), productList, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,66 +74,73 @@ public class ContactListMain_fragment extends Fragment {
     }
 
     private void setInitialData() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference contactListRef = FirebaseDatabase.getInstance().getReference().child("users");
-        contactDataList = new ArrayList<>();
-
-        contactListRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                ArrayList<String> myList = myContactList;
-
-                if (myList == null)
-                    return;
-
-                iter = myList.iterator();
-                while (iter.hasNext()) {
-                    String cur = iter.next();
-                    if (cur.equals(dataSnapshot.getKey())) {
-                        DatabaseReference newRef = FirebaseDatabase.getInstance().getReference().child("users").child(cur).child("myInfo");
-
-                        newRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                ContactData contactData = dataSnapshot.getValue(ContactData.class);
-
-                                contactDataList.add(contactData);
-                                productList.add(
-                                        new MyAdapter.ContactInformation(
-                                                contactData
-                                        )
-                                );
-                                myAdapter.notifyDataSetChanged();
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                }
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
+        Log.d("연락처 목록", person.toString());
+        Iterator<String> iterator = person.keySet().iterator();
+        if (iterator == null) return;
+        while (iterator.hasNext()) {
+            productList.add(
+                    new MyAdapter.ContactInformation(
+                            person.get(iterator.next())
+                    )
+            );
+        }
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        DatabaseReference contactListRef = FirebaseDatabase.getInstance().getReference().child("users");
+//        contactDataList = new ArrayList<>();
+//
+//        contactListRef.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                ArrayList<String> myList = myContactList;
+//
+//                if (myList == null)
+//                    return;
+//
+//                iter = myList.iterator();
+//                while (iter.hasNext()) {
+//                    String cur = iter.next();
+//                    if (cur.equals(dataSnapshot.getKey())) {
+//                        DatabaseReference newRef = FirebaseDatabase.getInstance().getReference().child("users").child(cur).child("myInfo");
+//                        newRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(DataSnapshot dataSnapshot) {
+//                                ContactData contactData = dataSnapshot.getValue(ContactData.class);
+//
+//                                contactDataList.add(contactData);
+//                                productList.add(
+//                                        new MyAdapter.ContactInformation(
+//                                                contactData
+//                                        )
+//                                );
+//                                myAdapter.notifyDataSetChanged();
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(DatabaseError databaseError) {
+//
+//                            }
+//                        });
+//                    }
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 }

@@ -32,8 +32,6 @@ public class ShakeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shake);
         mSharedPrefs = SharedPrefManager.getInstance(getApplicationContext());
 
-        ((ServiceApplication)getApplication()).isShaking = true;
-        Log.d("isShaking", ((ServiceApplication)getApplication()).isShaking + "");
 
         DialogFragment fragment = DialogFragment.newInstance(10, 5, false, false, mSharedPrefs.getUserTemplateNo(), null);
         fragment.show(getFragmentManager(), "blur_sample");
@@ -136,6 +134,8 @@ public class ShakeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        ((ServiceApplication)getApplication()).isShaking = true;
+        Log.d("isShaking", ((ServiceApplication)getApplication()).isShaking + "");
 
         Log.d("tag", "onResume: write");
         NFCWrite();
@@ -152,10 +152,14 @@ public class ShakeActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
+    protected void onStop() {
+        super.onStop();
         ((ServiceApplication)getApplication()).isShaking = false;
         Log.d("isShaking", ((ServiceApplication)getApplication()).isShaking + "");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

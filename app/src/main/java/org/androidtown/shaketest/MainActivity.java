@@ -31,6 +31,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +41,9 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "GoogleActivity";
@@ -110,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startActivity(new Intent(getApplicationContext(), MainMenu.class));
                         startActivity(new Intent(getApplicationContext(), HowToUse.class));
                         mSharedPrefManager.setCheckFirst(true);
-
                     }
 
                     finish();
@@ -154,8 +157,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists())
-                    ((ServiceApplication)getApplication()).myContactList = (ArrayList<String>) dataSnapshot.getValue();
+                Log.d("데이터 전달 확인", dataSnapshot.getValue().toString());
+                if (dataSnapshot.exists()) {
+                    ((ServiceApplication) getApplication()).myContactList = (ArrayList<String>) dataSnapshot.getValue();
+                    ((ServiceApplication)getApplication()).person = new HashMap<>();
+                    Log.d("데이터 전달 확인", ((ServiceApplication) getApplication()).myContactList.toString());
+                    DatabaseReference contactListRef = FirebaseDatabase.getInstance().getReference().child("users");
+                    contactListRef.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                            Iterator<String> iter = ((ServiceApplication) getApplication()).myContactList.iterator();
+                            while (iter.hasNext()) {
+                                final String cur = iter.next();
+                                if (cur.equals(dataSnapshot.getKey())) {
+                                    DatabaseReference newRef = FirebaseDatabase.getInstance().getReference().child("users").child(cur).child("myInfo");
+                                    newRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            ContactData contactData = dataSnapshot.getValue(ContactData.class);
+                                            Log.d("연락처 목록", cur + "#" + contactData.getName());
+                                            ((ServiceApplication)getApplication()).person.put(
+                                                    cur,
+                                                    contactData
+                                            );
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                }
+                            }
+
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
             }
 
             @Override
