@@ -48,7 +48,7 @@ public class DialogFragment extends BlurDialogFragment {
     private int mTemplate;
     private String isUser;
     private View view;
-    CircleImageView mPicture, convertQRButton;
+    CircleImageView mPicture, convertQRButton, read;
 
     private SharedPrefManager mSharedPrefManager;
     /**
@@ -164,7 +164,14 @@ public class DialogFragment extends BlurDialogFragment {
                 startScanning();
             }
         });
-
+        read = view.findViewById(R.id.readNfc);
+        read.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ReadNFC.class);
+                startActivity(intent);
+            }
+        });
         name.setText(mSharedPrefManager.getUserName());
         phone.setText(mSharedPrefManager.getUserPhonenum());
         email.setText(mSharedPrefManager.getUserEmail());

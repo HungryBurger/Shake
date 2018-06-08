@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.androidtown.shaketest">
 
-    <uses-sdk android:minSdkVersion="16" />
+    <uses-sdk android:minSdkVersion="23" />
 
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -37,7 +37,6 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -51,24 +50,25 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".MainMenu">
-            <intent-filter>
-                <action android:name="android.nfc.action.TECH_DISCOVERED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="application/org.androidtown.shaketest" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".MainMenu" />
 
         <!-- NFC Field -->
-        <activity android:name=".ShakeActivity" />
-        <activity android:name=".MadeByActivity"></activity>
+        <activity android:name=".ShakeActivity"/>
+        <activity android:name=".MadeByActivity"/>
         <activity android:name=".ContinuousCaptureActivity" />
         <activity android:name=".HowToUse" />
+        <activity android:name=".ReadNFC">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="shake/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="shake/*"/>
+            </intent-filter>
+        </activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

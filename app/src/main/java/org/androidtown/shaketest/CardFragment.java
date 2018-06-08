@@ -24,8 +24,7 @@ public class CardFragment extends Fragment {
     private ViewGroup view;
     private SharedPrefManager mSharedPrefManager;
     CircleImageView mPicture,convertQRButton;
-    MainMenu activity;
-    userData userdata;
+
 
     public static CardFragment newInstance (int template) {
         CardFragment fragment = new CardFragment();
