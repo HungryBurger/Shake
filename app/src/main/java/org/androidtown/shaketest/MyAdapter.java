@@ -1,8 +1,8 @@
 package org.androidtown.shaketest;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -12,12 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -49,7 +45,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final ContactInformation product = productList.get(position);
 
-
         holder.name.setText(product.getText1());
         holder.pnum.setText(product.getText2());
         holder.email.setText(product.getText3());
@@ -61,7 +56,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                //TODO 데이터 삭제
+                deleteDialog();
                 return true;
             }
         });
@@ -75,11 +70,31 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                         product.getText3(),
                         bitmapToString(product.getImage())
                 );
+                Log.d("상대방 이미지", product.getImage().toString());
                 DialogFragment fragment = DialogFragment.newInstance(10, 5, false, false, product.getTemplateNo(), data);
                 fragment.show(((AppCompatActivity)context).getFragmentManager(), "blur_sample");
                 Toast.makeText(context, "onClick", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void deleteDialog () {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("연락처 삭제");
+        builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private String serializeData (String data1, String data2, String data3, String data4) {

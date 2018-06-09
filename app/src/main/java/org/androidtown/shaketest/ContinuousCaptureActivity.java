@@ -73,6 +73,7 @@ public class ContinuousCaptureActivity extends Activity {
                         if (!contactList.contains(uid)) {
                             contactList.add(uid);
                             contactListRef.setValue(contactList);
+                            ((ServiceApplication)getApplication()).myContactList.add(uid);
 
                             DatabaseReference newRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("myInfo");
                             newRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -85,6 +86,7 @@ public class ContinuousCaptureActivity extends Activity {
                                                 data.getPhoneNum(),
                                                 data.getEmail()
                                         );
+                                        ((ServiceApplication)getApplication()).person.put(uid, data);
                                     }
                                 }
                                 @Override

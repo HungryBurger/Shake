@@ -197,6 +197,9 @@ public class DialogFragment extends BlurDialogFragment {
         phone.setText(arr[1]);
         email.setText(arr[2]);
         email.setSelected(true);
+
+        Log.d("상대방 이미지 확인", stringToBitmap(arr[3]).toString());
+
         if (arr[3] != null)
             mPicture.setImageBitmap(stringToBitmap(arr[3]));
         else
