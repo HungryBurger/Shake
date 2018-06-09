@@ -87,6 +87,10 @@ public class ReadNFC extends AppCompatActivity {
                                         data.getEmail()
                                 );
                                 ((ServiceApplication) getApplication()).person.put(opponent, data);
+                                DialogFragment fragment = DialogFragment.newInstance(
+                                        10, 5, false, false, data.getTemplate_no(), data
+                                );
+                                fragment.show(getFragmentManager(), "blur_sample");
                             }
                         }
                     }
@@ -112,7 +116,6 @@ public class ReadNFC extends AppCompatActivity {
 
         IntentFilter filter = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
         try {
-            //filter.addDataType("");
             Log.d("tag", "onResume: filter");
         } catch (Exception e) {
             Log.d("tag", "onResume:error ");
@@ -182,6 +185,7 @@ public class ReadNFC extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 }
 
 

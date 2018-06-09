@@ -56,10 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private GoogleSignInClient mGoogleSignInClient;
     private DatabaseReference mDatabase;
     private SharedPrefManager mSharedPrefManager;
-    private String displayUserName;
-    private String displayUserEmail;
     private String displayUserPhoneNumber;
-    private boolean chkFirst = false;
 
     // SCREEN_ON_OFF_BROADCAST_RECEIVER
     private BroadCastManager mBroadCastManager;
@@ -130,12 +127,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         PermissionListener permissionListener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-                Toast.makeText(getApplicationContext(), "권한 허가", Toast.LENGTH_SHORT).show();
+                Log.d("Permission", "권한 허가");
             }
 
             @Override
             public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(getApplicationContext(), "권한 거부", Toast.LENGTH_SHORT).show();
+                Log.d("Permission", "권한 거부");
             }
         };
         TedPermission.with(this)

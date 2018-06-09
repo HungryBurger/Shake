@@ -163,14 +163,7 @@ public class DialogFragment extends BlurDialogFragment {
                 startScanning();
             }
         });
-//        read = view.findViewById(R.id.readNfc);
-//        read.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), ReadNFC.class);
-//                startActivity(intent);
-//            }
-//        });
+
         name.setText(mSharedPrefManager.getUserName());
         phone.setText(mSharedPrefManager.getUserPhonenum());
         email.setText(mSharedPrefManager.getUserEmail());
@@ -187,6 +180,7 @@ public class DialogFragment extends BlurDialogFragment {
         TextView name = view.findViewById(R.id.card_name);
         final TextView phone = view.findViewById(R.id.card_phoneNumber);
         final TextView email = view.findViewById(R.id.card_email);
+
         convertQRButton = view.findViewById(R.id.convertQR);
         convertQRButton.setVisibility(View.INVISIBLE);
 
@@ -195,12 +189,8 @@ public class DialogFragment extends BlurDialogFragment {
         email.setText(oppo.getEmail());
         email.setSelected(true);
 
-        //Log.d("상대방 이미지 확인", stringToBitmap(oppo.getImage()).toString());
-
-        if (oppo.getImage() != null) {
-            this.mPicture.setImageURI(null);
+        if (oppo.getImage() != null)
             this.mPicture.setImageBitmap(stringToBitmap(oppo.getImage()));
-        }
         else
             mPicture.setImageResource(R.drawable.user_profile);
 
@@ -274,10 +264,5 @@ public class DialogFragment extends BlurDialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        if (mSharedPrefManager.getUserImage() != null) {
-            mPicture.setImageBitmap(mSharedPrefManager.getUserImage());
-        } else
-            mPicture.setImageResource(R.drawable.user_profile);
     }
 }

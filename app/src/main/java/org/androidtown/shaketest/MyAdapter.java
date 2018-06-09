@@ -64,7 +64,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             @Override
             public boolean onLongClick(View v) {
                 deleteDialog(product.getUid(), position);
-
                 return true;
             }
         });
@@ -83,7 +82,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                         10, 5, false, false, product.getTemplateNo(), cur
                 );
                 fragment.show(((AppCompatActivity) context).getFragmentManager(), "blur_sample");
-                Toast.makeText(context, "onClick", Toast.LENGTH_SHORT).show();
+                Log.d("ListView", "onItemClicked");
             }
         });
     }
@@ -94,14 +93,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Log.d("목록 지우기", "현재 개수: " + ServiceApplication.myContactList.size() + " " +  ServiceApplication.person.size());
                 ServiceApplication.myContactList.remove(uid);
                 ServiceApplication.person.remove(uid);
 
                 productList.remove(pos);
                 notifyItemRemoved(pos);
                 updateDB();
-                Log.d("목록 지우기", "나중 개수: " + ServiceApplication.myContactList.size() + " " +  ServiceApplication.person.size());
             }
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -115,7 +112,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     private void updateDB () {
-        Log.d("목록 지우기 업데이트", "나중 개수: " + ServiceApplication.myContactList.size() + " " +  ServiceApplication.person.size());
         final DatabaseReference mRef = FirebaseDatabase.getInstance().getReference().child("contact_list").child(mSharedPrefManager.getUserUid());
         mRef.setValue(ServiceApplication.myContactList);
     }

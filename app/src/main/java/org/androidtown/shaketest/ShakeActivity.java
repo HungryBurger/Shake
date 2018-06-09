@@ -110,103 +110,16 @@ public class ShakeActivity extends AppCompatActivity implements NfcAdapter.Creat
         mWriteMode = true;
 
     }
- /*
+
     @Override
     protected void onResume() {
         super.onResume();
-        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
-        IntentFilter[] mWriteTagFilters = new IntentFilter[]{tagDetected};
-        mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mWriteTagFilters, null);
-
+        stopService(new Intent(getApplicationContext(), ShakeService.class));
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        mNfcAdapter.disableForegroundDispatch(this);
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(getApplicationContext(), ShakeService.class));
     }
-
-       private void disableTagWriteMode() {
-        mWriteMode = false;
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        Log.d("tag", "onNewIntent: write");
-        if (mWriteMode && (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction()) || NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction()))) {
-            Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            Log.d("tag", "onNewIntent: " + mSharedPrefs.getUserUid());
-            NdefRecord record = NdefRecord.createMime("shake/nfc", mSharedPrefs.getUserUid().getBytes());
-            NdefMessage message = new NdefMessage(new NdefRecord[]{record});
-
-            // detected tag
-            if (writeTag(message, detectedTag)) {
-                disableTagWriteMode();
-                Toast.makeText(this, "NFC 태그에 데이터를 작성했습니다.", Toast.LENGTH_SHORT).show();
-            }
-
-        }
-    }
-
-    public boolean writeTag(NdefMessage message, Tag tag) {
-        int size = message.toByteArray().length;
-        Log.d("tag", "writeTag: ");
-        try {
-            Ndef ndef = Ndef.get(tag);
-            if (ndef != null) {
-                ndef.connect();
-                if (!ndef.isWritable()) {
-                    Toast.makeText(getApplicationContext(), "태그에 데이터를 작성할 수 없습니다.", Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-                if (ndef.getMaxSize() < size) {
-                    Toast.makeText(getApplicationContext(), "태그 사이즈가 너무 작습니다.", Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-                ndef.writeNdefMessage(message);
-                return true;
-            } else {
-                NdefFormatable format = NdefFormatable.get(tag);
-                if (format != null) {
-                    try {
-                        format.connect();
-                        format.format(message);
-                        return true;
-                    } catch (IOException e) {
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
-            }
-        } catch (Exception e) {
-            return false;
-        }
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Log.d("tag", "onResume: write");
-        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
-        IntentFilter[] mWriteTagFilters = new IntentFilter[]{tagDetected};
-        mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mWriteTagFilters, null);
-        Log.d("tag", "onResume: second");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("tag", "onResume: write");
-        mNfcAdapter.disableForegroundDispatch(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        ((ServiceApplication)getApplication()).isShaking = false;
-        Log.d("isShaking", ((ServiceApplication)getApplication()).isShaking + "");
-    }
-    */
 }

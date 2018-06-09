@@ -84,14 +84,14 @@ public class ShakeService extends Service implements SensorEventListener {
             double squaredD = Math.sqrt(f.doubleValue());
             float gForce = (float) squaredD;
 
-            if (gForce > SHAKE_THRESHOLD_GRAVITY && !((ServiceApplication)getApplication()).isShaking) {
+            if (gForce > SHAKE_THRESHOLD_GRAVITY) {
                 /* 흔들림이 감지 되는 부분 */
+                Log.d("MyService", "흔들림 감지");
                 long currentTime = System.currentTimeMillis();
 
                 if (mShakeTime + SHAKE_SKIP_TIME > currentTime) {
                     return;
-                }
-                mShakeTime = currentTime;
+                } mShakeTime = currentTime;
 
                 Intent intent = new Intent(ShakeService.this, ShakeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
