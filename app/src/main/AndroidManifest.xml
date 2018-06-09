@@ -68,6 +68,13 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="shake/*"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <meta-data android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/tech_list"/>
+
         </activity>
 
         <provider
