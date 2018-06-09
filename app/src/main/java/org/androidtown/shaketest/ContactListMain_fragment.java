@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,10 +33,7 @@ public class ContactListMain_fragment extends Fragment {
     private MyAdapter myAdapter;
     RecyclerView recyclerView;
     static TextView name, pnum, email;
-    TextView list_pos;
     List<MyAdapter.ContactInformation> productList = new ArrayList<>();
-    ArrayList<ContactData> contactDataList;
-    Iterator<String> iter;
 
     public static ContactListMain_fragment newInstance() {
         Bundle args = new Bundle();
@@ -68,79 +66,25 @@ public class ContactListMain_fragment extends Fragment {
                 builder.create().show();
             }
         });
-
         recyclerView.setAdapter(myAdapter);
         return mView;
     }
 
     private void setInitialData() {
-        Log.d("연락처 목록", person.toString());
-        Iterator<String> iterator = person.keySet().iterator();
-        if (iterator == null) return;
+        HashMap<String, ContactData> list = ServiceApplication.person;
+        Log.d("리스트뷰1", ServiceApplication.person.toString());
+        if (list == null) return;
+
+        Iterator<String> iterator = list.keySet().iterator();
         while (iterator.hasNext()) {
+            String cur = iterator.next();
+            Log.d("리스트뷰3", "생성 생성");
             productList.add(
                     new MyAdapter.ContactInformation(
-                            person.get(iterator.next())
+                            cur,
+                            list.get(cur)
                     )
             );
         }
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        DatabaseReference contactListRef = FirebaseDatabase.getInstance().getReference().child("users");
-//        contactDataList = new ArrayList<>();
-//
-//        contactListRef.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                ArrayList<String> myList = myContactList;
-//
-//                if (myList == null)
-//                    return;
-//
-//                iter = myList.iterator();
-//                while (iter.hasNext()) {
-//                    String cur = iter.next();
-//                    if (cur.equals(dataSnapshot.getKey())) {
-//                        DatabaseReference newRef = FirebaseDatabase.getInstance().getReference().child("users").child(cur).child("myInfo");
-//                        newRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(DataSnapshot dataSnapshot) {
-//                                ContactData contactData = dataSnapshot.getValue(ContactData.class);
-//
-//                                contactDataList.add(contactData);
-//                                productList.add(
-//                                        new MyAdapter.ContactInformation(
-//                                                contactData
-//                                        )
-//                                );
-//                                myAdapter.notifyDataSetChanged();
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(DatabaseError databaseError) {
-//
-//                            }
-//                        });
-//                    }
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 }

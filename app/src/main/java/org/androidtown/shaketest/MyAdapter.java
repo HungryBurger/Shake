@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.LocationListener;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
@@ -15,24 +16,30 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     Context context;
-    List<ContactInformation> productList = new ArrayList<>();
+    List<ContactInformation> productList;
     View.OnClickListener mListener;
     View.OnLongClickListener mLongListener;
-    private HashMap<Integer, ContactData> list;
+    private SharedPrefManager mSharedPrefManager;
 
     public MyAdapter(Context context, List<ContactInformation> productList, View.OnClickListener mListener) {
         this.context = context;
         this.productList = productList;
         this.mListener = mListener;
+        mSharedPrefManager = SharedPrefManager.getInstance(context);
     }
 
     @Override
@@ -42,7 +49,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final ContactInformation product = productList.get(position);
 
         holder.name.setText(product.getText1());
@@ -56,7 +63,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                deleteDialog();
+                deleteDialog(product.getUid(), position);
+
                 return true;
             }
         });
@@ -64,27 +72,36 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String data = serializeData(
+                ContactData cur = new ContactData(
                         product.getText1(),
                         product.getText2(),
                         product.getText3(),
+                        product.getTemplateNo(),
                         bitmapToString(product.getImage())
                 );
-                Log.d("상대방 이미지", product.getImage().toString());
-                DialogFragment fragment = DialogFragment.newInstance(10, 5, false, false, product.getTemplateNo(), data);
-                fragment.show(((AppCompatActivity)context).getFragmentManager(), "blur_sample");
+                DialogFragment fragment = DialogFragment.newInstance(
+                        10, 5, false, false, product.getTemplateNo(), cur
+                );
+                fragment.show(((AppCompatActivity) context).getFragmentManager(), "blur_sample");
                 Toast.makeText(context, "onClick", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    public void deleteDialog () {
+    public void deleteDialog(final String uid, final int pos) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("연락처 삭제");
         builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Log.d("목록 지우기", "현재 개수: " + ServiceApplication.myContactList.size() + " " +  ServiceApplication.person.size());
+                ServiceApplication.myContactList.remove(uid);
+                ServiceApplication.person.remove(uid);
 
+                productList.remove(pos);
+                notifyItemRemoved(pos);
+                updateDB();
+                Log.d("목록 지우기", "나중 개수: " + ServiceApplication.myContactList.size() + " " +  ServiceApplication.person.size());
             }
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -97,9 +114,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         alertDialog.show();
     }
 
-    private String serializeData (String data1, String data2, String data3, String data4) {
-        String serial = data1 + "#" + data2 + "#" + data3 + "#" + data4;
-        return serial;
+    private void updateDB () {
+        Log.d("목록 지우기 업데이트", "나중 개수: " + ServiceApplication.myContactList.size() + " " +  ServiceApplication.person.size());
+        final DatabaseReference mRef = FirebaseDatabase.getInstance().getReference().child("contact_list").child(mSharedPrefManager.getUserUid());
+        mRef.setValue(ServiceApplication.myContactList);
     }
 
     public String bitmapToString(Bitmap bitmap) {
@@ -113,7 +131,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-
         return productList.size();
     }
 
@@ -122,7 +139,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         TextView name;
         TextView pnum;
         TextView email;
-        TextView list_pos;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -138,9 +154,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     public static class ContactInformation {
+        String uid;
         String name, phoneNum, email, image;
-
         int templateNo;
+
+        public void setUid (String uid) {
+            this.uid = uid;
+        }
+
+        public String getUid () {
+            return this.uid;
+        }
 
         public String getText1() {
             return name;
@@ -174,15 +198,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             this.templateNo = image;
         }
 
-        public void setImage (String image) {
+        public void setImage(String image) {
             this.image = image;
         }
 
-        public Bitmap getImage () {
+        public Bitmap getImage() {
             return stringToBitmap(this.image);
         }
 
-        public ContactInformation(ContactData current) {
+        public ContactInformation(String uid, ContactData current) {
+            setUid(uid);
             setText1(current.getName());
             setText2(current.getPhoneNum());
             setText3(current.getEmail());

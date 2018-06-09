@@ -117,7 +117,7 @@ public class SharedPrefManager {
     public void setUserImage(Bitmap userImage) {
         mEditor.putString(USER_IMAGE, bitmapToString(userImage));
         mEditor.commit();
-        updateMyImgInfo();
+        updateMyInfo();
     }
 
     public Bitmap getUserImage() {
@@ -160,37 +160,8 @@ public class SharedPrefManager {
         return Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT);
     }
 
-    public void updateMyImgInfo() {
-                    mReference = FirebaseDatabase.getInstance().getReference().child("users").child(getUserUid()).child("myInfo");
-
-                    mReference.setValue(null);
-                    mReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            mReference.setValue(getUserData());
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
     public void updateMyInfo() {
-        mReference = FirebaseDatabase.getInstance().getReference().child("users").child(getUserUid()).child("myInfo");
-
-        mReference.setValue(null);
-        mReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mReference.setValue(getUserData());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        mReference = FirebaseDatabase.getInstance().getReference().child("myInfo").child(getUserUid());
+        mReference.setValue(getUserData());
     }
 }

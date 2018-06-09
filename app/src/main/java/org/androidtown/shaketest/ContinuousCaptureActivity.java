@@ -32,6 +32,7 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +43,7 @@ public class ContinuousCaptureActivity extends Activity {
     private BeepManager beepManager;
     private String lastText;
     private final String HEADER = "shake#";
+    private SharedPrefManager mSharedPrefManager;
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
@@ -58,46 +60,37 @@ public class ContinuousCaptureActivity extends Activity {
                 Toast.makeText(getApplicationContext(), "스캔 완료!", Toast.LENGTH_SHORT).show();
 
                 final String uid = arr[1];
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                final DatabaseReference contactListRef = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("contact_list");
 
-                contactListRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                DatabaseReference contactListRef = FirebaseDatabase.getInstance().getReference().child("contact_list").child(mSharedPrefManager.getUserUid());
+                if (((ServiceApplication) getApplication()).myContactList == null) {
+                    ((ServiceApplication) getApplication()).myContactList = new ArrayList<>();
+                    ((ServiceApplication) getApplication()).person = new HashMap<>();
+                }
+                if (((ServiceApplication) getApplication()).myContactList.contains(uid)) return;
+
+                ((ServiceApplication) getApplication()).myContactList.add(uid);
+                contactListRef.setValue(((ServiceApplication) getApplication()).myContactList);
+
+                DatabaseReference infoRef = FirebaseDatabase.getInstance().getReference().child("myInfo").child(uid);
+                infoRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        ArrayList<String> contactList = null;
                         if (dataSnapshot.exists()) {
-                            contactList = (ArrayList<String>) dataSnapshot.getValue();
-                        } else {
-                            contactList = new ArrayList<>();
-                        }
-                        if (!contactList.contains(uid)) {
-                            contactList.add(uid);
-                            contactListRef.setValue(contactList);
-                            ((ServiceApplication)getApplication()).myContactList.add(uid);
-
-                            DatabaseReference newRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("myInfo");
-                            newRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    ContactData data = dataSnapshot.getValue(ContactData.class);
-                                    if (data != null) {
-                                        saveContacts(
-                                                data.getName(),
-                                                data.getPhoneNum(),
-                                                data.getEmail()
-                                        );
-                                        ((ServiceApplication)getApplication()).person.put(uid, data);
-                                    }
-                                }
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                }
-                            });
+                            ContactData data = dataSnapshot.getValue(ContactData.class);
+                            if (data != null) {
+                                saveContacts(
+                                        data.getName(),
+                                        data.getPhoneNum(),
+                                        data.getEmail()
+                                );
+                                ((ServiceApplication) getApplication()).person.put(uid, data);
+                            }
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
+
                     }
                 });
             } else {
@@ -118,6 +111,7 @@ public class ContinuousCaptureActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mSharedPrefManager = SharedPrefManager.getInstance(getApplicationContext());
         setContentView(R.layout.continuous_scan);
         ((ImageView) findViewById(R.id.qrView)).setImageBitmap(generateQRCode(makeContents()));
 
@@ -125,7 +119,6 @@ public class ContinuousCaptureActivity extends Activity {
         Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE, BarcodeFormat.CODE_39);
         barcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(formats));
         barcodeView.decodeContinuous(callback);
-
         beepManager = new BeepManager(this);
     }
 
@@ -136,7 +129,7 @@ public class ContinuousCaptureActivity extends Activity {
      * @return
      */
     private String makeContents() {
-        return (HEADER + FirebaseAuth.getInstance().getUid());
+        return (HEADER + mSharedPrefManager.getUserUid());
     }
 
     //Overloading

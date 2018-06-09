@@ -39,14 +39,14 @@ public class DialogFragment extends BlurDialogFragment {
      */
     private static final String BUNDLE_KEY_DEBUG = "bundle_key_debug_effect";
     private static final String BUNDLE_KEY_TEMPLATE = "bundle_key_template";
-    private static final String BUDLE_KEY_IS_USER = "bundle_key_isUser";
+    private static final String BUNDLE_KEY_IS_OPPONENT = "bundle_key_opponent";
 
     private int mRadius;
     private float mDownScaleFactor;
     private boolean mDimming;
     private boolean mDebug;
     private int mTemplate;
-    private String isUser;
+    private ContactData mOpponent;
     private View view;
     CircleImageView mPicture, convertQRButton, read;
 
@@ -65,7 +65,7 @@ public class DialogFragment extends BlurDialogFragment {
                                              boolean dimming,
                                              boolean debug,
                                              int template,
-                                             String isUser) {
+                                             ContactData opponent) {
         DialogFragment fragment = new DialogFragment();
         Bundle args = new Bundle();
         args.putInt(
@@ -88,9 +88,9 @@ public class DialogFragment extends BlurDialogFragment {
                 BUNDLE_KEY_TEMPLATE,
                 template
         );
-        args.putString(
-                BUDLE_KEY_IS_USER,
-                isUser
+        args.putSerializable(
+                BUNDLE_KEY_IS_OPPONENT,
+                opponent
         );
 
         fragment.setArguments(args);
@@ -107,13 +107,12 @@ public class DialogFragment extends BlurDialogFragment {
         mDimming = args.getBoolean(BUNDLE_KEY_DIMMING);
         mDebug = args.getBoolean(BUNDLE_KEY_DEBUG);
         mTemplate = args.getInt(BUNDLE_KEY_TEMPLATE);
-        isUser = args.getString(BUDLE_KEY_IS_USER);
+        mOpponent = (ContactData) args.getSerializable(BUNDLE_KEY_IS_OPPONENT);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mSharedPrefManager = SharedPrefManager.getInstance(getContext());
     }
 
@@ -142,17 +141,17 @@ public class DialogFragment extends BlurDialogFragment {
             default:
                 break;
         }
-        if (isUser == null)
+        if (mOpponent == null)
             setCardContent();
         else
-            setCardContent(isUser);
+            setCardContent(mOpponent);
 
         builder.setView(view);
         return builder.create();
     }
 
     private void setCardContent() {
-        mPicture = view.findViewById(R.id.user_picture1);
+        this.mPicture = view.findViewById(R.id.user_picture1);
         TextView name = view.findViewById(R.id.card_name);
         TextView phone = view.findViewById(R.id.card_phoneNumber);
         TextView email = view.findViewById(R.id.card_email);
@@ -178,14 +177,12 @@ public class DialogFragment extends BlurDialogFragment {
         email.setSelected(true);
 
         if (mSharedPrefManager.getUserImage() != null)
-            mPicture.setImageBitmap(mSharedPrefManager.getUserImage());
+            this.mPicture.setImageBitmap(mSharedPrefManager.getUserImage());
         else
-            mPicture.setImageResource(R.drawable.user_profile);
+            this.mPicture.setImageResource(R.drawable.user_profile);
     }
 
-    private void setCardContent(String serial) {
-        String[] arr = serial.split("#");
-
+    private void setCardContent(ContactData oppo) {
         mPicture = view.findViewById(R.id.user_picture1);
         TextView name = view.findViewById(R.id.card_name);
         final TextView phone = view.findViewById(R.id.card_phoneNumber);
@@ -193,15 +190,17 @@ public class DialogFragment extends BlurDialogFragment {
         convertQRButton = view.findViewById(R.id.convertQR);
         convertQRButton.setVisibility(View.INVISIBLE);
 
-        name.setText(arr[0]);
-        phone.setText(arr[1]);
-        email.setText(arr[2]);
+        name.setText(oppo.getName());
+        phone.setText(oppo.getPhoneNum());
+        email.setText(oppo.getEmail());
         email.setSelected(true);
 
-        Log.d("상대방 이미지 확인", stringToBitmap(arr[3]).toString());
+        //Log.d("상대방 이미지 확인", stringToBitmap(oppo.getImage()).toString());
 
-        if (arr[3] != null)
-            mPicture.setImageBitmap(stringToBitmap(arr[3]));
+        if (oppo.getImage() != null) {
+            this.mPicture.setImageURI(null);
+            this.mPicture.setImageBitmap(stringToBitmap(oppo.getImage()));
+        }
         else
             mPicture.setImageResource(R.drawable.user_profile);
 
@@ -218,7 +217,6 @@ public class DialogFragment extends BlurDialogFragment {
         email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 startActivity(new Intent(
                         Intent.ACTION_SENDTO,
                         Uri.parse("mailto:" + email.getText())
@@ -269,7 +267,7 @@ public class DialogFragment extends BlurDialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        if (isUser == null)
+        if (mOpponent == null)
             getActivity().finish();
     }
 

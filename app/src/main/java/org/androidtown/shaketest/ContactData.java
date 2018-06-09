@@ -1,5 +1,8 @@
 package org.androidtown.shaketest;
-public class ContactData {
+
+import java.io.Serializable;
+
+public class ContactData implements Serializable{
 
     private String name;
     private String phoneNum;

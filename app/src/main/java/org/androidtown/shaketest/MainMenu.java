@@ -51,6 +51,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -67,6 +68,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -93,7 +96,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     private FragmentManager fragmentManager;
     int backbuttonChk = 0;
     SharedPrefManager mSharedPrefs;
-    userData userdata;
 
     private long backKeyPressedTime = 0;
     private Toast toast;
@@ -222,12 +224,49 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     protected void onResume() {
         super.onResume();
-
+        Log.d("메인메뉴", "접근");
+        checkUpdateInfo();
         if (mSharedPrefs.getUserImage() != null)
             mPicture1.setImageBitmap(mSharedPrefs.getUserImage());
         else {
             mPicture1.setImageResource(R.drawable.user_profile);
         }
+    }
+
+    private void checkUpdateInfo () {
+        DatabaseReference infoReference = FirebaseDatabase.getInstance().getReference().child("myInfo");
+        infoReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d("메인메뉴차일드", dataSnapshot.getKey() + "#" + dataSnapshot.getValue());
+                if (((ServiceApplication) getApplication()).myContactList.contains(dataSnapshot.getKey())) {
+                    ((ServiceApplication) getApplication()).person.put(
+                            dataSnapshot.getKey(),
+                            dataSnapshot.getValue(ContactData.class)
+                    );
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

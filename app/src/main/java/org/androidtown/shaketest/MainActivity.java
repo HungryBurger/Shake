@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String displayUserName;
     private String displayUserEmail;
     private String displayUserPhoneNumber;
-    private boolean chkFirst=false;
+    private boolean chkFirst = false;
 
     // SCREEN_ON_OFF_BROADCAST_RECEIVER
     private BroadCastManager mBroadCastManager;
@@ -68,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d("메인엑티비티", "접근");
+
 
         getPermission();
         mSharedPrefManager = SharedPrefManager.getInstance(this);
@@ -80,9 +83,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 Log.d("MainActivity", "구글 인증");
                 mUser = mAuth.getCurrentUser();
-                if(mUser != null) {
-                    mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).child("myInfo");
-
+                if (mUser != null) {
+                    mDatabase = FirebaseDatabase.getInstance().getReference().child("myInfo").child(mUser.getUid());
                     if (!mSharedPrefManager.getCheckFirst()) {
                         Log.d("MainActivity", "아다임");
                         /* 첫 로그인 */
@@ -106,11 +108,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mBroadCastManager = BroadCastManager.getInstance(getApplicationContext());
                     }
 
-                    if(mSharedPrefManager.getCheckFirst()==true)
+                    if (mSharedPrefManager.getCheckFirst() == true)
                         startActivity(new Intent(getApplicationContext(), MainMenu.class));
 
-                    else
-                    {
+                    else {
                         startActivity(new Intent(getApplicationContext(), MainMenu.class));
                         startActivity(new Intent(getApplicationContext(), HowToUse.class));
                         mSharedPrefManager.setCheckFirst(true);
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
     }
 
-    private void getPermission () {
+    private void getPermission() {
         PermissionListener permissionListener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
@@ -151,70 +152,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ).check();
     }
 
-    private void setMyContactList () {
-        DatabaseReference mReference = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).child("contact_list");
+    private void setMyContactList() {
+        DatabaseReference listReference = FirebaseDatabase.getInstance().getReference().child("contact_list").child(mUser.getUid());
 
-        mReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        listReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //Log.d("데이터 전달 확인", dataSnapshot.getValue().toString());
-                if (dataSnapshot.exists()) {
-                    ((ServiceApplication) getApplication()).myContactList = (ArrayList<String>) dataSnapshot.getValue();
-                    ((ServiceApplication)getApplication()).person = new HashMap<>();
-                    Log.d("데이터 전달 확인", ((ServiceApplication) getApplication()).myContactList.toString());
-                    DatabaseReference contactListRef = FirebaseDatabase.getInstance().getReference().child("users");
-                    contactListRef.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (!dataSnapshot.exists()) return;
 
-                            Iterator<String> iter = ((ServiceApplication) getApplication()).myContactList.iterator();
-                            while (iter.hasNext()) {
-                                final String cur = iter.next();
-                                if (cur.equals(dataSnapshot.getKey())) {
-                                    DatabaseReference newRef = FirebaseDatabase.getInstance().getReference().child("users").child(cur).child("myInfo");
-                                    newRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                            ContactData contactData = dataSnapshot.getValue(ContactData.class);
-                                            Log.d("연락처 목록", cur + "#" + contactData.getName());
-                                            ((ServiceApplication)getApplication()).person.put(
-                                                    cur,
-                                                    contactData
-                                            );
-                                        }
+                ((ServiceApplication) getApplication()).myContactList = (ArrayList<String>) dataSnapshot.getValue();
+                ((ServiceApplication) getApplication()).person = new HashMap<>();
 
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-
-                                        }
-                                    });
-                                }
-                            }
-
+                DatabaseReference infoReference = FirebaseDatabase.getInstance().getReference().child("myInfo");
+                infoReference.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        Log.d("메인차일드", dataSnapshot.getKey() + "#" + dataSnapshot.getValue());
+                        if (((ServiceApplication) getApplication()).myContactList.contains(dataSnapshot.getKey())) {
+                            ((ServiceApplication) getApplication()).person.put(
+                                    dataSnapshot.getKey(),
+                                    dataSnapshot.getValue(ContactData.class)
+                            );
                         }
+                    }
 
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                        }
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-                        }
+                    }
 
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                        }
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                    }
 
-                        }
-                    });
-                }
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
@@ -230,7 +217,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             displayUserPhoneNumber = PhoneNumberUtils.formatNumber(phoneNum);
         } catch (SecurityException e) {
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-        } return displayUserPhoneNumber;
+        }
+        return displayUserPhoneNumber;
     }
 
     private void init() {
@@ -245,7 +233,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build();
         // [END config_signin]
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
         myContact();
     }
 
@@ -263,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStop() {
         super.onStop();
 
-        if(mListener != null) {
+        if (mListener != null) {
             mAuth.removeAuthStateListener(mListener);
         }
     }
