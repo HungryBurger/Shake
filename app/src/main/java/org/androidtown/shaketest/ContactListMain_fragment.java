@@ -72,13 +72,11 @@ public class ContactListMain_fragment extends Fragment {
 
     private void setInitialData() {
         HashMap<String, ContactData> list = ServiceApplication.person;
-        Log.d("리스트뷰1", ServiceApplication.person.toString());
         if (list == null) return;
 
         Iterator<String> iterator = list.keySet().iterator();
         while (iterator.hasNext()) {
             String cur = iterator.next();
-            Log.d("리스트뷰3", "생성 생성");
             productList.add(
                     new MyAdapter.ContactInformation(
                             cur,

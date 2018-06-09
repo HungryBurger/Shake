@@ -22,64 +22,18 @@ public class ReadNFC extends AppCompatActivity {
     private PendingIntent pIntent;
     private IntentFilter[] filters;
     Intent intent;
+    String templateNum,name,Email,phoneNum;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        textView = new TextView(this);
-        setContentView(textView);
+        setContentView(R.layout.activity_read);
+        textView = (TextView) findViewById(R.id.read_id);
+       // textView = new TextView(this);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         getNFCData(getIntent());
         Log.d("tag", "onCreate: readfirst");
-        //  textView = findViewById(R.id.text);
-//        intent = new Intent(getApplicationContext(), ReadNFC.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//        pIntent = PendingIntent.getActivity(getApplicationContext(), 0,
-//                intent, 0);
-//
-//        // set an intent filter for all MIME data
-//        IntentFilter ndefIntent = new IntentFilter(
-//                NfcAdapter.ACTION_NDEF_DISCOVERED);
-//        try {
-//            ndefIntent.addDataType("*/*");
-//            filters = new IntentFilter[]{ndefIntent};
-//        } catch (Exception e) {
-//            Log.e("TagDispatch", e.toString());
-//        }
     }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        nfcAdapter.enableForegroundDispatch(this, pIntent, filters, null);
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        nfcAdapter.disableForegroundDispatch(this);
-//    }
-//
-//    @Override
-//    protected void onNewIntent(Intent intent) {
-//        super.onNewIntent(intent);
-//        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
-//            Parcelable[] data = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-//            if (data != null) {
-//                NdefMessage[] messages = new NdefMessage[data.length];
-//                for (int i = 0; i < data.length; ++i) {
-//                    messages[i] = (NdefMessage) data[i];
-//                }
-//                byte[] payload = messages[0].getRecords()[0].getPayload();
-//                textView.append("\n" + new String(payload));
-//            }
-//        }
-//        Log.d("onNewIntent", "onNewIntent");
-//        setIntent(intent);
-//
-//        return;
-//    }
-
 
     private void getNFCData(Intent intent) {
         Log.d("tag", "ReadNFCgetNFCData: ");
@@ -91,10 +45,12 @@ public class ReadNFC extends AppCompatActivity {
                     messages[i] = (NdefMessage) data[i];
                 }
                 byte[] payload = messages[0].getRecords()[0].getPayload();
-                textView.append("\n" + new String(payload));
+                textView.setText("\n" + new String(payload));
+
             }
         }
     }
+
 
     @Override
     protected void onResume() {

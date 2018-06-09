@@ -238,7 +238,8 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         infoReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d("메인메뉴차일드", dataSnapshot.getKey() + "#" + dataSnapshot.getValue());
+                if (((ServiceApplication) getApplication()).myContactList == null) return;
+
                 if (((ServiceApplication) getApplication()).myContactList.contains(dataSnapshot.getKey())) {
                     ((ServiceApplication) getApplication()).person.put(
                             dataSnapshot.getKey(),

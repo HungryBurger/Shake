@@ -111,7 +111,8 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="bottom"
-                android:src="@drawable/question" />
+                android:src="@drawable/nfc_button"
+                android:scaleType="fitXY"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
