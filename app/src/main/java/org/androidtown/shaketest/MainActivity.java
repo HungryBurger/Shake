@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("데이터 전달 확인", dataSnapshot.getValue().toString());
+                //Log.d("데이터 전달 확인", dataSnapshot.getValue().toString());
                 if (dataSnapshot.exists()) {
                     ((ServiceApplication) getApplication()).myContactList = (ArrayList<String>) dataSnapshot.getValue();
                     ((ServiceApplication)getApplication()).person = new HashMap<>();
