@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 public class HowToUse extends FragmentActivity {
     private ViewPager _mViewPager;
     private HowAdapter _adapter;
-    Button btn1, btn2, btn3, btn4, btn5, btn6;
+    Button btn1, btn2, btn3, btn4, btn5,btn6 ,btn7;
     Button skip_btn;
 
     @Override
@@ -68,7 +68,7 @@ public class HowToUse extends FragmentActivity {
                 btn4.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
                 btn5.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
                 btn6.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
-
+                btn7.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
                 break;
             case 1:
                 btn1.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
@@ -77,7 +77,7 @@ public class HowToUse extends FragmentActivity {
                 btn4.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
                 btn5.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
                 btn6.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
-
+                btn7.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
                 break;
             case 2:
                 btn1.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
@@ -86,7 +86,7 @@ public class HowToUse extends FragmentActivity {
                 btn4.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
                 btn5.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
                 btn6.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
-
+                btn7.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
                 break;
             case 3:
                 btn1.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
@@ -95,6 +95,7 @@ public class HowToUse extends FragmentActivity {
                 btn4.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.white));
                 btn5.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
                 btn6.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
+                btn7.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
                 break;
             case 4:
                 btn1.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
@@ -103,7 +104,7 @@ public class HowToUse extends FragmentActivity {
                 btn4.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
                 btn5.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.white));
                 btn6.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
-
+                btn7.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
                 break;
             case 5:
                 btn1.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
@@ -112,6 +113,16 @@ public class HowToUse extends FragmentActivity {
                 btn4.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
                 btn5.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
                 btn6.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.white));
+                btn7.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
+                break;
+            case 6:
+                btn1.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
+                btn2.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
+                btn3.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
+                btn4.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
+                btn5.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
+                btn6.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
+                btn7.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.white));
                 break;
         }
     }
@@ -123,6 +134,7 @@ public class HowToUse extends FragmentActivity {
         btn4 = (Button) findViewById(R.id.btn4);
         btn5 = (Button) findViewById(R.id.btn5);
         btn6 = (Button) findViewById(R.id.btn6);
+        btn7 = (Button) findViewById(R.id.btn7);
         skip_btn = (Button) findViewById(R.id.skip_btn);
 
         btn1.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.white));
@@ -131,5 +143,6 @@ public class HowToUse extends FragmentActivity {
         btn4.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
         btn5.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
         btn6.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
+        btn7.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.ourConcept2));
     }
 }

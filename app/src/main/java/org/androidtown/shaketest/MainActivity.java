@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (mUser != null) {
                     mDatabase = FirebaseDatabase.getInstance().getReference().child("myInfo").child(mUser.getUid());
                     if (!mSharedPrefManager.getCheckFirst()) {
-                        Log.d("MainActivity", "아다임");
+
                         /* 첫 로그인 */
 
                         ContactData userData = new ContactData(

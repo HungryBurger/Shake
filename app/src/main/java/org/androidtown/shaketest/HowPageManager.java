@@ -68,6 +68,10 @@ public class HowPageManager extends Fragment {
                 view = (ViewGroup)inflater.inflate(R.layout.activity_how_page6, container, false);
                 break;
             }
+            case 7: {
+                view = (ViewGroup)inflater.inflate(R.layout.activity_how_page7, container, false);
+                break;
+            }
             default:
                 break;
         }

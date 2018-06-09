@@ -64,12 +64,12 @@ public class Customized_main extends Fragment {
     }
 
     private void setInitialData() {
-        list.add(new CustomizedAdapter.Item("Style1", "hjjooace@naver.com", R.drawable.card1));
-        list.add(new CustomizedAdapter.Item("Style2", "hjjooace@naver.com", R.drawable.card2));
-        list.add(new CustomizedAdapter.Item("Style3", "hjjooace@gmail.com", R.drawable.card3));
-        list.add(new CustomizedAdapter.Item("Style4", "hjjooace@gmail.com", R.drawable.card4));
-        list.add(new CustomizedAdapter.Item("Style5", "hjjooace@gmail.com", R.drawable.card5));
-        list.add(new CustomizedAdapter.Item("Style6", "hjjooace@gmail.com", R.drawable.card6));
+        list.add(new CustomizedAdapter.Item("Style1", "", R.drawable.card1));
+        list.add(new CustomizedAdapter.Item("Style2", "", R.drawable.card2));
+        list.add(new CustomizedAdapter.Item("Style3", "", R.drawable.card3));
+        list.add(new CustomizedAdapter.Item("Style4", "", R.drawable.card4));
+        list.add(new CustomizedAdapter.Item("Style5", "", R.drawable.card5));
+        list.add(new CustomizedAdapter.Item("Style6", "", R.drawable.card6));
     }
     public void onClick(final View view) {
         itemPosition = mRecyclerView.getChildPosition(view);
