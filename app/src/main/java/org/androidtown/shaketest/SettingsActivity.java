@@ -44,6 +44,16 @@ public class SettingsActivity extends PreferenceActivity {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             context = getActivity().getApplicationContext();
 
+            Preference license = findPreference("license");
+            license.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    startActivity(new Intent(getActivity(), LicenseActivity.class));
+                    return false;
+                }
+            });
+
+
             prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
                 @Override
                 public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {

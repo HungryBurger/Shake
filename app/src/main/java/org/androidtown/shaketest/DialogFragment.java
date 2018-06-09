@@ -163,14 +163,14 @@ public class DialogFragment extends BlurDialogFragment {
                 startScanning();
             }
         });
-        read = view.findViewById(R.id.readNfc);
-        read.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ReadNFC.class);
-                startActivity(intent);
-            }
-        });
+//        read = view.findViewById(R.id.readNfc);
+//        read.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getActivity(), ReadNFC.class);
+//                startActivity(intent);
+//            }
+//        });
         name.setText(mSharedPrefManager.getUserName());
         phone.setText(mSharedPrefManager.getUserPhonenum());
         email.setText(mSharedPrefManager.getUserEmail());

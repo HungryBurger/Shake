@@ -30,6 +30,10 @@
                 android:data="mailto:hesue615@gmail.com, hjjooace24@gmail.com, hjhng125@gmail.com"/>
 
         </Preference>
+        <Preference android:key="license"
+            android:summary="Shake 앱에 쓰인 라이센스들을 확인합니다."
+            android:title="라이센스">
+        </Preference>
     </PreferenceCategory>
 
 </PreferenceScreen>
