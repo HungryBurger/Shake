@@ -35,7 +35,6 @@ public class Editprofile extends Fragment {
     private FragmentManager fragmentManager;
     private SharedPrefManager mSharedPrefManager;
     CircleImageView mPicture;
-    userData userdata;
     MainMenu activity;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;

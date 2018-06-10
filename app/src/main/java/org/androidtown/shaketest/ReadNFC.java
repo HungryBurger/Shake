@@ -29,7 +29,6 @@ import java.util.HashMap;
 
 public class ReadNFC extends AppCompatActivity {
     private NfcAdapter nfcAdapter;
-    private TextView textView;
     private PendingIntent pIntent;
     private IntentFilter[] filters;
     private SharedPrefManager mSharedPrefManager;
@@ -42,14 +41,15 @@ public class ReadNFC extends AppCompatActivity {
         mSharedPrefManager = SharedPrefManager.getInstance(getApplicationContext());
 
         setContentView(R.layout.activity_read);
-        textView = (TextView) findViewById(R.id.read_id);
-       // textView = new TextView(this);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        getNFCData(getIntent());
+        Log.d("getNFC 순서 확인", "앙 기모띠1");
+        if (getNFCData(getIntent())) {
+            finish();
+        }
         Log.d("tag", "onCreate: readfirst");
     }
 
-    private void getNFCData(Intent intent) {
+    private boolean getNFCData(Intent intent) {
         Log.d("tag", "ReadNFCgetNFCData: ");
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
             Parcelable[] data = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
@@ -59,17 +59,19 @@ public class ReadNFC extends AppCompatActivity {
                     messages[i] = (NdefMessage) data[i];
                 }
                 byte[] payload = messages[0].getRecords()[0].getPayload();
-                textView.setText("\n" + new String(payload));
 
                 final String opponent = new String(payload);
-                if (opponent == null) return;
+                if (opponent == null) return true;
 
                 DatabaseReference contactListRef = FirebaseDatabase.getInstance().getReference().child("contact_list").child(mSharedPrefManager.getUserUid());
                 if (((ServiceApplication) getApplication()).myContactList == null) {
                     ((ServiceApplication) getApplication()).myContactList = new ArrayList<>();
                     ((ServiceApplication) getApplication()).person = new HashMap<>();
                 }
-                if (((ServiceApplication) getApplication()).myContactList.contains(opponent)) return;
+                if (((ServiceApplication) getApplication()).myContactList.contains(opponent)) {
+                    Toast.makeText(getApplicationContext(), "이미 존재하는 사람 입니다.", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
 
                 ((ServiceApplication) getApplication()).myContactList.add(opponent);
                 contactListRef.setValue(((ServiceApplication) getApplication()).myContactList);
@@ -88,7 +90,7 @@ public class ReadNFC extends AppCompatActivity {
                                 );
                                 ((ServiceApplication) getApplication()).person.put(opponent, data);
                                 DialogFragment fragment = DialogFragment.newInstance(
-                                        10, 5, false, false, data.getTemplate_no(), data
+                                        10, 5, false, false, data.getTemplate_no(), data, 3
                                 );
                                 fragment.show(getFragmentManager(), "blur_sample");
                             }
@@ -101,7 +103,7 @@ public class ReadNFC extends AppCompatActivity {
                     }
                 });
             }
-        }
+        } return false;
     }
 
     @Override
@@ -130,7 +132,7 @@ public class ReadNFC extends AppCompatActivity {
         super.onNewIntent(intent);
         Log.d("tag", "onNewIntent: ");
         setIntent(intent);
-        getNFCData(getIntent());
+        if(getNFCData(getIntent())) finish();
     }
 
     public void saveContacts(String name, String phonNum, String email) {

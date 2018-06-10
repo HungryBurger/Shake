@@ -39,17 +39,14 @@ public class ShakeActivity extends AppCompatActivity implements NfcAdapter.Creat
         setContentView(R.layout.activity_shake);
         mSharedPrefs = SharedPrefManager.getInstance(getApplicationContext());
 
-        ((ServiceApplication)getApplication()).isShaking = true;
-        Log.d("isShaking", ((ServiceApplication)getApplication()).isShaking + "");
-
-        DialogFragment fragment = DialogFragment.newInstance(10, 5, false, false, mSharedPrefs.getUserTemplateNo(), null);
+        DialogFragment fragment = DialogFragment.newInstance(10, 5, false, false, mSharedPrefs.getUserTemplateNo(), null, 1);
         fragment.show(getFragmentManager(), "blur_sample");
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter != null) {
-            Toast.makeText(getApplicationContext(), "NFC 단말기를 접촉해주세요" + mNfcAdapter + "", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "NFC 단말기를 접촉해주세요", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getApplicationContext(), "NFC 기능이 꺼져있습니다. 켜주세요" + mNfcAdapter + "", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "NFC 기능이 꺼져있습니다. 켜주세요", Toast.LENGTH_SHORT).show();
         }
         NFCWrite();
         mNfcAdapter.setNdefPushMessageCallback(this,this);
@@ -74,7 +71,7 @@ public class ShakeActivity extends AppCompatActivity implements NfcAdapter.Creat
     @Override
     public void onNdefPushComplete(NfcEvent event) {
         Log.d(TAG, "onNdefPushComplete: ");
-        
+
         mHandler.obtainMessage(MESSAGE_SENT).sendToTarget();
     }
     private final Handler mHandler = new Handler(){

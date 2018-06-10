@@ -40,7 +40,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +58,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.io.File;
 import java.io.IOException;
@@ -95,16 +100,89 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        initLayout();
+        fragmentManager = getSupportFragmentManager();
         mSharedPrefs = SharedPrefManager.getInstance(this);
 
+        initLayout();
         setProfile();
-        fragmentManager = getSupportFragmentManager();
+
         fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
         fragmentManager.beginTransaction().replace(R.id.frameLayout_card, CardFragment.newInstance(mSharedPrefs.getUserTemplateNo())).commit();
-        backbuttonChk = 1;
-        //초기 값 설정 카드 넘버 저장
+        backbuttonChk = 1; //초기 값 설정 카드 넘버 저장
+    }
 
+    private void setCircularActionMenu () {
+        int subActionButtonSize = 140;
+
+        ImageView icon = new ImageView(this);
+        icon.setImageDrawable(getResources().getDrawable(R.drawable.plus));
+        com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
+                .setContentView(icon)
+                .build();
+
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(subActionButtonSize, subActionButtonSize);
+
+        ImageView settingIcon = new ImageView(this);
+        settingIcon.setImageDrawable(getResources().getDrawable(R.drawable.settings));
+        SubActionButton settingBtn = itemBuilder.setContentView(settingIcon)
+                .setLayoutParams(params)
+                .build();
+
+        ImageView shakeIcon = new ImageView(this);
+        shakeIcon.setImageDrawable(getResources().getDrawable(R.drawable.smartphone));
+        SubActionButton shakeBtn = itemBuilder.setContentView(shakeIcon)
+                .setLayoutParams(params)
+                .build();
+
+        ImageView handIcon = new ImageView(this);
+        handIcon.setImageDrawable(getResources().getDrawable(R.drawable.hand));
+        SubActionButton handBtn = itemBuilder.setContentView(handIcon)
+                .setLayoutParams(params)
+                .build();
+
+        ImageView listIcon = new ImageView(this);
+        listIcon.setImageDrawable(getResources().getDrawable(R.drawable.contactlist));
+        SubActionButton listBtn = itemBuilder.setContentView(listIcon)
+                .setLayoutParams(params)
+                .build();
+
+        settingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+            }
+        });
+
+        shakeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainMenu.this, ShakeActivity.class));
+            }
+        });
+
+        handBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), WriteNFCActivity.class));
+            }
+        });
+        listBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "연락처 목록.", Toast.LENGTH_SHORT).show();
+                fragmentManager.beginTransaction().replace(R.id.frameLayout, ContactListMain_fragment.newInstance()).commit();
+                backbuttonChk=1;
+            }
+        });
+
+        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(settingBtn)
+                .addSubActionView(listBtn)
+                .addSubActionView(shakeBtn)
+                .addSubActionView(handBtn)
+                .attachTo(actionButton)
+                .build();
     }
 
     private void setProfile() {
@@ -117,7 +195,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         mPicture1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //imageDialog();
                 editDialog();
             }
         });
@@ -194,6 +271,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             startActivityForResult(intent, PICK_FROM_CAMERA);
         }
     }
+
     public File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
         String imageFileName = "Shake" + timeStamp + "_";
@@ -216,49 +294,11 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     protected void onResume() {
         super.onResume();
         Log.d("메인메뉴", "접근");
-        checkUpdateInfo();
         if (mSharedPrefs.getUserImage() != null)
             mPicture1.setImageBitmap(mSharedPrefs.getUserImage());
         else {
             mPicture1.setImageResource(R.drawable.user_profile);
         }
-    }
-
-    private void checkUpdateInfo () {
-        DatabaseReference infoReference = FirebaseDatabase.getInstance().getReference().child("myInfo");
-        infoReference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (((ServiceApplication) getApplication()).myContactList == null) return;
-
-                if (((ServiceApplication) getApplication()).myContactList.contains(dataSnapshot.getKey())) {
-                    ((ServiceApplication) getApplication()).person.put(
-                            dataSnapshot.getKey(),
-                            dataSnapshot.getValue(ContactData.class)
-                    );
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     @Override
@@ -363,23 +403,23 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item1:
-                Toast.makeText(this, "메인 페이지가 클릭 되었습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "메인 페이지", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout_card, CardFragment.newInstance(mSharedPrefs.getUserTemplateNo())).commit();
                 backbuttonChk=0;
                 break;
             case R.id.item2:
-                Toast.makeText(this, "컨텍트 리스트가 클릭 되었습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "연락처 목록", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, ContactListMain_fragment.newInstance()).commit();
                 backbuttonChk=1;
                 break;
             case R.id.item3:
-                Toast.makeText(this, "프로필 수정이 클릭 되었습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "프로필 수정", Toast.LENGTH_SHORT).show();
                 fragmentManager.beginTransaction().replace(R.id.frameLayout, Editprofile.newInstance()).commit();
                 backbuttonChk=1;
                 break;
             case R.id.item4:
-                Toast.makeText(this, "사용법이 클릭 되었습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "사용법 화면", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, HowToUse.class);
                 startActivity(intent);
                 break;
@@ -414,6 +454,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     private void initLayout() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setCircularActionMenu();
 
         drawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer_root);
         navigationView = (NavigationView) findViewById(R.id.nv_main_navigation_root);

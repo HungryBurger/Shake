@@ -6,22 +6,5 @@
     android:background="@drawable/qr_nfc_background"
     android:gravity="center"
     android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="NFC Reader"
-        android:gravity="center"
-        android:textSize="30sp"
-        android:layout_gravity="center"
-        android:textColor="@color/white"
-        android:background="@color/black"/>
-    <TextView
-        android:id="@+id/read_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="30sp"
-        android:layout_gravity="center"
-        android:textColor="@color/white"
-        android:background="@color/black"/>
+
 </LinearLayout>

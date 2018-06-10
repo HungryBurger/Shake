@@ -53,7 +53,6 @@ public class CardFragment extends Fragment {
         mSharedPrefManager = SharedPrefManager.getInstance(getContext());
         Log.d("TAG", "onCreate: card");
         //activity = (MainMenu) getActivity();
-        //userdata = new userData(activity);
     }
 
     @Nullable

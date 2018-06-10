@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
@@ -41,6 +42,7 @@ public class DialogFragment extends BlurDialogFragment {
     private static final String BUNDLE_KEY_DEBUG = "bundle_key_debug_effect";
     private static final String BUNDLE_KEY_TEMPLATE = "bundle_key_template";
     private static final String BUNDLE_KEY_IS_OPPONENT = "bundle_key_opponent";
+    private static final String BUNDLE_KEY_ACTIVIY = "bundle_key_activity";
 
     private int mRadius;
     private float mDownScaleFactor;
@@ -48,6 +50,9 @@ public class DialogFragment extends BlurDialogFragment {
     private boolean mDebug;
     private int mTemplate;
     private ContactData mOpponent;
+    private int activityNo;
+    private Activity activity;
+    private Intent shakeIntent;
     private View view;
     CircleImageView mPicture, convertQRButton, read;
 
@@ -66,7 +71,8 @@ public class DialogFragment extends BlurDialogFragment {
                                              boolean dimming,
                                              boolean debug,
                                              int template,
-                                             ContactData opponent) {
+                                             ContactData opponent,
+                                             int activity_no) {
         DialogFragment fragment = new DialogFragment();
         Bundle args = new Bundle();
         args.putInt(
@@ -93,6 +99,10 @@ public class DialogFragment extends BlurDialogFragment {
                 BUNDLE_KEY_IS_OPPONENT,
                 opponent
         );
+        args.putInt(
+                BUNDLE_KEY_ACTIVIY,
+                activity_no
+        );
 
         fragment.setArguments(args);
         return fragment;
@@ -102,6 +112,8 @@ public class DialogFragment extends BlurDialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
+        shakeIntent = new Intent(activity, ShakeActivity.class);
+
         Bundle args = getArguments();
         mRadius = args.getInt(BUNDLE_KEY_BLUR_RADIUS);
         mDownScaleFactor = args.getFloat(BUNDLE_KEY_DOWN_SCALE_FACTOR);
@@ -109,6 +121,7 @@ public class DialogFragment extends BlurDialogFragment {
         mDebug = args.getBoolean(BUNDLE_KEY_DEBUG);
         mTemplate = args.getInt(BUNDLE_KEY_TEMPLATE);
         mOpponent = (ContactData) args.getSerializable(BUNDLE_KEY_IS_OPPONENT);
+        activityNo = args.getInt(BUNDLE_KEY_ACTIVIY);
     }
 
     @Override
@@ -194,30 +207,30 @@ public class DialogFragment extends BlurDialogFragment {
             this.mPicture.setImageBitmap(stringToBitmap(oppo.getImage()));
         else
             mPicture.setImageResource(R.drawable.user_profile);
-
-        phone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(
-                        Intent.ACTION_CALL,
-                        Uri.parse("tel:" + phone.getText())
-                ));
-            }
-        });
-
-        email.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(
-                        Intent.ACTION_SENDTO,
-                        Uri.parse("mailto:" + email.getText())
-                ));
-            }
-        });
+        //TODO 전화걸기 및 이메일 전송 기능추가
+//        phone.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(
+//                        Intent.ACTION_CALL,
+//                        Uri.parse("tel:" + phone.getText())
+//                ));
+//            }
+//        });
+//
+//        email.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(
+//                        Intent.ACTION_SENDTO,
+//                        Uri.parse("mailto:" + email.getText())
+//                ));
+//            }
+//        });
     }
 
     private void startScanning() {
-        Intent intent = new Intent(getActivity(), ContinuousCaptureActivity.class);
+        Intent intent = new Intent(getContext(), ContinuousCaptureActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
@@ -258,12 +271,52 @@ public class DialogFragment extends BlurDialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        if (mOpponent == null)
-            getActivity().finish();
+
+        switch (activityNo) {
+            case 1: {
+                getActivity().finish();
+                break;
+            }
+            case 2: {
+                break;
+            }
+            case 3: {
+                //TODO 전송화면으로 전환
+                //transferDialog();
+                getActivity().finish();
+                break;
+            }
+            default: {
+                Log.d("OnDismiss", "Invalid Value");
+            }
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    public void transferDialog () {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+        builder.setTitle("전송 모드로 전환하시겠습니까");
+        builder.setPositiveButton("전환", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                getActivity().startActivity(new Intent(getActivity(), ShakeActivity.class));
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                getActivity().finish();
+                dialog.cancel();
+            }
+        });
+
+        android.app.AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

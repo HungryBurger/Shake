@@ -44,6 +44,12 @@ public class ContactListMain_fragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        checkUpdateInfo();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -89,12 +95,50 @@ public class ContactListMain_fragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
+    }
 
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frameLayout_card, CardFragment.newInstance(SharedPrefManager.getInstance(getContext()).getUserTemplateNo())).commit();
+    private void checkUpdateInfo () {
+        DatabaseReference infoReference = FirebaseDatabase.getInstance().getReference().child("myInfo");
+        infoReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (ServiceApplication.myContactList == null) return;
+                Log.d("PERSON 데이터 변화", "변화 감지");
+                if (ServiceApplication.myContactList.contains(dataSnapshot.getKey())) {
+                    ServiceApplication.person.put(
+                            dataSnapshot.getKey(),
+                            dataSnapshot.getValue(ContactData.class)
+                    );
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

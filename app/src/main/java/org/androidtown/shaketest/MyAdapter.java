@@ -79,7 +79,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                         bitmapToString(product.getImage())
                 );
                 DialogFragment fragment = DialogFragment.newInstance(
-                        10, 5, false, false, product.getTemplateNo(), cur
+                        10, 5, false, false, product.getTemplateNo(), cur, 2
                 );
                 fragment.show(((AppCompatActivity) context).getFragmentManager(), "blur_sample");
                 Log.d("ListView", "onItemClicked");
@@ -99,6 +99,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 productList.remove(pos);
                 notifyItemRemoved(pos);
                 updateDB();
+                Toast.makeText(context, "삭제되었습니다.", Toast.LENGTH_SHORT).show();
             }
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {

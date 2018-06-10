@@ -67,10 +67,11 @@
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme = "https"
-                    android:host="play.google.com"
-                    android:pathPrefix="/store/apps/details?id=org.androidtown.shaketest"/>
 
+                <data
+                    android:host="play.google.com"
+                    android:pathPrefix="/store/apps/details?id=org.androidtown.shaketest"
+                    android:scheme="https" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
@@ -100,7 +101,8 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".LicenseActivity"></activity>
+        <activity android:name=".LicenseActivity" />
+        <activity android:name=".WriteNFCActivity"></activity>
     </application>
 
 </manifest>
