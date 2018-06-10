@@ -271,7 +271,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             startActivityForResult(intent, PICK_FROM_CAMERA);
         }
     }
-
     public File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
         String imageFileName = "Shake" + timeStamp + "_";
