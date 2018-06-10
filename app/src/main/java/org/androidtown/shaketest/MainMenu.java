@@ -459,6 +459,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         navigationView.setNavigationItemSelectedListener(MainMenu.this);
         nav_header_view = navigationView.getHeaderView(0);
 
+
         toolbar.setTitle("Shake");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);

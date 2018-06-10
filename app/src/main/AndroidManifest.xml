@@ -64,6 +64,15 @@
                 <data android:mimeType="shake/*" />
             </intent-filter>
             <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme = "https"
+                    android:host="play.google.com"
+                    android:pathPrefix="/store/apps/details?id=org.androidtown.shaketest"/>
+
+            </intent-filter>
+            <intent-filter>
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
 
                 <category android:name="android.intent.category.DEFAULT" />
