@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     finish();
                 } else {
                     init();
+                    Log.d("MainActivity", "구글 인증 실패");
                     updateUI(mUser);
                 }
             }

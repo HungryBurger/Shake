@@ -56,20 +56,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
 
-import org.w3c.dom.Text;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -83,7 +74,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle drawerToggle;
-    ImageButton settingButton;
 
     public static final int PICK_FROM_CAMERA = 1;
     public static final int PICK_FROM_ALBUM = 2;
@@ -131,6 +121,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 editDialog();
             }
         });
+
         mEmail.setText(mSharedPrefs.getUserEmail());
         mName.setText(mSharedPrefs.getUserName());
         mPhoneNum.setText(mSharedPrefs.getUserPhonenum());
@@ -421,19 +412,8 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     private void initLayout() {
-        settingButton = findViewById(R.id.setting_button);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        /**
-         * 환경설정 액티비티로 넘어가기
-         */
-        settingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-            }
-        });
 
         drawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer_root);
         navigationView = (NavigationView) findViewById(R.id.nv_main_navigation_root);

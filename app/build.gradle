@@ -47,6 +47,8 @@ dependencies {
 
     //blurFragment
     implementation 'fr.tvbarthel.blurdialogfragment:lib:2.2.0'
+    //CircularFloatinActionMenu
+    implementation 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

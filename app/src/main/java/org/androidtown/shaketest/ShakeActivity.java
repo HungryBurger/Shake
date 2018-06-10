@@ -29,6 +29,7 @@ public class ShakeActivity extends AppCompatActivity implements NfcAdapter.Creat
     /* Variables for Nfc communication */
     private static final int MESSAGE_SENT = 1;
     SharedPrefManager mSharedPrefs;
+    private static final String TAG= "tag";
     boolean mWriteMode = false;
     private NfcAdapter mNfcAdapter;
     private PendingIntent mNfcPendingIntent;
@@ -55,6 +56,7 @@ public class ShakeActivity extends AppCompatActivity implements NfcAdapter.Creat
         mNfcAdapter.setOnNdefPushCompleteCallback(this,this);
     }
     public NdefRecord createMimeRecord(String mimeType, byte[] payload){
+        Log.d(TAG, "createMimeRecord: ");
         byte[] mimeBytes = mimeType.getBytes(Charset.forName("US-ASCII"));
         NdefRecord mimeRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, mimeBytes,new byte[0],payload);
 
@@ -62,6 +64,7 @@ public class ShakeActivity extends AppCompatActivity implements NfcAdapter.Creat
     }
     @Override
     public NdefMessage createNdefMessage(NfcEvent event) {
+        Log.d(TAG, "createNdefMessage: ");
         String ID = mSharedPrefs.getUserUid();
         NdefMessage msg = new NdefMessage(new NdefRecord[]{createMimeRecord("shake/nfc",ID.getBytes()),NdefRecord.createApplicationRecord("org.androidtown.shaketest")
         });
@@ -70,6 +73,8 @@ public class ShakeActivity extends AppCompatActivity implements NfcAdapter.Creat
 
     @Override
     public void onNdefPushComplete(NfcEvent event) {
+        Log.d(TAG, "onNdefPushComplete: ");
+        
         mHandler.obtainMessage(MESSAGE_SENT).sendToTarget();
     }
     private final Handler mHandler = new Handler(){
@@ -100,8 +105,9 @@ public class ShakeActivity extends AppCompatActivity implements NfcAdapter.Creat
         Log.d("tag", "CheckNFCEnabled: write");
         NfcAdapter nfcAdpt = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdpt != null) {
-            if (!nfcAdpt.isEnabled())
+            if (!nfcAdpt.isEnabled()) {
                 return false;
+            }
         }
         return true;
     }

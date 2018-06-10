@@ -1,6 +1,8 @@
 package org.androidtown.shaketest;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -84,5 +86,15 @@ public class ContactListMain_fragment extends Fragment {
                     )
             );
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frameLayout, MainMenu_mainpage.newInstance()).commit();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frameLayout_card, CardFragment.newInstance(SharedPrefManager.getInstance(getContext()).getUserTemplateNo())).commit();
     }
 }

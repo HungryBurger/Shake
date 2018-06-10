@@ -14,6 +14,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.tvbarthel.lib.blurdialogfragment.BlurDialogFragment;
