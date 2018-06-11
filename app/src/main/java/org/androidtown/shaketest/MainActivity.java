@@ -10,7 +10,6 @@ import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -313,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             displayUserPhoneNumber = PhoneNumberUtils.formatNumber(phoneNum);
 
         } catch (SecurityException e) {
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
     }
 

@@ -107,6 +107,7 @@ public class SharedPrefManager {
     public void setUserTemplateNo(int no) {
         mEditor.putInt(USER_TEMPLATE_NO, no);
         mEditor.commit();
+        updateMyInfo();
     }
 
     public int getUserTemplateNo() {
