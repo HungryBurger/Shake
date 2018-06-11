@@ -6,8 +6,7 @@ Shake for exchanging contact
 
 Introduce
 ===============================================================
-<img src="/app/src/main/res/drawable/page_num1.png" width="15%"> 
-<img src="/app/src/main/res/drawable/page_num2.png" width="15%"> 
+<img src="/app/src/main/res/drawable/page_num1.png" width="15%"> <img src="/app/src/main/res/drawable/page_num2.png" width="15%"> 
 <img src="/app/src/main/res/drawable/page_num3.png" width="15%"> 
 <img src="/app/src/main/res/drawable/page_num4.png" width="15%"> 
 <img src="/app/src/main/res/drawable/page_num5.png" width="15%"> 
