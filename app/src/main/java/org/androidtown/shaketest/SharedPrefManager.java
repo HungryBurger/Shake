@@ -45,8 +45,7 @@ public class SharedPrefManager {
     public static SharedPrefManager getInstance(Context context) {
         if (mInstance == null) {
             mInstance = new SharedPrefManager(context);
-        }
-        return mInstance;
+        } return mInstance;
     }
 
     public void setUserData(String uid, ContactData userData) {

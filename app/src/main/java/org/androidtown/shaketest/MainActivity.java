@@ -204,9 +204,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             displayUserPhoneNumber = PhoneNumberUtils.formatNumber(phoneNum);
         } catch (SecurityException e) {
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-        }
-        return displayUserPhoneNumber;
+            Log.d("getPhoneNum", "error");
+        } return displayUserPhoneNumber;
     }
 
     private void init() {
