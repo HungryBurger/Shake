@@ -134,7 +134,8 @@ public class WriteNFCActivity extends AppCompatActivity {
         NFCWrite();
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         IntentFilter[] mWriteTagFilters = new IntentFilter[]{tagDetected};
-        mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mWriteTagFilters, null);
+        if (mNfcAdapter.isEnabled())
+            mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mWriteTagFilters, null);
     }
 
     @Override
