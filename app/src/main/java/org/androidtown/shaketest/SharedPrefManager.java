@@ -55,6 +55,7 @@ public class SharedPrefManager {
         setUserEmail(userData.getEmail());
         setUserTemplateNo(userData.getTemplate_no());
         setUserImage(stringToBitmap(userData.getImage()));
+        updateMyInfo();
     }
 
     public ContactData getUserData() {

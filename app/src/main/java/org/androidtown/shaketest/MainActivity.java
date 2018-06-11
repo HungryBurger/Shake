@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 null
                         );
                         mSharedPrefManager.setUserData(mUser.getUid(), userData);
-                        mDatabase.setValue(mSharedPrefManager.getUserData());
+                        //mDatabase.setValue(mSharedPrefManager.getUserData());
                     }
 
                     setMyContactList();
