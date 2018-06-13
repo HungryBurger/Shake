@@ -40,7 +40,8 @@ SharedPreference
 ```
 ## Contact	
 
-```NFC(Near-Field-Communication)
+```
+NFC(Near-Field-Communication)
 QR Code
 ```
 
@@ -49,7 +50,8 @@ QR Code
   Peer to Peer Communication
 ```
 ## Save Service
-``` Automatically Save and Manage Contacts
-    Firebase – Realtime Database
-		ContentProvider
+``` 
+Automatically Save and Manage Contacts
+Firebase – Realtime Database
+ContentProvider
 ```
