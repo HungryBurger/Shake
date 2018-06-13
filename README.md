@@ -44,11 +44,6 @@ SharedPreference
 NFC(Near-Field-Communication)
 QR Code
 ```
-
-## NFC
-```
-  Peer to Peer Communication
-```
 ## Save Service
 ``` 
 Automatically Save and Manage Contacts
