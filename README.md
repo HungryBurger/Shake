@@ -43,6 +43,7 @@ Contact devices to exchange their contact data which contains name, e-mail, phon
 After exchanging each other, Save opponent data into user’s local mobile contact list and Server which implemented by Firebase Service
 
 ## User Requirements
+```
 < Functional >
 User can exchange their contact with another user
 The System provides multiple ways to exchange contacts
@@ -55,9 +56,10 @@ If Service that run on background is always turn on, It can be causing battery i
 The application has elements that can attract attention from people
 Users need a profile they can decorate themselves such as business card
 Users can keep their personal information from some people that user doesn’t want to share their information
-
+```
 ## System Requirements
-< Functional >
+```
+<Functional >
 The system provides the service that user can transfer data to someone who doesn’t have our application
 Users exchange their profile containing their information by using NFC
 When users can’t use NFC function, users can use QR code containing their information instead of NFC. So, system provides the function to generate QR code
@@ -68,7 +70,7 @@ When user receives another user’s profile, system can parse it and save data f
 System provides the service that user can decorate and edit their own profile
 System provides multiple profile templates to users. So, they can decorate and edit their profile
 In order to reduce the NFC transmission cost value, we will make the series of string data instead of sending the profile itself.
-
+```
 
 
 Implementation
