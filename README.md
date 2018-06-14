@@ -17,11 +17,11 @@ At this Introduce part, we are going to introduce our motivation, purpose of our
 <img src="/app/src/main/res/drawable/page_num6.png" width="150" height ="200"> 
 <img src="/app/src/main/res/drawable/page_num7.png" width="150" height ="200">
 ## Motivation
-```
+
 Everyone wants to be easy in every area of life. Based on these reasons, we have considered which parts of human behavior can be simpler. 
 After thinking about it, we came to think about where people first met and formed relationships, and also thought about what action is necessary in the process. 
 People are bound to exchange contacts at the first meeting, so we have started this project to make it simpler and more new.
-```
+
 ## Link 
 ```
 You can download our application below.
