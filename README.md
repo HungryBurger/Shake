@@ -44,28 +44,30 @@ After exchanging each other, Save opponent data into user’s local mobile conta
 
 ## User Requirements
 < Functional >
-	User can exchange their contact with another user
-	The System provides multiple ways to exchange contacts
-	Determine what kind of data is contained in the profile such as name, phone number, and e-mail address
-	Users can hold other user’s profiles
+User can exchange their contact with another user
+The System provides multiple ways to exchange contacts
+Determine what kind of data is contained in the profile such as name, phone number, and e-mail address
+Users can hold other user’s profiles
+
 < Non-Functional >
-	Device’s Battery issue caused by Service provided by System
+Device’s Battery issue caused by Service provided by System
 If Service that run on background is always turn on, It can be causing battery issue.
-	The application has elements that can attract attention from people
-	Users need a profile they can decorate themselves such as business card
-	Users can keep their personal information from some people that user doesn’t want to share their information
+The application has elements that can attract attention from people
+Users need a profile they can decorate themselves such as business card
+Users can keep their personal information from some people that user doesn’t want to share their information
 
 ## System Requirements
 < Functional >
-	The system provides the service that user can transfer data to someone who doesn’t have our application
-	Users exchange their profile containing their information by using NFC
-	When users can’t use NFC function, users can use QR code containing their information instead of NFC. So, system provides the function to generate QR code
-	System needs check function to determine if they use the data service transfer service or not. The data transfer service is only used when check function is checked
-	When user receives another user’s profile, system can parse it and save data from received profile into user’s device automatically
+The system provides the service that user can transfer data to someone who doesn’t have our application
+Users exchange their profile containing their information by using NFC
+When users can’t use NFC function, users can use QR code containing their information instead of NFC. So, system provides the function to generate QR code
+System needs check function to determine if they use the data service transfer service or not. The data transfer service is only used when check function is checked
+When user receives another user’s profile, system can parse it and save data from received profile into user’s device automatically
+
 < Non-functional >
-	System provides the service that user can decorate and edit their own profile
-	System provides multiple profile templates to users. So, they can decorate and edit their profile
-	In order to reduce the NFC transmission cost value, we will make the series of string data instead of sending the profile itself.
+System provides the service that user can decorate and edit their own profile
+System provides multiple profile templates to users. So, they can decorate and edit their profile
+In order to reduce the NFC transmission cost value, we will make the series of string data instead of sending the profile itself.
 
 
 
